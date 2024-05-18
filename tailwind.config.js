@@ -13,8 +13,18 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Prompt', 'Figtree', 'Source Code Pro', ...defaultTheme.fontFamily.sans],
+
             },
+            keyframes: {
+                'up-down': {
+                  '0%, 100%': { transform: 'translateY(0)' },
+                  '50%': { transform: 'translateY(-20px)' },
+                },
+              },
+              animation: {
+                'up-down': 'up-down 3s ease-in-out infinite',
+              },
         },
     },
 
