@@ -3,6 +3,7 @@ import { onMounted } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 // import Badge from '@/Components/Badge.vue';
 import Typewriter from "typewriter-effect/dist/core";
+import HanziWriter from "hanzi-writer";
 
 let typeWords = (el_id, text_arr = []) => {
     let typewriter = new Typewriter(document.getElementById(el_id), {
@@ -21,6 +22,38 @@ let typeWords = (el_id, text_arr = []) => {
     typewriter.start();
 };
 
+let writeHanzi = (id, letter, option = null) => {
+    return HanziWriter.create(id, letter, {
+        // width: 100,
+        // height: 100,
+        // padding: 5,
+        // strokeColor: '#EE00FF',
+
+        character: null, // (The character to be rendered must be provided by the user)
+        width: 50, // 300, // (Default width of the rendering area in pixels)
+        height: 50, // 300, // (Default height of the rendering area in pixels)
+        padding: 0, // 20, // (Padding around the character in pixels)
+        strokeColor: '#555', // (Color of the strokes)
+        showOutline: true, // (Whether to show the outline of the character)
+        strokeAnimationSpeed: 1, // 1 (Multiplier for the speed of stroke animations)
+        delayBetweenStrokes: 200, // 1000 (Delay between stroke animations in milliseconds)
+        radicalColor: '#168F16', // null (Color for radical strokes, if any)
+
+        // // highlightColor: null, // (Color for highlighting strokes)
+        // outlineColor: '#DDD', // (Color for the outline of strokes)
+        // drawingWidth: 2, // (Width of the drawing strokes)
+        // drawingColor: '#333', // (Color of the drawing strokes)
+        // showCharacter: true, // (Whether to show the character itself)
+        // showHintAfterMisses: 3, // (Number of misses before showing a hint)
+        // highlightOnComplete: true, // (Whether to highlight the character on completion)
+        // drawingFadeDuration: 400, // (Duration for fading out drawing strokes in milliseconds)
+        // animationDuration: 200, // (Default animation duration in milliseconds)
+        // strokeOrder: true, // (Whether to show stroke order animations)
+        // strokeOrderSpeed: 2, // (Speed multiplier for stroke order animations)
+        // strokeOrderColors: null, // (Colors for the stroke order)
+    });
+}
+
 onMounted(() => {
     typeWords("service_typing", [
         "แบบเรียน HSK 1-6",
@@ -32,14 +65,23 @@ onMounted(() => {
         "ฝีกเขียนจีน Hànzì",
         "แข่งกับเพื่อน",
     ]);
+
+    writeHanzi('hanzi', '我').loopCharacterAnimation();
+    writeHanzi('hanzi2', '爱').loopCharacterAnimation();
+    writeHanzi('hanzi3', '学').loopCharacterAnimation();
+    writeHanzi('hanzi4', '习').loopCharacterAnimation();
+    writeHanzi('hanzi5', '中').loopCharacterAnimation();
+    writeHanzi('hanzi6', '文').loopCharacterAnimation();
+
+    // writer.animateCharacter();
+    // writer.loopCharacterAnimation();
 });
 </script>
 
 <template>
     <Head title="Welcome" />
 
-    <div class="flex flex-col justify-between">
-
+    <div class="">
         <img
             class="absolute w-full"
             src="/storage/images/intersect.svg"
@@ -48,9 +90,9 @@ onMounted(() => {
 
         <section
             class="h-auto md:h-svh font-sans bg-gradient-to-b from-gray-50 to-white"
-            >
+        >
             <header
-                class="relative z-50 h-24 translate-y-10 md:mt-0 md:translate-y-0 bg-gray-50"
+                class="relative z-50 h-24 md:mt-0 md:translate-y-0 bg-gray-50"
             >
                 <div
                     class="flex items-center w-full h-full px-6 mx-auto max-w-7xl md:px-8"
@@ -70,7 +112,7 @@ onMounted(() => {
                                     />
                                 </div>
                                 <span
-                                    class="text-3xl font-bold text-transparent bg-gradient-to-r bg-clip-text bg-gradient-to-br from-red-500 to-gray-900"
+                                    class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-gray-900"
                                     >HSK Warrior</span
                                 >
                             </a>
@@ -249,13 +291,13 @@ onMounted(() => {
                     class="flex flex-col-reverse items-center justify-center md:flex-row"
                 >
                     <div
-                        class="relative z-10 flex flex-col items-center justify-center min-h-screen pb-5 -mt-72 md:-mt-48 md:pt-48 md:py-24 xl:pb-0"
+                        class="relative z-10 -mt-48 flex flex-col items-center justify-center min-h-screen pb-5 md:-mt-48 md:pt-48 md:py-24 xl:pb-0"
                     >
                         <div
-                            class="fixed top-0 z-30 w-full mb-16 text-center sm:mb-0 md:relative"
+                            class="z-30 w-full text-center mt-14"
                         >
                             <p
-                                class="flex inline-flex items-center justify-center w-full h-10 px-4 text-xs font-medium text-white md:h-8 sm:text-sm bg-gradient-to-br from-red-500 md:w-auto to-red-400 md:rounded-full"
+                                class="flex items-center justify-center w-full h-10 px-4 text-xs font-medium text-white md:h-8 sm:text-sm bg-gradient-to-br from-red-500 md:w-auto to-red-400 md:rounded-full"
                             >
                                 🚀🇨🇳 ผจญภัยในดินแดนมังกร ฝึกฝนจนเป็นจอมยุทธ!
                                 🇹🇭💪
@@ -266,18 +308,15 @@ onMounted(() => {
                             </p>
                         </div>
                         <div
-                            class="relative px-6 mx-auto mt-32 md:mt-8 md:px-8 max-w-7xl"
+                            class="relative px-6 mx-auto md:px-8 max-w-7xl"
                         >
                             <div class="max-w-3xl mx-auto text-center">
                                 <h1
-                                    class="mt-5 text-4xl font-bold leading-tight text-gray-900 sm:text-4xl sm:leading-tight lg:text-5xl md:leading-tight"
+                                    class="mt-5 text-3xl font-bold text-gray-900"
                                 >
-                                    ฝึกฝนให้เชี่ยวชาญ <br />
-                                    <span
-                                        class="text-transparent bg-gradient-to-r bg-clip-text bg-gradient-to-br from-red-500 to-gray-900"
-                                        >HSK Warrior</span
-                                    >
+                                    เรียนภาษาจีนสุดสนุกด้วย <br />
                                 </h1>
+                                <div class="text-5xl font-bold mt-5 text-transparent bg-gradient-to-r bg-clip-text from-red-500 to-gray-900">HSK Warrior</div>
                                 <p
                                     class="mx-auto mt-6 text-base leading-7 text-gray-600 sm:max-w-md"
                                 >
@@ -291,6 +330,16 @@ onMounted(() => {
                                     id="service_typing"
                                     class="mt-5 text-2xl text-center text-green-600"
                                 ></div>
+
+                                <div class="flex items-center justify-center mt-14">
+                                    <div id="hanzi" class="w-14 h-auto"></div>
+                                    <div id="hanzi2" class="w-14 h-auto"></div>
+                                    <div id="hanzi3" class="w-14 h-auto"></div>
+                                    <div id="hanzi4" class="w-14 h-auto"></div>
+                                    <div id="hanzi5" class="w-14 h-auto"></div>
+                                    <div id="hanzi6" class="w-14 h-auto"></div>
+                                </div>
+
                                 <div
                                     class="flex flex-col items-center justify-center gap-2 md:flex-row"
                                 >
