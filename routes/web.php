@@ -26,6 +26,10 @@ Route::get('/hsk_workbook', function () {
     return Inertia::render('Workbook');
 });
 
+Route::get('/hanzi_writing', function () {
+    return Inertia::render('Hanziwriting');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

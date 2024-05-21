@@ -1,6 +1,9 @@
 <script setup>
 import Main from "@/Layouts/Main.vue";
 import { Head } from "@inertiajs/vue3";
+
+import warrior_exam from '/resources/images/warrior_exam.png';
+
 </script>
 
 <template>
@@ -79,7 +82,7 @@ import { Head } from "@inertiajs/vue3";
             </div>
             <div class="w-96 mt-14 bg-gredreen-500 md:-mt-10 md:block">
                 <img
-                    src="/storage/images/warrior_exam.png"
+                    :src="warrior_exam"
                     alt=""
                     class="w-full animate-up-down"
                 />
