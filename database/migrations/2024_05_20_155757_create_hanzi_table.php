@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('hanzi', function (Blueprint $table) {
             $table->id();
             $table->string('hanzi', 50)->unique();
+            $table->string('radical', 50)->nullable();
             $table->string('pinyin', 50);
             $table->string('pinyin_eng', 50);
             $table->text('meaning_thai');

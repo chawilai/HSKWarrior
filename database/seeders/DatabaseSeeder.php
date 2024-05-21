@@ -29,5 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(HanziFrequentlyUsedSeeder::class);
         $this->call(HanziCommonSeeder::class);
         $this->call(HanziTraditionalSeeder::class);
+        $this->call(HanziUnCommonSeeder::class);
+        $this->call(HanziRadicalSeeder::class);
     }
 }
