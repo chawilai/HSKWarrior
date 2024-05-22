@@ -5055,7 +5055,7 @@ Route::get('/test', function () {
 
     // 倆 of hsk4 not found in letter
 
-    foreach ($hsk6 as $key => $word) {
+    foreach ($hsk4 as $key => $word) {
         // Extract Chinese characters only
         preg_match_all('/[\p{Han}]/u', $word, $matches);
         $characters = $matches[0];

@@ -251,6 +251,7 @@ class HanziTraditionalSeeder extends Seeder
             ['hanzi' => '鍛', 'radical' => '金', 'pinyin' => 'duàn', 'pinyin_eng' => 'duan', 'meaning_thai' => 'ปลอม', 'meaning_english' => 'forge'],
             ['hanzi' => '夾', 'radical' => '大', 'pinyin' => 'jiā', 'pinyin_eng' => 'jia', 'meaning_thai' => 'กดจากทั้งสองด้าน', 'meaning_english' => 'press from both sides'],
             ['hanzi' => '烏', 'radical' => '火', 'pinyin' => 'wū', 'pinyin_eng' => 'wu', 'meaning_thai' => 'อีกา', 'meaning_english' => 'crow'],
+            ['hanzi' => '倆', 'radical' => '亻', 'pinyin' => 'liǎ', 'pinyin_eng' => 'lia', 'meaning_thai' => 'สองคน, คู่', 'meaning_english' => 'two, a pair of'],
         ]);
 
         // hanzi_categories Traditional Hanzi (236)
@@ -491,6 +492,7 @@ class HanziTraditionalSeeder extends Seeder
             ['hanzi_id' => 7234, 'category_id' => 9],
             ['hanzi_id' => 7235, 'category_id' => 9],
             ['hanzi_id' => 7236, 'category_id' => 9],
+            ['hanzi_id' => 7237, 'category_id' => 9],
         ]);
     }
 }

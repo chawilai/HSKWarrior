@@ -108,7 +108,6 @@ class HanziUnCommonSeeder extends Seeder
 
         // hanzi_categories Common Hanzi (3462)
         DB::table('hanzi_categories')->insert([
-            ['hanzi_id' => 7237, 'category_id' => 10],
             ['hanzi_id' => 7238, 'category_id' => 10],
             ['hanzi_id' => 7239, 'category_id' => 10],
             ['hanzi_id' => 7240, 'category_id' => 10],
@@ -185,6 +184,19 @@ class HanziUnCommonSeeder extends Seeder
             ['hanzi_id' => 7311, 'category_id' => 10],
             ['hanzi_id' => 7312, 'category_id' => 10],
             ['hanzi_id' => 7313, 'category_id' => 10],
+            ['hanzi_id' => 7314, 'category_id' => 10],
+            ['hanzi_id' => 7283, 'category_id' => 10],
+            ['hanzi_id' => 7284, 'category_id' => 10],
+            ['hanzi_id' => 7290, 'category_id' => 10],
+            ['hanzi_id' => 7291, 'category_id' => 10],
+            ['hanzi_id' => 7298, 'category_id' => 10],
+            ['hanzi_id' => 7304, 'category_id' => 10],
+            ['hanzi_id' => 7308, 'category_id' => 10],
+            ['hanzi_id' => 7309, 'category_id' => 10],
+            ['hanzi_id' => 7310, 'category_id' => 10],
+            ['hanzi_id' => 7315, 'category_id' => 10],
+            ['hanzi_id' => 7316, 'category_id' => 10],
+            ['hanzi_id' => 7323, 'category_id' => 10],
         ]);
     }
 }
