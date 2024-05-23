@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
-use App\Models\Graphics;
+use App\Models\GraphicsKo;
 
 class GraphicsKoSeeder extends Seeder
 {
@@ -24,7 +24,7 @@ class GraphicsKoSeeder extends Seeder
             foreach ($lines as $line) {
                 $data = json_decode($line, true);
                 if ($data) {
-                    Graphics::create([
+                    GraphicsKo::create([
                         'character' => $data['character'] ?? null,
                         'strokes' => isset($data['strokes']) ? json_encode($data['strokes']) : null,
                         'medians' => isset($data['medians']) ? json_encode($data['medians']) : null,

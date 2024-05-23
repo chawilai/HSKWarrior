@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
-use App\Models\DictionaryJa;
+use App\Models\DictionaryKo;
 
 class DictionaryKoSeeder extends Seeder
 {
@@ -24,7 +24,7 @@ class DictionaryKoSeeder extends Seeder
             foreach ($lines as $line) {
                 $data = json_decode($line, true);
                 if ($data) {
-                    DictionaryJa::create([
+                    DictionaryKo::create([
                         'character' => $data['character'] ?? null,
                         'set' => isset($data['set']) ? json_encode($data['set']) : null,
                         'definition' => $data['definition'] ?? null,
