@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Graphics extends Model
 {
     use HasFactory;
+
+    protected $table = 'graphics';
+
+    protected $fillable = [
+        'character',
+        'strokes',
+        'medians',
+    ];
+
+    protected $casts = [
+        'strokes' => 'array',
+        'medians' => 'array',
+    ];
 }

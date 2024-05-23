@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('graphics_js', function (Blueprint $table) {
+        Schema::create('graphics_ja', function (Blueprint $table) {
             $table->id();
             $table->string('character', 10);
             $table->json('strokes')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('graphics_js');
+        Schema::dropIfExists('graphics_ja');
     }
 };
