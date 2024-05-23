@@ -73,7 +73,8 @@ onMounted(() => {
   writeHanzi("hanzi3", "学").loopCharacterAnimation();
   writeHanzi("hanzi4", "习").loopCharacterAnimation();
   writeHanzi("hanzi5", "中").loopCharacterAnimation();
-  writeHanzi("hanzi6", "文").loopCharacterAnimation();
+//   writeHanzi("hanzi6", "文").loopCharacterAnimation();
+  writeHanzi("hanzi6", "倆").loopCharacterAnimation();
 
   // writer.animateCharacter();
   // writer.loopCharacterAnimation();

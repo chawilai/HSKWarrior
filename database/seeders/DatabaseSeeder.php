@@ -31,5 +31,17 @@ class DatabaseSeeder extends Seeder
         $this->call(HanziTraditionalSeeder::class);
         $this->call(HanziUnCommonSeeder::class);
         $this->call(HanziRadicalSeeder::class);
+        $this->call(DictionarySeeder::class);
+        $this->call(GraphicsSeeder::class);
+
+        $this->call(DictionaryJaSeeder::class);
+        $this->call(DictionaryKoSeeder::class);
+        $this->call(DictionaryZhHansSeeder::class);
+        $this->call(DictionaryZhHantSeeder::class);
+
+        $this->call(GraphicsJaSeeder::class);
+        $this->call(GraphicsKoSeeder::class);
+        $this->call(GraphicsZhHansSeeder::class);
+        $this->call(GraphicsZhHantSeeder::class);
     }
 }

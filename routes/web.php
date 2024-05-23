@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Dictionary;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,35 @@ Route::get('/hsk_workbook', function () {
 
 Route::get('/hanzi_writing', function () {
     return Inertia::render('Hanziwriting');
+});
+
+Route::get('/insert_dic', function () {
+
+    $filePath = resource_path('db/dictionary.txt');
+
+        if (File::exists($filePath)) {
+            $fileContent = File::get($filePath);
+            $lines = explode("\n", $fileContent);
+
+            foreach ($lines as $line) {
+                $data = json_decode($line, true);
+                if ($data) {
+                    Dictionary::create([
+                        'character' => $data['character'] ?? null,
+                        'definition' => $data['definition'] ?? null,
+                        'pinyin' => json_encode($data['pinyin']),
+                        'decomposition' => $data['decomposition'] ?? null,
+                        'etymology' => isset($data['etymology']) ? json_encode($data['etymology']) : null,
+                        'radical' => $data['radical'] ?? null,
+                        'matches' => json_encode($data['matches']),
+                    ]);
+                }
+            }
+
+            return response()->json(['message' => 'Data inserted successfully'], 200);
+        }
+
+        return response()->json(['message' => 'File not found'], 404);
 });
 
 Route::get('/test', function () {
@@ -5097,3 +5127,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+// character
+// definition
+// pinyin
+// decomposition
+// etymology
+// type
+// hint
+// radical
+// matches
