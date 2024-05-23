@@ -26,8 +26,8 @@ class GraphicsJaSeeder extends Seeder
                 if ($data) {
                     Graphics::create([
                         'character' => $data['character'] ?? null,
-                        'strokes' => json_encode($data['strokes']),
-                        'medians' => json_encode($data['medians']),
+                        'strokes' => isset($data['strokes']) ? json_encode($data['strokes']) : null,
+                        'medians' => isset($data['medians']) ? json_encode($data['medians']) : null,
                     ]);
                 }
             }

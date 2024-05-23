@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('graphics_zh_hant', function (Blueprint $table) {
             $table->id();
             $table->string('character', 10);
-            $table->json('strokes');
-            $table->json('medians');
+            $table->json('strokes')->nullable();
+            $table->json('medians')->nullable();
             $table->timestamps();
         });
     }
