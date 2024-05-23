@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DictionaryZhHantSeeder::class);
 
         $this->call(GraphicsJaSeeder::class);
+        $this->call(GraphicsKanaSeeder::class);
         $this->call(GraphicsKoSeeder::class);
         $this->call(GraphicsZhHansSeeder::class);
         $this->call(GraphicsZhHantSeeder::class);
