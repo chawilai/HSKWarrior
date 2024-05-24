@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
+use App\Models\Hanzi;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,15 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return Inertia::render('Home');
+});
+
+Route::get('/hanzi_sound', function () {
+
+    $hanziRecords = Hanzi::whereBetween('id', [1, 173])->get();
+
+    return Inertia::render('HanziSound', [
+        'hsk1' => $hanziRecords
+    ]);
 });
 
 Route::get('/hsk_textbook', function () {

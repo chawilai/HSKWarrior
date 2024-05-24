@@ -1,84 +1,8 @@
 <script setup>
-import { onMounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 // import Badge from '@/Components/Badge.vue';
-import Typewriter from "typewriter-effect/dist/core";
-import HanziWriter from "hanzi-writer";
 
 import warrior_logo from '/resources/images/warrior_logo.png';
-
-let typeWords = (el_id, text_arr = []) => {
-  let typewriter = new Typewriter(document.getElementById(el_id), {
-    loop: true, // false,
-    delay: 50, // 50,
-    deleteSpeed: 30, // 50,
-    cursor: "|", // "|",
-    cursorClassName: "typewriter-cursor", // "typewriter-cursor",
-    autoStart: false, // false,
-    strings: [], // [],
-  });
-
-  text_arr.forEach((word, index) => {
-    typewriter.typeString(word).pauseFor(500).deleteAll().pauseFor(500);
-  });
-  typewriter.start();
-};
-
-let writeHanzi = (id, letter, option = null) => {
-  return HanziWriter.create(id, letter, {
-    // width: 100,
-    // height: 100,
-    // padding: 5,
-    // strokeColor: '#EE00FF',
-
-    character: null, // (The character to be rendered must be provided by the user)
-    width: 50, // 300, // (Default width of the rendering area in pixels)
-    height: 50, // 300, // (Default height of the rendering area in pixels)
-    padding: 0, // 20, // (Padding around the character in pixels)
-    strokeColor: "#555", // (Color of the strokes)
-    showOutline: true, // (Whether to show the outline of the character)
-    strokeAnimationSpeed: 1, // 1 (Multiplier for the speed of stroke animations)
-    delayBetweenStrokes: 200, // 1000 (Delay between stroke animations in milliseconds)
-    radicalColor: "#168F16", // null (Color for radical strokes, if any)
-
-    // // highlightColor: null, // (Color for highlighting strokes)
-    // outlineColor: '#DDD', // (Color for the outline of strokes)
-    // drawingWidth: 2, // (Width of the drawing strokes)
-    // drawingColor: '#333', // (Color of the drawing strokes)
-    // showCharacter: true, // (Whether to show the character itself)
-    // showHintAfterMisses: 3, // (Number of misses before showing a hint)
-    // highlightOnComplete: true, // (Whether to highlight the character on completion)
-    // drawingFadeDuration: 400, // (Duration for fading out drawing strokes in milliseconds)
-    // animationDuration: 200, // (Default animation duration in milliseconds)
-    // strokeOrder: true, // (Whether to show stroke order animations)
-    // strokeOrderSpeed: 2, // (Speed multiplier for stroke order animations)
-    // strokeOrderColors: null, // (Colors for the stroke order)
-  });
-};
-
-onMounted(() => {
-  typeWords("service_typing", [
-    "แบบเรียน HSK 1-6",
-    "แบบฝึกหัด HSK 1-6",
-    "Flash Card ทายคำ",
-    "ฝึก Pīnyīn",
-    "หมวดหมู่คำศัพท์",
-    "ทายประโยค",
-    "ฝีกเขียนจีน Hànzì",
-    "แข่งกับเพื่อน",
-  ]);
-
-  writeHanzi("hanzi", "我").loopCharacterAnimation();
-  writeHanzi("hanzi2", "爱").loopCharacterAnimation();
-  writeHanzi("hanzi3", "学").loopCharacterAnimation();
-  writeHanzi("hanzi4", "习").loopCharacterAnimation();
-  writeHanzi("hanzi5", "中").loopCharacterAnimation();
-//   writeHanzi("hanzi6", "文").loopCharacterAnimation();
-  writeHanzi("hanzi6", "倆").loopCharacterAnimation();
-
-  // writer.animateCharacter();
-  // writer.loopCharacterAnimation();
-});
 </script>
 
 <template>
@@ -237,6 +161,15 @@ onMounted(() => {
                 class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 transition-all duration-300 rounded outline-none cursor-pointer text-opacity-80 hover:text-opacity-100 group md:w-auto md:h-auto md:inline-block md:hover:-rotate-3 active:outline-none"
               >
                 <span class="relative z-20 whitespace-nowrap">คัดจีน (Hànzì)</span>
+                <span
+                  class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
+                ></span>
+              </Link>
+              <Link
+                href="/hanzi_sound"
+                class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 transition-all duration-300 rounded outline-none cursor-pointer text-opacity-80 hover:text-opacity-100 group md:w-auto md:h-auto md:inline-block md:hover:-rotate-3 active:outline-none"
+              >
+                <span class="relative z-20 whitespace-nowrap">ท่องศัพท์</span>
                 <span
                   class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
                 ></span>

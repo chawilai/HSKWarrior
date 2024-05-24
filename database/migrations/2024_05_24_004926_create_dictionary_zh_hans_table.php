@@ -19,7 +19,18 @@ return new class extends Migration
             $table->json('pinyin')->nullable();
             $table->string('radical', 10)->nullable();
             $table->string('decomposition')->nullable();
+            $table->json('etymology')->nullable();
             $table->string('acjk')->nullable();
+            $table->timestamps();
+
+            $table->id();
+            $table->string('character', 10);
+            $table->string('definition')->nullable();
+            $table->json('pinyin');
+            $table->string('decomposition')->nullable();
+            $table->json('etymology')->nullable();
+            $table->string('radical', 10);
+            $table->json('matches');
             $table->timestamps();
         });
     }
