@@ -26,8 +26,8 @@ class GraphicsKoSeeder extends Seeder
                 if ($data) {
                     GraphicsKo::create([
                         'character' => $data['character'] ?? null,
-                        'strokes' => isset($data['strokes']) ? json_encode($data['strokes']) : null,
-                        'medians' => isset($data['medians']) ? json_encode($data['medians']) : null,
+                        'strokes' => isset($data['strokes']) ? $data['strokes'] : null,
+                        'medians' => isset($data['medians']) ? $data['medians'] : null,
                     ]);
                 }
             }

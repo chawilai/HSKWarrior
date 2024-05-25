@@ -26,7 +26,7 @@ class DictionaryKoSeeder extends Seeder
                 if ($data) {
                     DictionaryKo::create([
                         'character' => $data['character'] ?? null,
-                        'set' => isset($data['set']) ? json_encode($data['set']) : null,
+                        'set' => isset($data['set']) ? $data['set'] : null,
                         'definition' => $data['definition'] ?? null,
                         'radical' => $data['radical'] ?? null,
                         'decomposition' => $data['decomposition'] ?? null,

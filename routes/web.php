@@ -3,7 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
 use App\Models\Hanzi;
+use App\Models\Sentence;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,10 +25,14 @@ Route::get('/home', function () {
 
 Route::get('/hanzi_sound', function () {
 
-    $hanziRecords = Hanzi::whereBetween('id', [1, 173])->get();
+    $hanziRecords = Hanzi::whereBetween('id', [174, 200])->get();
+    // $sentences = Sentence::whereBetween('id', [1, 100])
+    // ->where('sentence', 'like', '%了%')
+    // ->get();
 
     return Inertia::render('HanziSound', [
         'hsk1' => $hanziRecords
+        // 'hsk1' => $sentences
     ]);
 });
 
@@ -38,37 +44,20 @@ Route::get('/hsk_workbook', function () {
     return Inertia::render('Workbook');
 });
 
-Route::get('/hanzi_writing', function () {
-    return Inertia::render('Hanziwriting');
+Route::get('/hanzi_writing', function (Request $request) {
+
+    $search = $request->session()->get('search', '');
+
+    return Inertia::render('Hanziwriting', [
+        'search' => $search,
+    ]);
 });
 
-Route::get('/insert_dic', function () {
+Route::post('/search', function (Request $request) {
 
-    $filePath = resource_path('db/dictionary.txt');
+    $search = $request->input('search');
 
-        if (File::exists($filePath)) {
-            $fileContent = File::get($filePath);
-            $lines = explode("\n", $fileContent);
-
-            foreach ($lines as $line) {
-                $data = json_decode($line, true);
-                if ($data) {
-                    Dictionary::create([
-                        'character' => $data['character'] ?? null,
-                        'definition' => $data['definition'] ?? null,
-                        'pinyin' => json_encode($data['pinyin']),
-                        'decomposition' => $data['decomposition'] ?? null,
-                        'etymology' => isset($data['etymology']) ? json_encode($data['etymology']) : null,
-                        'radical' => $data['radical'] ?? null,
-                        'matches' => json_encode($data['matches']),
-                    ]);
-                }
-            }
-
-            return response()->json(['message' => 'Data inserted successfully'], 200);
-        }
-
-        return response()->json(['message' => 'File not found'], 404);
+    return redirect('/hanzi_writing')->with('search', $search);
 });
 
 Route::get('/test', function () {

@@ -108,9 +108,9 @@ let stopPlayback = () => {
                             <th>id</th>
                             <th>hanzi</th>
                             <th>pinyin</th>
+                            <th>sound</th>
                             <th>thai</th>
                             <th>english</th>
-                            <th>sound</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,8 +122,6 @@ let stopPlayback = () => {
                             <td>{{ index + 1 }}</td>
                             <td>{{ word.hanzi }}</td>
                             <td>{{ word.pinyin }}</td>
-                            <td>{{ word.meaning_thai }}</td>
-                            <td>{{ word.meaning_english }}</td>
                             <td>
                                 <span
                                     @click="playSound(word.hanzi)"
@@ -131,6 +129,8 @@ let stopPlayback = () => {
                                     >Play</span
                                 >
                             </td>
+                            <td>{{ word.meaning_thai }}</td>
+                            <td>{{ word.meaning_english }}</td>
                         </tr>
                     </tbody>
                 </table>

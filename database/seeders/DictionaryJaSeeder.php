@@ -26,10 +26,10 @@ class DictionaryJaSeeder extends Seeder
                 if ($data) {
                     DictionaryJa::create([
                         'character' => $data['character'] ?? null,
-                        'set' => isset($data['set']) ? json_encode($data['set']) : null,
+                        'set' => isset($data['set']) ? $data['set'] : null,
                         'definition' => $data['definition'] ?? null,
-                        'kun' => isset($data['kun']) ? json_encode($data['kun']) : null,
-                        'on' => isset($data['on']) ? json_encode($data['on']) : null,
+                        'kun' => isset($data['kun']) ? $data['kun'] : null,
+                        'on' => isset($data['on']) ? $data['on'] : null,
                         'radical' => $data['radical'] ?? null,
                         'decomposition' => $data['decomposition'] ?? null,
                         'acjk' => $data['acjk'] ?? null,

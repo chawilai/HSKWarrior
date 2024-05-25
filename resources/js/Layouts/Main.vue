@@ -160,7 +160,7 @@ import warrior_logo from '/resources/images/warrior_logo.png';
                 href="/hanzi_writing"
                 class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 transition-all duration-300 rounded outline-none cursor-pointer text-opacity-80 hover:text-opacity-100 group md:w-auto md:h-auto md:inline-block md:hover:-rotate-3 active:outline-none"
               >
-                <span class="relative z-20 whitespace-nowrap">คัดจีน (Hànzì)</span>
+                <span class="relative z-20 whitespace-nowrap">เขียนจีน (Hànzì)</span>
                 <span
                   class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
                 ></span>

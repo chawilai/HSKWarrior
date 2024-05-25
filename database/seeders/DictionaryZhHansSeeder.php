@@ -26,9 +26,9 @@ class DictionaryZhHansSeeder extends Seeder
                 if ($data) {
                     DictionaryZhHans::create([
                         'character' => $data['character'] ?? null,
-                        'set' => isset($data['set']) ? json_encode($data['set']) : null,
+                        'set' => isset($data['set']) ? $data['set'] : null,
                         'definition' => $data['definition'] ?? null,
-                        'pinyin' => isset($data['pinyin']) ? json_encode($data['pinyin']) : null,
+                        'pinyin' => isset($data['pinyin']) ? $data['pinyin'] : null,
                         'radical' => $data['radical'] ?? null,
                         'decomposition' => $data['decomposition'] ?? null,
                         'acjk' => $data['acjk'] ?? null,

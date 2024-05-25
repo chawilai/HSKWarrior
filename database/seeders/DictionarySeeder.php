@@ -27,11 +27,11 @@ class DictionarySeeder extends Seeder
                     Dictionary::create([
                         'character' => $data['character'] ?? null,
                         'definition' => $data['definition'] ?? null,
-                        'pinyin' => isset($data['pinyin']) ? json_encode($data['pinyin']) : null,
+                        'pinyin' => isset($data['pinyin']) ? $data['pinyin'] : null,
                         'decomposition' => $data['decomposition'] ?? null,
-                        'etymology' => isset($data['etymology']) ? json_encode($data['etymology']) : null,
+                        'etymology' => isset($data['etymology']) ? $data['etymology'] : null,
                         'radical' => $data['radical'] ?? null,
-                        'matches' => isset($data['matches']) ? json_encode($data['matches']) : null,
+                        'matches' => isset($data['matches']) ? $data['matches'] : null,
                     ]);
                 }
             }
