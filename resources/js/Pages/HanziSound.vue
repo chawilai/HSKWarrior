@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeUnmount } from "vue";
 import Main from "@/Layouts/Main.vue";
 import { Head } from "@inertiajs/vue3";
 
@@ -12,7 +12,7 @@ let props = defineProps({
 });
 
 let shouldStop = ref(false);
-let playingWord = ref('');
+let playingWord = ref("");
 let currentPlaybackId = ref(0);
 
 let hsk1_lists = computed(() => {
@@ -20,11 +20,10 @@ let hsk1_lists = computed(() => {
 });
 
 let isPlaying = (word_check) => {
-    return word_check == playingWord.value
-}
+    return word_check == playingWord.value;
+};
 
 let playSound = (input) => {
-
     const tts = new tts2();
 
     currentPlaybackId.value++;
@@ -40,7 +39,7 @@ let playSound = (input) => {
         return new Promise((resolve) => {
             tts.speak2(sound);
 
-            playingWord.value = sound
+            playingWord.value = sound;
 
             resolve();
         });
@@ -76,6 +75,10 @@ let playSound = (input) => {
 let stopPlayback = () => {
     shouldStop.value = true;
 };
+
+onBeforeUnmount(() => {
+    stopPlayback();
+});
 </script>
 
 <template>
@@ -117,7 +120,7 @@ let stopPlayback = () => {
                         <tr
                             v-for="(word, index) in props.hsk1"
                             :key="index"
-                            :class="{'bg-green-300':isPlaying(word.hanzi)}"
+                            :class="{ 'bg-green-300': isPlaying(word.hanzi) }"
                         >
                             <td>{{ index + 1 }}</td>
                             <td>{{ word.hanzi }}</td>

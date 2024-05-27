@@ -19,16 +19,41 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/organic', function () {
+    return Inertia::render('Organic');
+});
+
 Route::get('/home', function () {
     return Inertia::render('Home');
 });
 
 Route::get('/hanzi_sound', function () {
 
-    $hanziRecords = Hanzi::whereBetween('id', [174, 200])->get();
+    $hanziRecords = Hanzi::whereBetween('id', [1, 1000])
+    ->where('pinyin_eng', 'like', '%ian')
+    ->orderBy('pinyin_eng', 'ASC')
+    ->get();
+
     // $sentences = Sentence::whereBetween('id', [1, 100])
     // ->where('sentence', 'like', '%了%')
     // ->get();
+// [
+//     "bian",
+//     "biān",
+//     "biàn",
+//     "biàn",
+//     "dian",
+//     "diǎn",
+//     "diàn",
+//     "diǎn",
+//     "diàn",
+//     "jian",
+//     "jiǎn",
+//     "jiàn",
+//     "jiàn",
+//     "jiān",
+//     "jiàn",
+//     "jiàn"]
 
     return Inertia::render('HanziSound', [
         'hsk1' => $hanziRecords
