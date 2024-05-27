@@ -23,6 +23,10 @@ Route::get('/organic', function () {
     return Inertia::render('Organic');
 });
 
+Route::get('/warrior', function () {
+    return Inertia::render('Warrior');
+});
+
 Route::get('/home', function () {
     return Inertia::render('Home');
 });
