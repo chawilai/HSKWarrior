@@ -1,17 +1,26 @@
 <script setup>
 import ScreenIndicator from "@/Components/ScreenIndicator.vue";
+import { Link } from "@inertiajs/vue3";
 
 import { ref } from "vue";
 import HamburgerIcon from "@/../icons/hamburger.svg";
+import warrior_logo from "@/../images/warrior_logo.png";
 
 let activeMenu = ref("Home");
-const menus = ["Home", "แบบเรียน HSK", "แบบฝึกหัด HSK", "FAQs", "Contact"];
+const menus = [
+    { title: "Home", url: "/warrior_home" },
+    { title: "แบบเรียน HSK", url: "/warrior_textbook" },
+    { title: "แบบฝึกหัด HSK", url: "/warrior_workbook" },
+    { title: "เขียนจีน (Hànzì)", url: "/warrior_writehanzi" },
+    { title: "Game", url: "/warrior_practicewords" },
+    // {"title":"ทายคำศัพท์", "url": "/warrior_guessingwords"},
+];
 const sidebarOpen = ref(false);
 </script>
 
 <template>
     <div
-        class="w-full min-h-screen font-sans text-gray-900 bg-gradient-to-br from-transparent to-green-100"
+        class="w-full min-h-screen font-sans text-gray-900 bg-gradient-to-br from-transparent to-red-100"
         :class="sidebarOpen ? 'overflow-hidden h-screen' : ''"
     >
         <ScreenIndicator />
@@ -19,8 +28,12 @@ const sidebarOpen = ref(false);
         <nav
             class="flex justify-between items-center py-8 px-6 mx-auto max-w-screen-xl md:px-12 lg:px-16 xl:px-24"
         >
-            <a href="#" class="text-3xl md:text-4xl font-bold tracking-wide">
-                Organ<span class="text-green">o</span>
+            <a href="#" class="text-2xl font-bold tracking-wide text-red-600">
+                <div class="flex justify-center items-center">
+                    <img class="w-20 h-auto" :src="warrior_logo" alt="" />
+                    <span>HSK</span>
+                    <span class="text-black">Warrior</span>
+                </div>
             </a>
             <div
                 class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 md:static md:bg-transparent md:flex md:space-y-0 md:space-x-8 md:flex-row lg:space-x-14"
@@ -31,21 +44,30 @@ const sidebarOpen = ref(false);
                 >
                     <li
                         v-for="menu in menus"
-                        @click="activeMenu = menu"
+                        @click="activeMenu = menu.title"
                         class="text-lg md:text-base lg:text-lg font-medium group"
-                        :class="{ 'text-green': activeMenu === menu }"
+                        :class="{ 'text-red': activeMenu === menu.title }"
                     >
-                        <a href="#"> {{ menu }} </a>
-                        <div
-                            class="h-0.5 bg-green scale-x-0 group-hover:scale-100 transition-transform origin-center rounded-full duration-300 ease-out"
-                        />
+                        <Link
+                            :href="menu.url"
+                            class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 text-opacity-100 transition-all duration-300 rounded outline-none cursor-pointer group md:w-auto md:h-auto md:inline-block md:hover:-rotate-3 active:ring-0 active:outline-none"
+                        >
+                            <span class="relative z-20 whitespace-nowrap">{{
+                                menu.title
+                            }}</span>
+                            <span
+                                class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
+                            ></span>
+                        </Link>
                     </li>
                 </ul>
-                <button
-                    class="flex justify-center items-center h-13 px-7 font-medium text-white bg-green rounded-xl hover:shadow-primary transition-shadow duration-300 whitespace-nowrap"
+                <Link
+                    role="button"
+                    href="/login"
+                    class="flex justify-center items-center h-13 px-7 font-medium py-2 hover:-rotate-3 transition-all ease-out duration-300 text-base font-semibold leading-7 text-red duration-200 bg-transparent border border-red rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 hover:bg-red hover:text-white sm:w-auto hover:scale-[1.01] focus:bg-red focus:text-white hover:shadow-hsk whitespace-nowrap"
                 >
-                    Get started
-                </button>
+                    เริ่มผจญภัย
+                </Link>
             </div>
             <button
                 @click="sidebarOpen = !sidebarOpen"
@@ -56,9 +78,9 @@ const sidebarOpen = ref(false);
         </nav>
 
         <div
-            class="flex flex-wrap-reverse gap-y-24 justify-between py-12 px-6 mx-auto max-w-screen-xl sm:px-8 md:px-12 lg:px-16 xl:px-24"
+            class="flex flex-wrap-reverse gap-y-24 justify-between py-8 px-6 mx-auto max-w-screen-xl sm:px-8 md:px-12 lg:px-16 xl:px-24"
         >
-         <slot />
+            <slot />
         </div>
         <!-- flowbit -->
         <div class="container mx-auto px-5" v-if="false">
@@ -222,7 +244,7 @@ const sidebarOpen = ref(false);
             </form>
         </div>
         <!-- flowbit -->
-        <hr class="my-5" v-if="false">
+        <hr class="my-5" v-if="false" />
         <!-- flowbit table -->
         <div class="container mx-auto px-5" v-if="false">
             <div class="relative overflow-x-auto sm:rounded-lg">
@@ -240,7 +262,9 @@ const sidebarOpen = ref(false);
                                         type="checkbox"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                     />
-                                    <label for="checkbox-all-search" class="sr-only"
+                                    <label
+                                        for="checkbox-all-search"
+                                        class="sr-only"
                                         >checkbox</label
                                     >
                                 </div>
@@ -602,11 +626,13 @@ const sidebarOpen = ref(false);
                     <span
                         class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto"
                         >Showing
-                        <span class="font-semibold text-gray-900 dark:text-white"
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
                             >1-10</span
                         >
                         of
-                        <span class="font-semibold text-gray-900 dark:text-white"
+                        <span
+                            class="font-semibold text-gray-900 dark:text-white"
                             >1000</span
                         ></span
                     >

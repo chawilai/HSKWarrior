@@ -35,6 +35,9 @@ export default {
                 green: {
                     DEFAULT: "#71B214",
                 },
+                red: {
+                    DEFAULT: "#B71F1F",
+                },
                 gray: {
                     600: "#606060",
                 },
@@ -44,6 +47,7 @@ export default {
             },
             boxShadow: {
                 primary: "0px 9.9px 21.6px rgba(136, 202, 41, 0.41)",
+                hsk: "0px 10px 22px rgb(224, 65, 65, 0.4)",
             },
             // from oganic
         },

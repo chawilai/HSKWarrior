@@ -23,6 +23,30 @@ Route::get('/organic', function () {
     return Inertia::render('Organic');
 });
 
+Route::get('/warrior_home', function () {
+    return Inertia::render('Warrior');
+});
+
+Route::get('/warrior_textbook', function () {
+    return Inertia::render('WarriorHome');
+});
+
+Route::get('/warrior_workbook', function () {
+    return Inertia::render('WarriorHome');
+});
+
+Route::get('/warrior_writehanzi', function () {
+    return Inertia::render('WarriorHome');
+});
+
+Route::get('/warrior_practicewords', function () {
+    return Inertia::render('WarriorHome');
+});
+
+Route::get('/warrior_guessingwords', function () {
+    return Inertia::render('WarriorHome');
+});
+
 Route::get('/warrior', function () {
     return Inertia::render('Warrior');
 });
