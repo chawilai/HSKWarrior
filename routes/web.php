@@ -66,7 +66,7 @@ Route::get('/warrior_writehanzi', function (Request $request) {
         ->when($request->input('s_mean'), function ($query, $s_mean) {
             $query->where('definition', 'like', '%' . $s_mean . '%');
         })
-        ->paginate(25)
+        ->paginate(15)
         ->withQueryString()
         ->through(fn($hanzi) => [
             'id' => $hanzi->id,

@@ -162,6 +162,8 @@ onBeforeUnmount(() => {
                                 <option>hsk4</option>
                                 <option>hsk5</option>
                                 <option>hsk6</option>
+                                <option>hsk7</option>
+                                <option>hsk8</option>
                             </select>
                         </th>
                         <th>
@@ -243,7 +245,7 @@ onBeforeUnmount(() => {
                             v-text="hanzi.set"
                         ></td>
                         <td
-                            class="w-24 border border-gray-300 py-1 px-2 text-center"
+                            class="w-24 text-3xl font-bold border border-gray-300 py-1 px-2 text-center"
                             v-text="hanzi.character"
                         ></td>
                         <td
