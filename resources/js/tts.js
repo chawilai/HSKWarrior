@@ -1,6 +1,6 @@
 class tts2 {
   constructor() {
-    console.log('tts constructor');
+    // console.log('tts constructor');
     window.speechSynthesis.cancel(); //強制中斷之前的語音
     this.synth = window.speechSynthesis;
 
@@ -34,11 +34,11 @@ class tts2 {
     // let voices = this.synth.getVoices();
 
     u.onend = (event) => {
-      console.log('tts.onend');
+    //   console.log('tts.onend');
     };
 
     u.onerror = (event) => {
-      console.log('tts.onerror', event);
+    //   console.log('tts.onerror', event);
       this.cancel2();
     };
 
@@ -82,7 +82,7 @@ class tts2 {
     u.text = filter_text;
 
     u.onstart = (event) => {
-      console.log('tts.onstart', filter_text);
+    //   console.log('tts.onstart', filter_text);
     };
 
     if (u.text.length > 0) {
@@ -93,7 +93,7 @@ class tts2 {
   }
 
   cancel2() {
-    console.log('tts cancel');
+    // console.log('tts cancel');
     window.speechSynthesis.cancel();
   }
 
@@ -102,9 +102,9 @@ class tts2 {
     if (volume >= 0 && volume <= 1) {
       this.u_volume = volume;
       localStorage.setItem('ls_volume', volume);
-      console.log(`音量調整為: ${this.u_volume}`);
+    //   console.log(`音量調整為: ${this.u_volume}`);
     } else {
-      console.log(`超出範圍`);
+    //   console.log(`超出範圍`);
     }
   }
 
@@ -113,9 +113,9 @@ class tts2 {
     if (rate >= 0.1 && rate <= 10) {
       this.u_rate = rate;
       localStorage.setItem('ls_rate', rate);
-      console.log(`語速調整為: ${this.u_rate}`);
+    //   console.log(`語速調整為: ${this.u_rate}`);
     } else {
-      console.log(`超出範圍`);
+    //   console.log(`超出範圍`);
     }
   }
 
@@ -124,9 +124,9 @@ class tts2 {
     if (pitch >= 0 && pitch <= 2) {
       this.u_pitch = pitch;
       localStorage.setItem('ls_pitch', pitch);
-      console.log(`語調調整為: ${this.u_pitch}`);
+    //   console.log(`語調調整為: ${this.u_pitch}`);
     } else {
-      console.log(`超出範圍`);
+    //   console.log(`超出範圍`);
     }
   }
 

@@ -40,30 +40,45 @@ Route::get('/warrior_workbook', function () {
 
 Route::get('/warrior_writehanzi', function (Request $request) {
 
+    $filters = [];
+
+    if($request->input("search")) $filters["search"] = $request->input("search");
+    if($request->input("s_set")) $filters["s_set"] = $request->input("s_set");
+    if($request->input("s_hanzi")) $filters["s_hanzi"] = $request->input("s_hanzi");
+    if($request->input("s_pinyin")) $filters["s_pinyin"] = $request->input("s_pinyin");
+    if($request->input("s_mean")) $filters["s_mean"] = $request->input("s_mean");
+
     return Inertia::render('WarriorWriteHanzi', [
         "page" => $request->page,
-        "filters" => [
-            "search" => $request->input('search')
-        ],
-        "hanzi_list" => DictionaryZhHans::when($request->input('search'), function ($query, $search) {
-            $query->where('character', 'like', '%' . $search . '%')
-                ->orWhere('set', 'like', '%' . $search . '%')
-                ->orWhere('pinyin', 'like', '%' . $search . '%')
-                ->orWhere('pinyin_english', 'like', '%' . $search . '%');
+        "filters" => $filters,
+        "hanzi_list" => DictionaryZhHans::when($request->input('s_set'), function ($query, $s_set) {
+            $query->where('set', 'like', '%' . $s_set . '%');
         })
-        ->paginate(10)
+        ->when($request->input('s_hanzi'), function ($query, $s_hanzi) {
+            $query->where('character', 'like', '%' . $s_hanzi . '%');
+        })
+        ->when($request->input('s_pinyin'), function ($query, $s_pinyin) {
+            $query->where(function ($q) use ($s_pinyin) {
+                $q->where('pinyin', 'like', '%' . $s_pinyin . '%')
+                  ->orWhere('pinyin_english', 'like', '%' . $s_pinyin . '%');
+            });
+        })
+        ->when($request->input('s_mean'), function ($query, $s_mean) {
+            $query->where('definition', 'like', '%' . $s_mean . '%');
+        })
+        ->paginate(25)
         ->withQueryString()
         ->through(fn($hanzi) => [
-                'id' => $hanzi->id,
-                'character' => $hanzi->character,
-                'set' => $hanzi->set,
-                'definition' => $hanzi->definition,
-                'pinyin' => $hanzi->pinyin,
-                'pinyin_english' => Pinyin::sentence($hanzi->character, 'none')[0],
-                'radical' => $hanzi->radical,
-                'decomposition' => $hanzi->decomposition,
-                'acjk' => $hanzi->acjk,
-            ])
+            'id' => $hanzi->id,
+            'character' => $hanzi->character,
+            'set' => $hanzi->set,
+            'definition' => $hanzi->definition,
+            'pinyin' => $hanzi->pinyin,
+            'pinyin_english' => Pinyin::sentence($hanzi->character, 'none')[0],
+            'radical' => $hanzi->radical,
+            'decomposition' => $hanzi->decomposition,
+            'acjk' => $hanzi->acjk,
+        ])
     ]);
 });
 
