@@ -17,6 +17,7 @@ return new class extends Migration
             $table->json('set')->nullable();
             $table->string('definition')->nullable();
             $table->json('pinyin')->nullable();
+            $table->string('pinyin_english')->nullable();
             $table->string('radical', 10)->nullable();
             $table->string('decomposition')->nullable();
             $table->json('etymology')->nullable();

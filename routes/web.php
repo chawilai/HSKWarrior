@@ -2,13 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
+use App\Models\DictionaryZhHans;
 use App\Models\Hanzi;
 use App\Models\Sentence;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Js;
 use Inertia\Inertia;
+use Overtrue\Pinyin\Pinyin;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -35,8 +38,33 @@ Route::get('/warrior_workbook', function () {
     return Inertia::render('WarriorHome');
 });
 
-Route::get('/warrior_writehanzi', function () {
-    return Inertia::render('WarriorHome');
+Route::get('/warrior_writehanzi', function (Request $request) {
+
+    return Inertia::render('WarriorWriteHanzi', [
+        "page" => $request->page,
+        "filters" => [
+            "search" => $request->input('search')
+        ],
+        "hanzi_list" => DictionaryZhHans::when($request->input('search'), function ($query, $search) {
+            $query->where('character', 'like', '%' . $search . '%')
+                ->orWhere('set', 'like', '%' . $search . '%')
+                ->orWhere('pinyin', 'like', '%' . $search . '%')
+                ->orWhere('pinyin_english', 'like', '%' . $search . '%');
+        })
+        ->paginate(10)
+        ->withQueryString()
+        ->through(fn($hanzi) => [
+                'id' => $hanzi->id,
+                'character' => $hanzi->character,
+                'set' => $hanzi->set,
+                'definition' => $hanzi->definition,
+                'pinyin' => $hanzi->pinyin,
+                'pinyin_english' => Pinyin::sentence($hanzi->character, 'none')[0],
+                'radical' => $hanzi->radical,
+                'decomposition' => $hanzi->decomposition,
+                'acjk' => $hanzi->acjk,
+            ])
+    ]);
 });
 
 Route::get('/warrior_practicewords', function () {

@@ -16,6 +16,7 @@ class DictionaryZhHans extends Model
         'set',
         'definition',
         'pinyin',
+        'pinyin_english',
         'radical',
         'decomposition',
         'acjk',
@@ -25,4 +26,47 @@ class DictionaryZhHans extends Model
         'set' => 'array',
         'pinyin' => 'array',
     ];
+
+    // Define an accessor for the set attribute
+    public function getSetAttribute($value)
+    {
+        return is_array(json_decode($value, true)) ? json_decode($value, true)[0] : '';
+    }
+
+    // Define an accessor for the pinyin attribute
+    public function getPinyinAttribute($value)
+    {
+        return $this->filterPinyin($value);
+    }
+
+    // Custom method to filter and return the string in front of the biggest number
+    protected function filterPinyin($value)
+    {
+        // Remove the surrounding brackets and quotes if present
+        $value = trim($value, '["]');
+
+        // Split the string into individual parts
+        $parts = explode(' ', $value);
+
+        $maxNumber = 0;
+        $result = '';
+
+        // if(count($parts) == 1) return $parts[0];
+
+        foreach ($parts as $part) {
+            if (preg_match('/(.+?)\((\d+)\)/', $part, $matches)) {
+                $string = $matches[1];
+                $number = (int) $matches[2];
+
+                if ($number > $maxNumber) {
+                    $maxNumber = $number;
+                    $result = $string;
+                }
+            } else {
+                $result = $part;
+            }
+        }
+
+        return $result;
+    }
 }

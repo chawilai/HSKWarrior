@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use App\Models\DictionaryZhHans;
+use Overtrue\Pinyin\Pinyin;
 
 class DictionaryZhHansSeeder extends Seeder
 {
@@ -35,6 +36,15 @@ class DictionaryZhHansSeeder extends Seeder
                     ]);
                 }
             }
+
+            // update pinyin_english
+            DictionaryZhHans::chunk(1000, function ($hanziList) {
+                foreach ($hanziList as $hanzi) {
+                    $hanzi->pinyin_english = Pinyin::sentence($hanzi->character, 'none')[0];
+                    $hanzi->save();
+                }
+            });
+
         } else {
             $this->command->error("File not found at $filePath");
         }
