@@ -5178,14 +5178,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+Route::fallback(function () {
+    return Inertia::render('404');
+});
 
-// character
-// definition
-// pinyin
-// decomposition
-// etymology
-// type
-// hint
-// radical
-// matches
+require __DIR__ . '/auth.php';
