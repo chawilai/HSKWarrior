@@ -76,13 +76,13 @@ const sidebarOpen = ref(false);
         <HamburgerIcon class="w-8 h-8 fill-current text-gray-900" />
       </button>
     </nav>
+    <slot />
 
-    <div
-      class="flex flex-wrap-reverse gap-y-24 justify-between py-14 px-6 mx-auto max-w-screen-xl sm:px-8 md:px-12 lg:px-16 xl:px-24"
-    >
-      <slot />
-    </div>
+
     <!-- flowbit -->
+
+    <!-- <slot name="content2"></slot> -->
+
     <div class="container mx-auto px-5" v-if="false">
       <form>
         <div class="grid gap-6 mb-6 md:grid-cols-2">

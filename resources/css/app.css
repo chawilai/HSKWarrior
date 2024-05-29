@@ -6,3 +6,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.typewriter-cursor {
+  color: black; /* Change this to your desired cursor color */
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  } /* Change this to match the cursor color */
+}
