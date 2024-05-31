@@ -133,7 +133,7 @@ onMounted(() => {
                   class="absolute duration-1000 transitiona-all opacity-70 -inset-px bg-gradient-to-r from-sky-400 via-blue-400 to-teal-400 rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"
                 ></div>
                 <a
-                  href="/login"
+                  href="#login"
                   class="relative sm:w-auto w-full hover:-rotate-3 transition-all ease-out duration-300 inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white duration-200 bg-gray-900 hover:bg-red-500 hover:scale-[1.01] rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                   role="button"
                   ><span class="mr-2">เข้าสู่ระบบ HSK Warrior</span></a

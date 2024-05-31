@@ -175,7 +175,7 @@ import warrior_logo from '/resources/images/warrior_logo.png';
                 ></span>
               </Link>
               <Link
-                href="/login"
+                href="#login"
                 target="_blank"
                 title=""
                 class="flex items-center justify-center h-16 px-5 text-base font-semibold leading-7 text-center text-white transition-all duration-200 duration-300 ease-out md:hidden bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 hover:bg-red-500 hover:text-white focus:bg-red-500 focus:text-white"
@@ -185,7 +185,7 @@ import warrior_logo from '/resources/images/warrior_logo.png';
             </div>
             <div class="hidden md:flex md:items-center md:justify-center">
               <Link
-                href="/login"
+                href="#login"
                 title=""
                 class="px-5 py-2 hover:-rotate-3 transition-all ease-out duration-300 text-base font-semibold leading-7 text-gray-900 duration-200 bg-transparent border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 hover:bg-red-500 hover:text-white sm:w-auto hover:scale-[1.01] focus:bg-red-500 focus:text-white"
                 role="button"

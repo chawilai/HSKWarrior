@@ -66,13 +66,13 @@ const sidebarOpen = ref(false);
         </ul>
         <Link
           role="button"
-          href="/login"
+          href="#login"
           class="flex justify-center items-center px-7 py-2 hover:-rotate-3 transition-all ease-out duration-300 text-base font-semibold leading-7 text-white bg-red border border-red rounded-lg focus:outline-red focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 hover:bg-transparent hover:text-red sm:w-auto hover:scale-[1.01] focus:bg-transparent focus:text-red hover:shadow-hsk whitespace-nowrap"
         >
           เริ่มผจญภัย
         </Link>
       </div>
-      <button @click="sidebarOpen = !sidebarOpen" class="block md:hidden relative z-30">
+      <button @click="sidebarOpen = !sidebarOpen" class="block sm:hidden relative z-30">
         <HamburgerIcon class="w-8 h-8 fill-current text-gray-900" />
       </button>
     </nav>

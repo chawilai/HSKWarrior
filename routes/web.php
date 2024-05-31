@@ -16,7 +16,7 @@ use Inertia\Inertia;
 use Overtrue\Pinyin\Pinyin;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Warrior', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
