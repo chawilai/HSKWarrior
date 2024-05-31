@@ -69,4 +69,14 @@ class DictionaryZhHans extends Model
 
         return $result;
     }
+
+    public function hanziListWords()
+    {
+        return $this->hasMany(HanziListWord::class);
+    }
+
+    // public function hanziLists()
+    // {
+    //     return $this->belongsToMany(HanziList::class, 'hanzi_list_words', 'hanzi_id', 'hanzi_list_id');
+    // }
 }

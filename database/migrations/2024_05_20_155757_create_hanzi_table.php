@@ -66,7 +66,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('hanzi_list_id');
             $table->unsignedBigInteger('hanzi_id');
-            $table->timestamps();
 
             $table->foreign('hanzi_list_id')->references('id')->on('hanzi_lists')->onDelete('cascade');
             $table->foreign('hanzi_id')->references('id')->on('hanzi')->onDelete('cascade');

@@ -12,10 +12,10 @@ let activeMenu = ref('Home');
 
 const menus = [
   { "title": "Home", "component": "Warrior","url": "/warrior_home", "disabled": false, "active": true},
-  { "title": "แบบเรียน HSK", "component": "WarriorHome","url": "/warrior_textbook", "disabled": true, "active": false},
-  { "title": "แบบฝึกหัด HSK", "component": "WarriorHome","url": "/warrior_workbook", "disabled": true, "active": false},
-  { "title": "เขียนจีน (Hànzì)", "component": "WarriorHome","url": "/warrior_writehanzi", "disabled": false, "active": false},
-  { "title": "Game", "component": "WarriorHome","url": "/warrior_practicewords", "disabled": false, "active": false},
+  { "title": "แบบเรียน HSK", "component": "WarriorHSKTextbook","url": "/warrior_textbook", "disabled": true, "active": false},
+  { "title": "แบบฝึกหัด HSK", "component": "WarriorHSKWorkbook","url": "/warrior_workbook", "disabled": true, "active": false},
+  { "title": "เขียนจีน (Hànzì)", "component": "WarriorWriteHanzi","url": "/warrior_writehanzi", "disabled": false, "active": false},
+  { "title": "Game", "component": "WarriorGame","url": "/warrior_game", "disabled": false, "active": false},
   // {"title":"ทายคำศัพท์", "component": "WarriorHome","url": "/warrior_guessingwords", "disabled": false, "active": false},
 ];
 const sidebarOpen = ref(false);
@@ -31,7 +31,7 @@ const sidebarOpen = ref(false);
     <nav
       class="flex justify-between items-center py-8 px-6 mx-auto max-w-screen-xl md:px-12 lg:px-16 xl:px-24"
     >
-      <a href="#" class="text-2xl font-bold tracking-wide text-red-600">
+      <a href="/warrior_home" class="text-2xl font-bold tracking-wide text-red-600">
         <div class="flex justify-center items-center">
           <img class="w-20 h-auto" :src="warrior_logo" alt="" />
           <span>HSK</span>

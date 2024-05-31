@@ -142,7 +142,7 @@ onMounted(() => {
                 alt=""
             />
             <div
-                class="absolute right-0 lg:-right-6 top-0 md:-top-20 md:-top-18 flex flex-col py-5 px-7 rounded-2xl shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group/card"
+                class="absolute right-0 md:-right-10 lg:-right-6 -top-16 md:-top-24 lg:-top-16 flex flex-col py-5 px-7 rounded-2xl shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group/card"
             >
                 <div class="flex justify-center space-x-1">
                     <div
@@ -175,7 +175,7 @@ onMounted(() => {
                 </div>
             </div>
             <div
-                class="absolute left-0 bottom-0 md:-bottom-6 lg:bottom-16 flex rounded-2xl shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
+                class="absolute left-0 bottom-0 md:-bottom-6 lg:-left-16 lg:bottom-16 flex rounded-2xl shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md hover:-translate-y-2 hover:shadow-2xl transition-all duration-300"
             >
                 <div class="flex items-center gap-x-2">
                     <img

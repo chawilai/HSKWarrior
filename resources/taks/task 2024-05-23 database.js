@@ -16,21 +16,23 @@
     // - add menu dynamic
     // - add 404 page
     // - add animation and link
-    start the pinyin page
-        - show all character
-            - 10 at a time big one character can have animation using laravel pagination to fetch
-            - show in table
-            - add input for character search (filter)
-                - using lodash to fetch
-            - table detail
-                - no
-                - character -> svg big size -> CARD ?? not table
-                    -> play animation
-                    -> play sound
-                    -> show pinyin
-                    -> show meaning
-                    -> more detail to show example sentence
+    // start the pinyin page
+    //     - show all character
+    //         - 10 at a time big one character can have animation using laravel pagination to fetch
+    //         - show in table
+    //         - add input for character search (filter)
+    //             - using lodash to fetch
+    //         - table detail
+    //             - no
+    //             - character -> svg big size -> CARD ?? not table
+    //                 -> play animation
+    //                 -> play sound
+    //                 -> show pinyin
+    //                 -> show meaning
+    //                 -> more detail to show example sentence
                     -> add to list
+                    -> floating cart for pinyin list
+                        -> click to show the list page
                         -> the list can have function
                             -> name
                             -> show list

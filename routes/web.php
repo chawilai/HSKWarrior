@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
 use App\Models\DictionaryZhHans;
 use App\Models\Hanzi;
+use App\Models\HanziList;
+use App\Models\HanziListWord;
 use App\Models\Sentence;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -31,11 +33,11 @@ Route::get('/warrior_home', function () {
 });
 
 Route::get('/warrior_textbook', function () {
-    return Inertia::render('WarriorHome');
+    return Inertia::render('WarriorHSKTextbook');
 });
 
 Route::get('/warrior_workbook', function () {
-    return Inertia::render('WarriorHome');
+    return Inertia::render('WarriorHSKWorkbook');
 });
 
 Route::get('/warrior_writehanzi', function (Request $request) {
@@ -82,8 +84,64 @@ Route::get('/warrior_writehanzi', function (Request $request) {
     ]);
 });
 
-Route::get('/warrior_practicewords', function () {
-    return Inertia::render('WarriorHome');
+Route::post('/save_hanzi_list', function (Request $request) {
+
+    $request->validate([
+        // 'user_id' => 'required|integer|exists:users,id',
+        'list_reference' => 'required|string|max:255',
+        'list_name' => 'required|string|max:255',
+        // 'box_number' => 'required|integer',
+    ]);
+
+    // Create a new HanziList entry
+    $hanziList = HanziList::create([
+        'user_id' => 1,
+        'list_reference' => $request->input('list_reference'),
+        'list_name' => $request->input('list_name'),
+        'box_number' => 6
+    ]);
+    // Create a new HanziList entry
+    foreach($request->list as $item) {
+        HanziListWord::create([
+            'hanzi_list_id' => $hanziList->id,
+            'hanzi_id' => DictionaryZhHans::where('character', $item)->first()->id,
+        ]);
+    }
+
+    // return response()->json($hanziList, 201);
+    return redirect()->to('/hanzi_list?reference=' . $request->input('list_reference'))->with([
+        'success' => 'Hanzi list created successfully!',
+    ]);
+});
+
+Route::get('/hanzi_list', function (Request $request) {
+
+    $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->with('word.hanzi')->first();
+
+    $hanzi_list_data = [];
+    if($hanzi_list_word_arr) {
+        $hanzi_list_data['id'] = $hanzi_list_word_arr->id;
+        $hanzi_list_data['reference'] = $hanzi_list_word_arr->list_reference;
+        $hanzi_list_data['list_name'] = $hanzi_list_word_arr->list_list_name;
+        $hanzi_list_data['box_count'] = $hanzi_list_word_arr->box_number;
+        $hanzi_list_data['words'] = $hanzi_list_word_arr->word->map(
+            fn($word) => [
+                    'character' => $word->hanzi->character,
+                    'set' => $word->hanzi->set,
+                    'definition' => $word->hanzi->definition,
+                    'pinyin' => $word->hanzi->pinyin,
+                    'radical' => $word->hanzi->radical,
+            ]);
+    }
+
+    return Inertia::render('WarriorhanziList', [
+        'success' => session('success'),
+        'hanzi_list_data' => $hanzi_list_data
+    ]);
+});
+
+Route::get('/warrior_game', function () {
+    return Inertia::render('WarriorGame');
 });
 
 Route::get('/warrior_guessingwords', function () {
@@ -104,27 +162,6 @@ Route::get('/hanzi_sound', function () {
     ->where('pinyin_eng', 'like', '%ian')
     ->orderBy('pinyin_eng', 'ASC')
     ->get();
-
-    // $sentences = Sentence::whereBetween('id', [1, 100])
-    // ->where('sentence', 'like', '%了%')
-    // ->get();
-// [
-//     "bian",
-//     "biān",
-//     "biàn",
-//     "biàn",
-//     "dian",
-//     "diǎn",
-//     "diàn",
-//     "diǎn",
-//     "diàn",
-//     "jian",
-//     "jiǎn",
-//     "jiàn",
-//     "jiàn",
-//     "jiān",
-//     "jiàn",
-//     "jiàn"]
 
     return Inertia::render('HanziSound', [
         'hsk1' => $hanziRecords
