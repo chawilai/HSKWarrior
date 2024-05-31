@@ -6,16 +6,46 @@ import ScreenIndicator from "@/Components/ScreenIndicator.vue";
 import HamburgerIcon from "@/../icons/hamburger.svg";
 import warrior_logo from "@/../images/warrior_logo.png";
 
-const page = usePage()
+const page = usePage();
 
-let activeMenu = ref('Home');
+let activeMenu = ref("Home");
 
 const menus = [
-  { "title": "Home", "component": "Warrior","url": "/warrior_home", "disabled": false, "active": true},
-  { "title": "แบบเรียน HSK", "component": "WarriorHSKTextbook","url": "/warrior_textbook", "disabled": true, "active": false},
-  { "title": "แบบฝึกหัด HSK", "component": "WarriorHSKWorkbook","url": "/warrior_workbook", "disabled": true, "active": false},
-  { "title": "เขียนจีน (Hànzì)", "component": "WarriorWriteHanzi","url": "/warrior_writehanzi", "disabled": false, "active": false},
-  { "title": "Game", "component": "WarriorGame","url": "/warrior_game", "disabled": false, "active": false},
+  {
+    title: "Home",
+    component: "Warrior",
+    url: "/warrior_home",
+    disabled: false,
+    active: true,
+  },
+  {
+    title: "แบบเรียน HSK",
+    component: "WarriorHSKTextbook",
+    url: "/warrior_textbook",
+    disabled: true,
+    active: false,
+  },
+  {
+    title: "แบบฝึกหัด HSK",
+    component: "WarriorHSKWorkbook",
+    url: "/warrior_workbook",
+    disabled: true,
+    active: false,
+  },
+  {
+    title: "เขียนจีน (Hànzì)",
+    component: "WarriorWriteHanzi",
+    url: "/warrior_writehanzi",
+    disabled: false,
+    active: false,
+  },
+  {
+    title: "Game",
+    component: "WarriorGame",
+    url: "/warrior_game",
+    disabled: false,
+    active: false,
+  },
   // {"title":"ทายคำศัพท์", "component": "WarriorHome","url": "/warrior_guessingwords", "disabled": false, "active": false},
 ];
 const sidebarOpen = ref(false);
@@ -26,10 +56,10 @@ const sidebarOpen = ref(false);
     class="w-full min-h-screen font-sans text-gray-900 bg-gradient-to-br from-transparent to-red-100"
     :class="sidebarOpen ? 'overflow-hidden h-screen' : ''"
   >
-    <ScreenIndicator />
+    <!-- <ScreenIndicator /> -->
 
     <nav
-      class="flex justify-between items-center py-8 px-6 mx-auto max-w-screen-xl md:px-12 lg:px-16 xl:px-24"
+      class="flex justify-between items-center py-8 px-6 mx-auto max-w-screen-xl lg:px-12 lg:px-16 xl:px-24"
     >
       <a href="/warrior_home" class="text-2xl font-bold tracking-wide text-red-600">
         <div class="flex justify-center items-center">
@@ -39,25 +69,26 @@ const sidebarOpen = ref(false);
         </div>
       </a>
       <div
-        class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 md:static md:bg-transparent md:flex md:space-y-0 md:space-x-8 md:flex-row lg:space-x-14"
+        class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 lg:static lg:bg-transparent lg:flex lg:space-y-0 lg:space-x-8 lg:flex-row lg:space-x-14"
         :class="sidebarOpen ? 'fixed flex' : 'hidden'"
       >
         <ul
-          class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 lg:md:-x-8"
+          class="flex flex-col lg:flex-row items-center space-y-6 lg:space-y-0 lg:space-x-6 lg:-x-8"
         >
           <li
             v-for="menu in menus"
-            class="text-lg md:text-base lg:text-lg font-medium group"
+            class="text-lg lg:text-base lg:text-lg font-medium group"
           >
             <Link
-                preserve-state
-                :href="menu.url"
-                class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 text-opacity-100 transition-all duration-300 rounded outline-none cursor-pointer group md:w-auto md:h-auto md:inline-block md:hover:-rotate-3 active:ring-0 active:outline-none"
+              preserve-state
+              :href="menu.url"
+              class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 text-opacity-100 transition-all duration-300 rounded outline-none cursor-pointer group lg:w-auto lg:h-auto lg:inline-block lg:hover:-rotate-3 active:ring-0 active:outline-none"
             >
               <span
-              class="relative z-20 whitespace-nowrap"
-              :class="{ 'text-red': menu.component === page.component }"
-              >{{ menu.title }}</span>
+                class="relative z-20 whitespace-nowrap"
+                :class="{ 'text-red': menu.component === page.component }"
+                >{{ menu.title }}</span
+              >
               <span
                 class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
               ></span>
@@ -72,12 +103,11 @@ const sidebarOpen = ref(false);
           เริ่มผจญภัย
         </Link>
       </div>
-      <button @click="sidebarOpen = !sidebarOpen" class="block sm:hidden relative z-30">
+      <button @click="sidebarOpen = !sidebarOpen" class="block lg:hidden relative z-30">
         <HamburgerIcon class="w-8 h-8 fill-current text-gray-900" />
       </button>
     </nav>
     <slot />
-
 
     <!-- flowbit -->
 
@@ -85,7 +115,7 @@ const sidebarOpen = ref(false);
 
     <div class="container mx-auto px-5" v-if="false">
       <form>
-        <div class="grid gap-6 mb-6 md:grid-cols-2">
+        <div class="grid gap-6 mb-6 lg:grid-cols-2">
           <div>
             <label
               for="first_name"
@@ -574,11 +604,11 @@ const sidebarOpen = ref(false);
           </tbody>
         </table>
         <nav
-          class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 mb-4"
+          class="flex items-center flex-column flex-wrap lg:flex-row justify-between pt-4 mb-4"
           aria-label="Table navigation"
         >
           <span
-            class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto"
+            class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 lg:mb-0 block w-full lg:inline lg:w-auto"
             >Showing
             <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
             of

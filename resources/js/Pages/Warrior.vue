@@ -81,12 +81,12 @@ onMounted(() => {
     >
         <div class="relative z-10 md:w-1/2 w-full">
             <img
-                class="absolute -top-6 right-4 md:right-14 md:-top-8 w-14 h-auto rotate-12 hover:scale-125 duration-300"
+                class="absolute z-20 -top-6 right-4 md:right-14 md:-top-8 w-14 h-auto rotate-12 hover:scale-125 duration-300"
                 src="@/../images/img/object/lantern_1.png"
                 alt=""
             />
             <img
-                class="absolute bottom-6 left-0 md:bottom-20 md:left-0 w-14 h-auto -rotate-12 hover:scale-125 duration-300"
+                class="absolute z-20 bottom-6 left-0 md:bottom-20 md:left-0 w-14 h-auto -rotate-12 hover:scale-125 duration-300"
                 src="@/../images/img/object/lantern_1.png"
                 alt=""
             />
@@ -173,13 +173,8 @@ onMounted(() => {
                     >
                         <img src="@/../images/img/object/fan_1.png" alt="" />
                     </div>
-                    <div
-                        class="w-13 h-13 bg-white/80 group-hover/card:border-red/40 rounded-2xl border-2 border-white object-cover overflow-hidden"
-                    >
-                        <img
-                            src="@/../images/img/object/lantern_2.png"
-                            alt=""
-                        />
+                    <div class="w-13 h-13 bg-white/80 group-hover/card:border-red/40 rounded-2xl border-2 border-white object-cover overflow-hidden">
+                        <img src="@/../images/img/object/lantern_2.png" alt=""/>
                     </div>
                 </div>
                 <div class="pt-3 font-bold">สร้างโปรไฟล์เพื่อบันทึกเลเวล</div>
@@ -207,7 +202,7 @@ onMounted(() => {
                 </div>
             </div>
             <img
-                class="absolute bottom-16 right-4 md:right-14 md:bottom-18 w-14 h-auto rotate-12 hover:scale-125 duration-300"
+                class="absolute z-20 bottom-16 right-4 md:right-14 md:bottom-18 w-14 h-auto rotate-12 hover:scale-125 duration-300"
                 src="@/../images/img/object/lantern_1.png"
                 alt=""
             />

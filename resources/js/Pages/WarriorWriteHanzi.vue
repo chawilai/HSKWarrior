@@ -107,10 +107,9 @@ let playSound = (input) => {
 };
 
 let addToHanziList = (input, list_name = null) => {
-    console.log(input);
 
-    // Check if input exists in any list and remove it if found
     let found = false;
+
     hanzi_list_arr.forEach(list => {
         if (list.hanzi.includes(input)) {
             list.hanzi = list.hanzi.filter(item => item !== input);
@@ -180,67 +179,8 @@ watch(s_pinyin, debounce((value) => fetchData(), 500));
 watch(s_mean, debounce((value) => fetchData(), 500));
 watch(() => pages.props, (data) => (hanzi_list = data.hanzi_list));
 
-watch(
-    () => pages.url,
-    () => {
-
-        // setTimeout(() => {
-        //     hanzi_list.data.forEach((item) => {
-        //         let animate_hanzi = writeHanzi(
-        //             `hanzi_${item.id}`,
-        //             item.character
-        //         );
-
-        //         hanziWriterList.value.push(animate_hanzi);
-        //         animate_hanzi.loopCharacterAnimation();
-        //     });
-        // }, 1000);
-    }
-);
-
-let writeHanzi = (id, letter, option = null) => {
-    return HanziWriter.create(id, letter, {
-        // width: 100,
-        // height: 100,
-        // padding: 5,
-        // strokeColor: '#EE00FF',
-
-        character: null, // (The character to be rendered must be provided by the user)
-        width: 50, // 300, // (Default width of the rendering area in pixels)
-        height: 50, // 300, // (Default height of the rendering area in pixels)
-        padding: 0, // 20, // (Padding around the character in pixels)
-        strokeColor: "#555", // (Color of the strokes)
-        showOutline: true, // (Whether to show the outline of the character)
-        strokeAnimationSpeed: 1, // 1 (Multiplier for the speed of stroke animations)
-        delayBetweenStrokes: 200, // 1000 (Delay between stroke animations in milliseconds)
-        radicalColor: "#168F16", // null (Color for radical strokes, if any)
-
-        // // highlightColor: null, // (Color for highlighting strokes)
-        // outlineColor: '#DDD', // (Color for the outline of strokes)
-        // drawingWidth: 2, // (Width of the drawing strokes)
-        // drawingColor: '#333', // (Color of the drawing strokes)
-        // showCharacter: true, // (Whether to show the character itself)
-        // showHintAfterMisses: 3, // (Number of misses before showing a hint)
-        // highlightOnComplete: true, // (Whether to highlight the character on completion)
-        // drawingFadeDuration: 400, // (Duration for fading out drawing strokes in milliseconds)
-        // animationDuration: 200, // (Default animation duration in milliseconds)
-        // strokeOrder: true, // (Whether to show stroke order animations)
-        // strokeOrderSpeed: 2, // (Speed multiplier for stroke order animations)
-        // strokeOrderColors: null, // (Colors for the stroke order)
-    });
-};
-
 onMounted(() => {
-
     fetchData()
-    // setTimeout(() => {
-    //     hanzi_list.data.forEach((item) => {
-    //         let animate_hanzi = writeHanzi(`hanzi_${item.id}`, item.character);
-
-    //         hanziWriterList.value.push(animate_hanzi);
-    //         animate_hanzi.loopCharacterAnimation();
-    //     });
-    // }, 1000);
 });
 
 onBeforeUnmount(() => {
@@ -304,7 +244,6 @@ onBeforeUnmount(() => {
                                     autocomplete="off"
                                 />
                             </th>
-                            <!-- <th></th> -->
                             <th>
                                 <input
                                     class="text-center h-10 w-10/12 rounded-lg"
@@ -352,11 +291,6 @@ onBeforeUnmount(() => {
                             >
                                 hanzi
                             </th>
-                            <!-- <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                hanzi
-                            </th> -->
                             <th
                                 class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
                             >
@@ -396,14 +330,6 @@ onBeforeUnmount(() => {
                                 class="w-24 text-2xl font-medium border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
                                 v-text="hanzi.character"
                             ></td>
-                            <!-- <td
-                                class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                            >
-                                <div
-                                    :id="`hanzi_${hanzi.id}`"
-                                    class="w-10 mx-auto"
-                                ></div>
-                            </td> -->
                             <td
                                 class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
                                 v-text="hanzi.pinyin"

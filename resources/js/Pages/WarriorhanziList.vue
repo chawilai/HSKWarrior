@@ -168,10 +168,10 @@ onBeforeUnmount(() => {
                         class="text-base text-gray-700 uppercase bg-gradient-to-br from-red-100 to-red-300 dark:bg-gray-700 dark:text-gray-400"
                     >
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center w-16">
                                 ลำดับ
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center w-52">
                                 อักษร
                             </th>
                             <th scope="col" class="px-6 py-3 text-center">
@@ -186,18 +186,29 @@ onBeforeUnmount(() => {
                             :key="word.character"
                         >
                             <td
-                                class="px-6 py-4 text-center"
+                                class="px-6 py-4 text-center w-16"
                                 v-text="index + 1"
                             ></td>
 
                             <th
                                 scope="row"
-                                class="relative px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                class="relative w-52 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
+                                <!-- character -->
                                 <div
                                     :id="`hanzi_${word.character}`"
-                                    class="w-32 h-32 mx-auto my-auto flex justify-center items-center"
+                                    @click="writeAnimate(index + 1), playSound(word.character)"
+                                    class="w-32 h-32 mx-auto my-auto flex justify-center items-center cursor-pointer"
                                 ></div>
+
+                                <!-- radical front -->
+                                <div
+                                    class="absolute text-red left-3 top-1/2 transform -translate-y-1/2"
+                                    v-text="word.radical"
+                                >
+                                </div>
+
+                                <!-- play animate top -->
                                 <div
                                     class="absolute top-3 left-1/2 transform -translate-x-1/2"
                                 >
@@ -206,12 +217,8 @@ onBeforeUnmount(() => {
                                         @click="writeAnimate(index + 1), playSound(word.character)"
                                     ></i>
                                 </div>
-                                <!-- <div class="absolute right-3 bottom-3">
-                                <i
-                                    class="pi pi-volume-up text-lg cursor-pointer hover:text-red hover:font-bold hover:scale-125"
-                                    @click="playSound(word.character)"
-                                ></i>
-                            </div> -->
+
+                                <!-- pinyin and sound bottom -->
                                 <div
                                     class="flex justify-center items-center gap-x-2 absolute bottom-3 left-1/2 transform -translate-x-1/2"
                                 >
@@ -240,10 +247,10 @@ onBeforeUnmount(() => {
                         class="text-base text-gray-700 uppercase bg-gradient-to-br from-red-100 to-red-300 dark:bg-gray-700 dark:text-gray-400"
                     >
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center w-16">
                                 ลำดับ
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center w-52">
                                 อักษร
                             </th>
                             <th scope="col" class="px-6 py-3 text-center">
@@ -258,18 +265,29 @@ onBeforeUnmount(() => {
                             :key="word.character"
                         >
                             <td
-                                class="px-6 py-4 text-center"
+                                class="px-6 py-4 text-center w-16"
                                 v-text="index + leftWords.length + 1"
                             ></td>
 
                             <th
                                 scope="row"
-                                class="relative px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                class="relative w-52 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
+                                <!-- character -->
                                 <div
                                     :id="`hanzi_${word.character}`"
-                                    class="w-32 h-32 mx-auto my-auto flex justify-center items-center"
+                                    @click="writeAnimate(index + leftWords.length + 1), playSound(word.character)"
+                                    class="w-32 h-32 mx-auto my-auto flex justify-center items-center cursor-pointer"
                                 ></div>
+
+                                <!-- radical front -->
+                                <div
+                                    class="absolute text-red left-3 top-1/2 transform -translate-y-1/2"
+                                    v-text="word.radical"
+                                >
+                                </div>
+
+                                <!-- play animate top -->
                                 <div
                                     class="absolute top-3 left-1/2 transform -translate-x-1/2"
                                 >
@@ -278,12 +296,8 @@ onBeforeUnmount(() => {
                                         @click="writeAnimate(index + leftWords.length + 1), playSound(word.character)"
                                     ></i>
                                 </div>
-                                <!-- <div class="absolute right-3 bottom-3">
-                                <i
-                                    class="pi pi-volume-up text-lg cursor-pointer hover:text-red hover:font-bold hover:scale-125"
-                                    @click="playSound(word.character)"
-                                ></i>
-                            </div> -->
+
+                                <!-- pinyin and sound bottom -->
                                 <div
                                     class="flex justify-center items-center gap-x-2 absolute bottom-3 left-1/2 transform -translate-x-1/2"
                                 >

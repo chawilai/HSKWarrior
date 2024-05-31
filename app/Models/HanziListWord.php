@@ -28,6 +28,11 @@ class HanziListWord extends Model
         return $this->belongsTo(HanziList::class);
     }
 
+    public function dictionaryZhHans()
+    {
+        return $this->belongsTo(DictionaryZhHans::class, 'hanzi_id');
+    }
+
     public function hanzi()
     {
         return $this->belongsTo(DictionaryZhHans::class, 'hanzi_id');

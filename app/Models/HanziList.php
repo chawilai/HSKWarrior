@@ -18,9 +18,14 @@ class HanziList extends Model
         "box_number",
     ];
 
-    public function word()
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+    ];
+
+    public function words()
     {
-        return $this->hasMany(HanziListWord::class);
+        return $this->hasMany(HanziListWord::class, 'hanzi_list_id');
     }
 
     public function hanziLists()
