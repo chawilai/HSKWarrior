@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 import 'primeicons/primeicons.css';
+import 'paper-css/paper.min.css'
 
 
 import { createApp, h } from 'vue';

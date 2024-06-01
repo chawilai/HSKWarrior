@@ -1,7 +1,8 @@
 <script setup>
 import Layout from "@/Layouts/OrganicLayout.vue";
+
 import NotFound from "@/Pages/404.vue";
-import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 import HanziWriter from "hanzi-writer";
@@ -159,6 +160,25 @@ onBeforeUnmount(() => {
             <span v-text="`reference: ${hanzi_list.reference}`"></span>
             <span v-text="`box_count: ${hanzi_list.box_count}`"></span>
         </div> -->
+
+        <div class="flex justify-end">
+
+            <Link :href="`/hanzi_list_writing?reference=${hanzi_list.reference}`" as="button"
+            class="mb-2 px-3 py-2 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300">
+            <i class="pi pi-pen-to-square"></i>
+            คัดจีน
+            </Link>
+        </div>
+        <div>
+        <!-- <i class="pi pi-pencil"></i> -->
+
+        <!-- <i class="pi pi-pen"></i> -->
+        <!-- <i class="pi pi-pencil-alt"></i> -->
+        <!-- <i class="pi pi-paint-brush"></i> -->
+        <!-- <i class="pi pi-paint-roller"></i> -->
+        <!-- <i class="pi pi-brush"></i> -->
+
+        </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg flex flex-col lg:flex-row lg:gap-x-4">
             <div class="w-full">
                 <table

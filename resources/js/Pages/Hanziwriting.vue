@@ -1,5 +1,5 @@
 <script setup>
-import Main from "@/Layouts/Main.vue";
+import Layout from "@/Layouts/OrganicLayout.vue";
 import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -57,7 +57,7 @@ const form = useForm({
 //                 - box_number
 //                 - created_at
 //                 - updated_at
-//             - hanzi_list_words
+//             -
 //                 - id
 //                 - hanzi_list_id
 //                 - hanzi_id

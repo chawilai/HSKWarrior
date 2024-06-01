@@ -46,6 +46,8 @@ export default {
             },
             spacing: {
                 13: "3.25rem",
+                15: "3.75rem",
+                26: "6.5rem",
             },
             boxShadow: {
                 primary: "0px 9.9px 21.6px rgba(136, 202, 41, 0.41)",

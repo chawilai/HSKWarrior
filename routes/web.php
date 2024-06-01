@@ -116,6 +116,8 @@ Route::post('/save_hanzi_list', function (Request $request) {
 
 Route::get('/hanzi_list', function (Request $request) {
 
+    if (!$request->reference) return back();
+
     $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
 
     $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.definition')
@@ -143,6 +145,43 @@ Route::get('/hanzi_list', function (Request $request) {
     }
 
     return Inertia::render('WarriorhanziList', [
+        'success' => session('success'),
+        'hanzi_list_data' => $hanzi_list_data
+    ]);
+});
+
+Route::get('/hanzi_list_writing', function (Request $request) {
+
+    if (!$request->reference) return back();
+
+    $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
+
+    $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.definition')
+    ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
+    ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
+    ->orderBy('hanzi_list_words.id', 'ASC')
+    ->get();
+
+    $hanzi_list_word_arr['words'] = $words;
+
+    $hanzi_list_data = [];
+    if ($hanzi_list_word_arr) {
+        $hanzi_list_data['id'] = $hanzi_list_word_arr['id'];
+        $hanzi_list_data['reference'] = $hanzi_list_word_arr['list_reference'];
+        $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
+        $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
+        $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
+            fn ($word) => [
+                'character' => $word->hanzi->character,
+                'set' => $word->hanzi->set,
+                'definition' => $word->hanzi->definition,
+                'pinyin' => $word->hanzi->pinyin,
+                'radical' => $word->hanzi->radical,
+            ]
+        )->toArray();
+    }
+
+    return Inertia::render('WarriorhanziListWriting', [
         'success' => session('success'),
         'hanzi_list_data' => $hanzi_list_data
     ]);
@@ -202,6 +241,11 @@ Route::post('/search', function (Request $request) {
 });
 
 Route::get('/test', function () {
+
+    return Inertia::render('Test');
+
+});
+Route::get('/test2', function () {
 
     $hsk1 = [
         '爱',
