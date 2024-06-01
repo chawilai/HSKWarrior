@@ -240,11 +240,18 @@ Route::post('/search', function (Request $request) {
     return redirect('/hanzi_writing')->with('search', $search);
 });
 
+Route::get('/hanzi_quiz', function () {
+
+    return Inertia::render('HanziQuiz');
+
+});
+
 Route::get('/test', function () {
 
     return Inertia::render('Test');
 
 });
+
 Route::get('/test2', function () {
 
     $hsk1 = [

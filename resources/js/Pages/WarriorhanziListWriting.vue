@@ -5,6 +5,7 @@ import HanziWriter from "hanzi-writer";
 import tts2 from "@/tts.js";
 import warrior_logo from "@/../images/warrior_logo.png";
 import QRCode from "qrcode";
+import HanziStrokeList from "@/Components/HanziStrokeList.vue";
 
 const mainUrl = `${window.location.protocol}//${window.location.hostname}${
     window.location.port ? ":" + window.location.port : ""
@@ -16,7 +17,7 @@ const props = defineProps({
 
 const hanzi_list = ref(props.hanzi_list_data);
 
-const url = `${mainUrl}/hanzi_list?reference=${hanzi_list.reference}`;
+const url = `${mainUrl}/hanzi_list?reference=${hanzi_list.value.reference}`;
 
 let qrImage = ref("");
 let animateHanzi = [];
@@ -274,7 +275,6 @@ onMounted(() => {
     //     // let point = {x: 518, y: 382}
     //     // let point = {x: 25, y: 421}
 
-
     //     const gs = svgElements[1].querySelector("g");
     //     // let point = {x: 308, y: 603}
     //     // let point = {x: 517, y: 212}
@@ -367,14 +367,24 @@ onUnmounted(() => {
             </div>
             <hr class="border-1 border-red" />
         </div>
-        <div class="p-5 flex-1 flex flex-col gap-y-3 w-full">
+        <div class="p-5 flex-1 flex flex-col gap-y-2 w-full">
             <div v-for="(word, word_index) in hanzi_list.words">
-                <div
-                    class="text-xs pl-4"
-                    v-html="
-                        `${word.character} (${word.pinyin}) : ${word.definition} `
-                    "
-                ></div>
+                <div class="flex items-center gap-x-2">
+                    <div
+                        class="text-xs pl-4"
+                        v-html="
+                            `${word.character} (${word.pinyin}) : ${word.definition} `
+                        "
+                    ></div>
+                    <HanziStrokeList
+                        :id="`hanzi_stroke_${word_index}`"
+                        :hanzi="word.character"
+                        frame-size="20"
+                        frame-border="1"
+                        hanzi-size="17"
+                        class="flex gap-x-px pb-px"
+                    ></HanziStrokeList>
+                </div>
                 <div class="relative flex justify-start">
                     <div
                         class="w-15 h-15 border-t border-b border-r border-red first:border-l last:border-r"

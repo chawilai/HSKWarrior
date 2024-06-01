@@ -43,15 +43,15 @@
     //             -> unique id
 
 2024-06-01
-- add table of hanzi_list with name, reference, character list, character count,link
-- add share button to hanzi_list
-- add Practice Write button
-    - list all character in A4 Page with table
-    - add stroke number on Character
-    - add radical
-    - add grid structure
+// - add table of hanzi_list with name, reference, character list, character count,link
+// - add share button to hanzi_list
+// - add Practice Write button
+//     - list all character in A4 Page with table
+//     - add stroke number on Character
+//     - add radical
+//     - add grid structure
     - add empty slot full 1 row or 2 rows -> maybe can set or
         - empty slot can draw using consent pad library
-    - can save ?? have to login
-    - add print button
+//     - can save ?? have to login
+//     - add print button
 
