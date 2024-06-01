@@ -54,4 +54,12 @@
         - empty slot can draw using consent pad library
 //     - can save ?? have to login
 //     - add print button
+//     - add go back button
+        // - hidden button when print
+        // - add more page for hanzi_list_writing
+        //     - check if word % by 10 then add new page
+        //     - pagination for hanzi_list_writing
+        //     - add page number current/max page
+
+2024-06-02
 

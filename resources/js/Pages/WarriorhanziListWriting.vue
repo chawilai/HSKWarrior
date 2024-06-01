@@ -26,6 +26,17 @@ let playingWord = ref("");
 let currentPlaybackId = ref(0);
 const startPoints = ref([]);
 let hanzi_start = ref([]);
+const hanziPerPage = 10;
+
+const pageCount = computed(() => {
+  return Math.ceil(hanzi_list.value.words.length / hanziPerPage);
+});
+
+const paginatedData = (page) => {
+  const start = (page - 1) * hanziPerPage;
+  const end = start + hanziPerPage;
+  return hanzi_list.value.words.slice(start, end);
+};
 
 // add circle with number
 let addStrokeNumber = () => {
@@ -140,6 +151,10 @@ let writeAnimate = (no) => {
     // animateHanzi[no].loopCharacterAnimation()
 };
 
+let printPage = () => {
+    window.print()
+}
+
 QRCode.toDataURL(url)
     .then((res) => {
         qrImage.value = res;
@@ -147,103 +162,6 @@ QRCode.toDataURL(url)
     .catch((err) => {
         console.error(err);
     });
-
-// onMounted(() => {
-//     document.body.classList.add("A4");
-//     document.body.classList.add("bg-gradient-to-br");
-//     document.body.classList.add("from-red-100");
-//     document.body.classList.add("to-red-300");
-
-//     hanzi_list.value.words.forEach((item, index) => {
-//         animateHanzi[index] = writeHanzi(
-//             `hanzi_${item.character}`,
-//             item.character,
-//             {
-//                 width: 50,
-//                 height: 50,
-//                 strokeAnimationSpeed: 2,
-//                 delayBetweenStrokes: 150,
-//                 radicalColor: "#B71F1F",
-//                 padding: 3,
-//             }
-//         );
-//     });
-
-//     HanziWriter.loadCharacterData("二").then((character) => {
-//         // console.log(character.strokes);
-//         // console.log("Stroke count:", character.strokes.length);
-
-//         svgElements = document.querySelectorAll("svg");
-
-//         console.log(svgElements[1].innerHTML);
-
-//         const gs = svgElements[1].querySelector("g");
-
-//         console.log(gs.innerHTML);
-
-//         let startPoints = character.strokes.map((path) => {
-//             const match = path.match(/M (\d+) (\d+)/);
-//             return match
-//                 ? { x: parseInt(match[1]), y: parseInt(match[2]) }
-//                 : null;
-//         });
-
-//         console.log(startPoints);
-
-//         return;
-
-//         startPoints.forEach((point) => {
-//             console.log(point);
-
-//             const circle = document.createElementNS(
-//                 "http://www.w3.org/2000/svg",
-//                 "circle"
-//             );
-//             circle.setAttribute("cx", point.x);
-//             circle.setAttribute("cy", point.y);
-//             circle.setAttribute("r", 70); // Set radius of the circle
-//             circle.setAttribute("fill", "red"); // Set fill color of the circle
-
-//             gs.appendChild(circle);
-//         });
-//     });
-
-//     setTimeout(() => {
-//         // const gs = svgElements[1].querySelector("g");
-//         // console.log(gs.innerHTML);
-//         /////
-//         // const circle = document.createElementNS(
-//         //     "http://www.w3.org/2000/svg",
-//         //     "circle"
-//         // );
-//         // circle.setAttribute("cx", point[0]);
-//         // circle.setAttribute("cy", point[1]);
-//         // circle.setAttribute("r", 70); // Set radius of the circle
-//         // circle.setAttribute("fill", "red"); // Set fill color of the circle
-//         // gs.appendChild(circle);
-//         // const text = document.createElementNS(
-//         //     "http://www.w3.org/2000/svg",
-//         //     "text"
-//         // );
-//         // text.textContent = 1;
-//         // text.setAttribute("x", 25);
-//         // text.setAttribute("y", 421);
-//         // text.setAttribute("font-size", 130);
-//         // text.setAttribute("text-anchor", "middle");
-//         // text.setAttribute("fill", "white");
-//         // text.setAttribute("dy", ".3em");
-//         // text.setAttribute("transform", "scale(1,-1) translate(0,-842)");
-//         // paths[0].appendChild(text);
-//         /////
-//         // svgElements.forEach((svg) => {
-//         //     const gs = svg.querySelectorAll("g")
-//         //     console.log(gs[0].innerHTML)
-//         //     // gs.forEach(g => console.log(g.innerHTML))
-//         // });
-//     }, 500);
-
-//     // console.log(svgElements)
-// });
 
 onMounted(() => {
     document.body.classList.add("A4");
@@ -267,79 +185,6 @@ onMounted(() => {
         );
     });
 
-    // setTimeout(() => {
-
-    //     svgElements = document.querySelectorAll("svg");
-
-    //     // const gs = svgElements[0].querySelector("g");
-    //     // let point = {x: 518, y: 382}
-    //     // let point = {x: 25, y: 421}
-
-    //     const gs = svgElements[1].querySelector("g");
-    //     // let point = {x: 308, y: 603}
-    //     // let point = {x: 517, y: 212}
-    //     // let point = {x: 193.2, y: 593.4}
-    //     let point = {x: 29.6, y: 245.5}
-
-    //     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    //     circle.setAttribute("cx", point.x);
-    //     circle.setAttribute("cy", point.y);
-    //     circle.setAttribute("r", 80); // Set radius of the circle
-    //     circle.setAttribute("fill", "red"); // Set fill color of the circle
-
-    //     gs.appendChild(circle);
-
-    //     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    //     text.textContent = 1;
-    //     text.setAttribute("x", point.x);
-    //     text.setAttribute("y", point.y);
-    //     text.setAttribute("font-size", 160);
-    //     text.setAttribute("text-anchor", "middle");
-    //     text.setAttribute("fill", "white");
-    //     text.setAttribute("dy", ".3em");
-    //     text.setAttribute("transform", "scale(1,-1) translate(0,-842)");
-    //     gs.appendChild(text);
-
-    //     const svgs = document.querySelectorAll("svg");
-    //     svgs.forEach((svg, index) => {
-    //         const paths = svg.querySelectorAll("path");
-    //         paths.forEach((path) => {
-    //             const d = path.getAttribute("d");
-    //             const commands = d.split(" ");
-    //             for (let i = 0; i < commands.length; i++) {
-    //                 if (commands[i] === "M") {
-    //                     const x = parseFloat(commands[i + 1]);
-    //                     const y = parseFloat(commands[i + 2]);
-    //                     // startPoints.value.push({ x, y });
-
-    //                     if (!hanzi_start[index].includes({ x, y }))
-    //                         hanzi_start[index].push({ x, y });
-
-    //                     break;
-    //                 }
-    //             }
-    //         });
-    //     });
-
-    //     const arrayOfArrays = Object.values(hanzi_start);
-
-    //     arrayOfArrays.forEach(item => {
-    //         let uniqueArray = item.filter((obj, index, self) =>
-    //             index === self.findIndex((o) => o.x === obj.x && o.y === obj.y)
-    //         );
-
-    //         console.log(uniqueArray)
-    //     })
-
-    //     return
-
-    //     const uniqueArray = arrayOfArrays.filter((obj, index, self) =>
-    //         index === self.findIndex((o) => o.x === obj.x && o.y === obj.y)
-    //     );
-
-    //     console.log(uniqueArray);
-    //     // console.log(hanzi_start);
-    // }, 500);
 });
 
 onUnmounted(() => {
@@ -353,7 +198,10 @@ onUnmounted(() => {
 <template>
     <Head title="Home" />
 
-    <section class="sheet p-[5mm] flex flex-col justify-between">
+    <section
+        class="sheet p-[5mm] flex flex-col justify-between"
+        v-for="(sheet, sheet_index) in pageCount"
+    >
         <div class="w-full">
             <div class="flex justify-between mb-2">
                 <a href="/warrior_home" class="text-xl font-bold tracking-wide">
@@ -363,12 +211,31 @@ onUnmounted(() => {
                         <span class="text-black">Warrior</span>
                     </div>
                 </a>
+                <div class="flex gap-x-3 items-end">
+                <Link
+                :href="url"
+                as="button"
+                class="h-10 w-20 rounded-md hover:text-red hover:bg-white hover:border-red border-2 border-red text-white bg-red border-white transition-all duration-300 print:hidden"
+                >
+                <i class="pi pi-chevron-left"></i>
+                    Back
+                </Link>
+                <Link
+                @click="printPage()"
+                href="#"
+                as="button"
+                class="h-10 w-20 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300 print:hidden"
+                >
+                <i class="pi pi-print"></i>
+                    Print
+                </Link>
+                </div>
                 <img class="w-20 h-20" :src="qrImage" alt="" />
             </div>
             <hr class="border-1 border-red" />
         </div>
         <div class="p-5 flex-1 flex flex-col gap-y-2 w-full">
-            <div v-for="(word, word_index) in hanzi_list.words">
+            <div v-for="(word, word_index) in paginatedData(sheet)">
                 <div class="flex items-center gap-x-2">
                     <div
                         class="text-xs pl-4"
@@ -377,9 +244,10 @@ onUnmounted(() => {
                         "
                     ></div>
                     <HanziStrokeList
-                        :id="`hanzi_stroke_${word_index}`"
+                        :id="`hanzi_stroke_${sheet}_${word_index}`"
                         :hanzi="word.character"
                         frame-size="20"
+                        frame-color="#CCC"
                         frame-border="1"
                         hanzi-size="17"
                         class="flex gap-x-px pb-px"
@@ -392,14 +260,14 @@ onUnmounted(() => {
                     >
                         <div
                             class="absolute -top-2 -left-3 w-5 h-5 text-sm bg-red rounded-full text-white font-bold flex justify-center items-center"
-                            v-text="word_index + 1"
+                            v-text="(sheet - 1) * 10 + word_index + 1"
                             v-if="index == 0"
                         ></div>
                         <div
                             v-if="index == 0"
                             :id="`hanzi_${word.character}`"
                             @click="
-                                writeAnimate(word_index + 1),
+                                writeAnimate((sheet - 1) * 10 + word_index + 1),
                                     playSound(word.character)
                             "
                             class="w-14 h-14 mx-auto my-auto flex justify-center items-center cursor-pointer"
@@ -409,13 +277,21 @@ onUnmounted(() => {
             </div>
         </div>
         <hr class="border-1 border-red" />
-        <div class="w-full p-3 text-xs">
-            <strong
-                >Copyright &copy; 2023-2024
-                <a target="_blank" href="https://hskwarrior.com">HSK Warrior</a
-                >.</strong
+        <div class="flex justify-between items-center">
+            <div class="w-full p-3 text-xs">
+                <strong
+                    >Copyright &copy; 2023-2024
+                    <a target="_blank" href="https://hskwarrior.com">HSK Warrior</a
+                    >.</strong
+                >
+                All rights reserved.
+            </div>
+            <div
+            class="pr-5"
+            v-html="`${sheet}/${pageCount}`"
             >
-            All rights reserved.
+
+            </div>
         </div>
     </section>
 </template>
