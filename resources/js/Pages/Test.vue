@@ -1,17 +1,20 @@
 <script setup>
-import HanziStrokeList from "@/Components/HanziStrokeList.vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import SignaturePad from "@/Components/SignaturePad.vue";
+
 </script>
 
 <template>
-    <div class="container flex justify-center items-center mx-auto mt-4">
-        <HanziStrokeList
-            hanzi="你"
-            frame-size="100"
-            hanzi-size="95"
-            class="flex gap-x-2"
-        ></HanziStrokeList>
-    </div>
+        <SignaturePad
+        :have-btn="false"
+        canvas-class="bg-transparent rounded-lg border-2 border-gray-400"
+        :min-width="0.5"
+        :max-width="3.5"
+        :dot-size="3"
+        :width="100"
+        :height="100"
+        canvasId="pad1" />
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

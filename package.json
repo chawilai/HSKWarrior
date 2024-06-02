@@ -26,6 +26,7 @@
         "path": "^0.12.7",
         "primeicons": "^7.0.0",
         "qrcode": "^1.5.3",
+        "signature_pad": "^5.0.1",
         "typewriter-effect": "^2.21.0",
         "vite-svg-loader": "^4.0.0"
     }

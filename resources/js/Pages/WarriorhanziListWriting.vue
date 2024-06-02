@@ -6,6 +6,9 @@ import tts2 from "@/tts.js";
 import warrior_logo from "@/../images/warrior_logo.png";
 import QRCode from "qrcode";
 import HanziStrokeList from "@/Components/HanziStrokeList.vue";
+import SignaturePad from "@/Components/SignaturePad.vue";
+
+const emit = defineEmits(['backPressed']);
 
 const mainUrl = `${window.location.protocol}//${window.location.hostname}${
     window.location.port ? ":" + window.location.port : ""
@@ -29,30 +32,13 @@ let hanzi_start = ref([]);
 const hanziPerPage = 10;
 
 const pageCount = computed(() => {
-  return Math.ceil(hanzi_list.value.words.length / hanziPerPage);
+    return Math.ceil(hanzi_list.value.words.length / hanziPerPage);
 });
 
 const paginatedData = (page) => {
-  const start = (page - 1) * hanziPerPage;
-  const end = start + hanziPerPage;
-  return hanzi_list.value.words.slice(start, end);
-};
-
-// add circle with number
-let addStrokeNumber = () => {
-    // <circle cx="25" cy="421" r="150" fill="red" />
-    //             <!-- Number inside the circle with flip -->
-    //             <text
-    //                 x="25"
-    //                 y="421"
-    //                 font-size="150"
-    //                 text-anchor="middle"
-    //                 fill="white"
-    //                 dy=".3em"
-    //                 transform="scale(1,-1) translate(0,-842)"
-    //             >
-    //                 1
-    //             </text>
+    const start = (page - 1) * hanziPerPage;
+    const end = start + hanziPerPage;
+    return hanzi_list.value.words.slice(start, end);
 };
 
 // add number to SVG
@@ -152,8 +138,12 @@ let writeAnimate = (no) => {
 };
 
 let printPage = () => {
-    window.print()
-}
+    window.print();
+};
+
+let isDrawActive = (word_no) => {
+    return word_no === 1 ? true : false;
+};
 
 QRCode.toDataURL(url)
     .then((res) => {
@@ -163,11 +153,25 @@ QRCode.toDataURL(url)
         console.error(err);
     });
 
+const handleKeydown = (event) => {
+    if (event.key === 'Backspace') {
+        // Change the background color
+        emit('back', 'back')
+    }
+};
+
+onBeforeUnmount(() => {
+    // Remove event listener from the document
+    document.removeEventListener("keydown", handleKeydown);
+});
+
 onMounted(() => {
     document.body.classList.add("A4");
     document.body.classList.add("bg-gradient-to-br");
     document.body.classList.add("from-red-100");
     document.body.classList.add("to-red-300");
+
+    document.addEventListener("keydown", handleKeydown);
 
     hanzi_list.value.words.forEach((item, index) => {
         hanzi_start[index] = [];
@@ -184,7 +188,6 @@ onMounted(() => {
             }
         );
     });
-
 });
 
 onUnmounted(() => {
@@ -199,42 +202,51 @@ onUnmounted(() => {
     <Head title="Home" />
 
     <section
-        class="sheet p-[5mm] flex flex-col justify-between"
+        class="sheet p-[3mm] flex flex-col justify-between"
         v-for="(sheet, sheet_index) in pageCount"
     >
         <div class="w-full">
-            <div class="flex justify-between mb-2">
-                <a href="/warrior_home" class="text-xl font-bold tracking-wide">
-                    <div class="flex items-center pl-3 py-3">
-                        <img class="w-14 h-auto" :src="warrior_logo" alt="" />
-                        <span class="text-red">HSK</span>
-                        <span class="text-black">Warrior</span>
+            <div class="flex justify-between gap-x-4 h-16">
+                <div class="flex justify-between flex-1">
+                    <a
+                        href="/warrior_home"
+                        class="text-lg font-bold tracking-wide"
+                    >
+                        <div class="flex items-center pl-3 py-3">
+                            <img
+                                class="w-14 h-auto"
+                                :src="warrior_logo"
+                                alt=""
+                            />
+                            <span class="text-red">HSK</span>
+                            <span class="text-black">Warrior</span>
+                        </div>
+                    </a>
+                    <div class="flex gap-x-3 items-end mr-4">
+                        <Link
+                            :href="url"
+                            as="button"
+                            class="h-8 w-16 rounded-md text-sm hover:text-red hover:bg-white hover:border-red border-2 border-red text-white bg-red transition-all duration-300 print:hidden"
+                        >
+                            <i class="pi pi-chevron-left"></i>
+                            Back
+                        </Link>
+                        <Link
+                            @click="printPage()"
+                            href="#"
+                            as="button"
+                            class="h-8 w-16 rounded-md text-sm text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-red transition-all duration-300 print:hidden"
+                        >
+                            <i class="pi pi-print"></i>
+                            Print
+                        </Link>
                     </div>
-                </a>
-                <div class="flex gap-x-3 items-end">
-                <Link
-                :href="url"
-                as="button"
-                class="h-10 w-20 rounded-md hover:text-red hover:bg-white hover:border-red border-2 border-red text-white bg-red border-white transition-all duration-300 print:hidden"
-                >
-                <i class="pi pi-chevron-left"></i>
-                    Back
-                </Link>
-                <Link
-                @click="printPage()"
-                href="#"
-                as="button"
-                class="h-10 w-20 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300 print:hidden"
-                >
-                <i class="pi pi-print"></i>
-                    Print
-                </Link>
                 </div>
-                <img class="w-20 h-20" :src="qrImage" alt="" />
+                <img class="w-[100px] h-[100px]" :src="qrImage" alt="" />
             </div>
-            <hr class="border-1 border-red" />
+            <hr class="border-1 mt-4 border-red" />
         </div>
-        <div class="p-5 flex-1 flex flex-col gap-y-2 w-full">
+        <div class="px-5 py-4 flex-1 flex flex-col gap-y-[6px] w-full">
             <div v-for="(word, word_index) in paginatedData(sheet)">
                 <div class="flex items-center gap-x-2">
                     <div
@@ -246,17 +258,17 @@ onUnmounted(() => {
                     <HanziStrokeList
                         :id="`hanzi_stroke_${sheet}_${word_index}`"
                         :hanzi="word.character"
-                        frame-size="20"
+                        frame-size="25"
+                        hanzi-size="23"
                         frame-color="#CCC"
                         frame-border="1"
-                        hanzi-size="17"
-                        class="flex gap-x-px pb-px"
+                        class="flex gap-x-px pb-1"
                     ></HanziStrokeList>
                 </div>
                 <div class="relative flex justify-start">
                     <div
                         class="w-15 h-15 border-t border-b border-r border-red first:border-l last:border-r"
-                        v-for="(box, index) in 12"
+                        v-for="(box, index) in 1"
                     >
                         <div
                             class="absolute -top-2 -left-3 w-5 h-5 text-sm bg-red rounded-full text-white font-bold flex justify-center items-center"
@@ -273,6 +285,32 @@ onUnmounted(() => {
                             class="w-14 h-14 mx-auto my-auto flex justify-center items-center cursor-pointer"
                         ></div>
                     </div>
+                    <SignaturePad
+                        :have-btn="false"
+                        canvas-class=""
+                        :wrapper-class="
+                            isDrawActive((sheet - 1) * 10 + word_index + 1)
+                                ? 'bg-gray-100'
+                                : ''
+                        "
+                        background-color=""
+                        :min-width="0.5"
+                        :max-width="2"
+                        :dot-size="1.8"
+                        :throttle="0"
+                        :minDistance="1"
+                        :width="60"
+                        :height="60"
+                        border-color
+                        :canvasId="
+                            `drawpad_` +
+                            ((sheet - 1) * 10 + word_index + 1) +
+                            `_${index}`
+                        "
+                        v-for="(box, index) in 11"
+                    />
+                    <!--  -->
+                    <!--  -->
                 </div>
             </div>
         </div>
@@ -281,17 +319,13 @@ onUnmounted(() => {
             <div class="w-full p-3 text-xs">
                 <strong
                     >Copyright &copy; 2023-2024
-                    <a target="_blank" href="https://hskwarrior.com">HSK Warrior</a
+                    <a target="_blank" href="https://hskwarrior.com"
+                        >HSK Warrior</a
                     >.</strong
                 >
                 All rights reserved.
             </div>
-            <div
-            class="pr-5"
-            v-html="`${sheet}/${pageCount}`"
-            >
-
-            </div>
+            <div class="pr-5" v-html="`${sheet}/${pageCount}`"></div>
         </div>
     </section>
 </template>
