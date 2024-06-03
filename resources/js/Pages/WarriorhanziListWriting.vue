@@ -257,12 +257,12 @@ onUnmounted(() => {
             <div class="flex items-end mb-1 gap-x-1 pr-5">
                 <button
                 v-show="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1)"
-                class="text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerUndo()"><i class="pi pi-undo"></i> Undo</button>
+                class="print:hidden text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerUndo()"><i class="pi pi-undo"></i> Undo</button>
                 <button
                 v-show="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1)"
-                class="text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerClearPad()"><i class="pi pi-eraser"></i> Clear</button>
+                class="print:hidden text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerClearPad()"><i class="pi pi-eraser"></i> Clear</button>
                 <button
-                class="text-[8px] w-10 h-4 border rounded-lg hover:bg-red hover:text-white hover:border-red"
+                class="print:hidden text-[8px] w-10 h-4 border rounded-lg hover:bg-red hover:text-white hover:border-red"
                 :class="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1) ? 'bg-red text-white bg-red' : 'bg-gray-400 text-black border-black'"
                 type="button"
                 @click="signaturePadStore.triggerActiveRow((sheet - 1) * 10 + word_index + 1)"><i class="pi pi-pencil"></i> Write</button>
@@ -274,7 +274,7 @@ onUnmounted(() => {
             v-for="(box, index) in 1"
           >
             <div
-              class="absolute -top-2 -left-3 w-5 h-5 text-sm rounded-full text-white font-bold flex justify-center items-center"
+              class="absolute -top-2 -left-3 w-5 h-5 text-sm bg-red rounded-full text-white font-bold flex justify-center items-center"
               v-text="(sheet - 1) * 10 + word_index + 1"
               v-if="index == 0"
             ></div>
