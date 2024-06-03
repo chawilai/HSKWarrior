@@ -17,8 +17,6 @@ console.log(counterStore)
         <button class="p-2 border border-gray-400 rounded-lg" @click="counterStore.increment">Increment</button>
         <button class="p-2 border border-gray-400 rounded-lg" @click="counterStore.decrement">Decrement</button>
     </div>
-
-    <SignaturePad />
 </template>
 
 <style scoped></style>

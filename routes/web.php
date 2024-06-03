@@ -254,6 +254,12 @@ Route::get('/test', function () {
 
 Route::get('/test2', function () {
 
+    return Inertia::render('Test2');
+
+});
+
+Route::get('/test3', function () {
+
     $hsk1 = [
         '爱',
         '八',
