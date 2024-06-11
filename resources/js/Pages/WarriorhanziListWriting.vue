@@ -208,15 +208,15 @@ onUnmounted(() => {
           <a href="/warrior_home" class="text-lg font-bold tracking-wide">
             <div class="flex items-center pl-3 py-3">
               <img class="w-14 h-auto" :src="warrior_logo" alt="" />
-              <span class="text-red">HSK</span>
-              <span class="text-black">Warrior</span>
+              <span class="select-none text-red">HSK</span>
+              <span class="select-none text-black">Warrior</span>
             </div>
           </a>
           <div class="flex gap-x-3 items-end mr-4">
             <Link
               :href="url"
               as="button"
-              class="h-8 w-16 rounded-md text-sm hover:text-red hover:bg-white hover:border-red border-2 border-red text-white bg-red transition-all duration-300 print:hidden"
+              class="h-8 w-16 select-none rounded-md text-sm hover:text-red hover:bg-white hover:border-red border-2 border-red text-white bg-red transition-all duration-300 print:hidden"
             >
               <i class="pi pi-chevron-left"></i>
               Back
@@ -225,7 +225,7 @@ onUnmounted(() => {
               @click="printPage()"
               href="#"
               as="button"
-              class="h-8 w-16 rounded-md text-sm text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-red transition-all duration-300 print:hidden"
+              class="h-8 w-16 select-none rounded-md text-sm text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-red transition-all duration-300 print:hidden"
             >
               <i class="pi pi-print"></i>
               Print
@@ -241,7 +241,7 @@ onUnmounted(() => {
         <div class="flex justify-between">
             <div class="flex items-center gap-x-2">
             <div
-                class="text-xs pl-4"
+                class="text-xs pl-4 select-none"
                 v-html="`${word.character} (${word.pinyin}) : ${word.definition} `"
             ></div>
             <HanziStrokeList
@@ -257,12 +257,12 @@ onUnmounted(() => {
             <div class="flex items-end mb-1 gap-x-1 pr-5">
                 <button
                 v-show="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1)"
-                class="print:hidden text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerUndo()"><i class="pi pi-undo"></i> Undo</button>
+                class="print:hidden select-none text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerUndo()"><i class="pi pi-undo"></i> Undo</button>
                 <button
                 v-show="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1)"
-                class="print:hidden text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerClearPad()"><i class="pi pi-eraser"></i> Clear</button>
+                class="print:hidden select-none text-[8px] w-10 h-4 border border-red-200 rounded-lg" type="button" @click="signaturePadStore.triggerClearPad()"><i class="pi pi-eraser"></i> Clear</button>
                 <button
-                class="print:hidden text-[8px] w-10 h-4 border rounded-lg hover:bg-red hover:text-white hover:border-red"
+                class="print:hidden select-none text-[8px] w-10 h-4 border rounded-lg hover:bg-red hover:text-white hover:border-red"
                 :class="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1) ? 'bg-red text-white bg-red' : 'bg-gray-400 text-black border-black'"
                 type="button"
                 @click="signaturePadStore.triggerActiveRow((sheet - 1) * 10 + word_index + 1)"><i class="pi pi-pencil"></i> Write</button>
@@ -274,7 +274,7 @@ onUnmounted(() => {
             v-for="(box, index) in 1"
           >
             <div
-              class="absolute -top-2 -left-3 w-5 h-5 text-sm bg-red rounded-full text-white font-bold flex justify-center items-center"
+              class="absolute -top-2 -left-3 w-5 h-5 text-sm bg-red select-none rounded-full text-white font-bold flex justify-center items-center"
               v-text="(sheet - 1) * 10 + word_index + 1"
               v-if="index == 0"
             ></div>
@@ -291,13 +291,14 @@ onUnmounted(() => {
             :isActive="true"
             :have-btn="false"
             canvas-class=""
+            pen-color="#0037dd"
             :wrapper-class="signaturePadStore.activeRow.includes((sheet - 1) * 10 + word_index + 1) ? 'bg-gray-100' : ''"
             background-color=""
-            :min-width="0.3"
-            :max-width="1.8"
-            :velocity-filter-weight="1"
-            :dot-size="1.6"
-            :throttle="0"
+            :min-width="0.6"
+            :max-width="1.2"
+            :velocity-filter-weight="0"
+            :dot-size="1.1"
+            :throttle="10"
             :minDistance="1"
             :width="60"
             :height="60"

@@ -161,12 +161,17 @@ onBeforeUnmount(() => {
             <span v-text="`box_count: ${hanzi_list.box_count}`"></span>
         </div> -->
 
-        <div class="flex justify-end">
+        <div class="flex gap-x-2 justify-end">
 
             <Link :href="`/hanzi_list_writing?reference=${hanzi_list.reference}`" as="button"
             class="mb-2 px-3 py-2 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300">
             <i class="pi pi-pen-to-square"></i>
             คัดจีน
+            </Link>
+            <Link :href="`/warrior_flip_card?reference=${hanzi_list.reference}`" as="button"
+            class="mb-2 px-3 py-2 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300">
+            <i class="pi pi-play"></i>
+            Flip Card
             </Link>
         </div>
         <div>

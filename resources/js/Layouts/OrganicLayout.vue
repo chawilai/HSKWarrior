@@ -40,9 +40,9 @@ const menus = [
     active: false,
   },
   {
-    title: "Game",
-    component: "WarriorGame",
-    url: "/warrior_game",
+    title: "Flip Card",
+    component: "WarriorFlipCard",
+    url: "/warrior_flip_card",
     disabled: false,
     active: false,
   },
