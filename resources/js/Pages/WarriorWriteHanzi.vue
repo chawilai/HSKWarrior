@@ -27,7 +27,7 @@ let hanzi_list = pages.props.hanzi_list;
 let hanzi_list_arr = pages.props.hanzi_list_arr;
 
 let search = ref(pages.props.filters.search);
-let s_set = ref('hsk1');
+let s_set = ref("hsk1");
 let s_hanzi = ref(pages.props.filters.s_hanzi);
 let s_pinyin = ref(pages.props.filters.s_pinyin);
 let s_mean = ref(pages.props.filters.s_mean);
@@ -107,12 +107,11 @@ let playSound = (input) => {
 };
 
 let addToHanziList = (input, list_name = null) => {
-
     let found = false;
 
-    hanzi_list_arr.forEach(list => {
+    hanzi_list_arr.forEach((list) => {
         if (list.hanzi.includes(input)) {
-            list.hanzi = list.hanzi.filter(item => item !== input);
+            list.hanzi = list.hanzi.filter((item) => item !== input);
             found = true;
         }
     });
@@ -121,17 +120,17 @@ let addToHanziList = (input, list_name = null) => {
     if (!found) {
         if (list_name) {
             // Find the list by name
-            let list = hanzi_list_arr.find(list => list.name === list_name);
+            let list = hanzi_list_arr.find((list) => list.name === list_name);
             if (list) {
                 list.hanzi.push(input);
             } else {
-                console.log('List not found.');
+                console.log("List not found.");
             }
         } else {
             // Add input to the default list
             if (hanzi_list_arr.length == 0) {
                 hanzi_list_arr.push({
-                    name: 'my_list',
+                    name: "my_list",
                     reference: makeid(6),
                     hanzi: [input],
                 });
@@ -149,38 +148,49 @@ let stopPlayback = () => {
 };
 
 let makeid = (
-  length = 4,
-  letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    length = 4,
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 ) => {
-  var result = [];
-  var characters = letters;
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result.push(
-      characters.charAt(Math.floor(Math.random() * charactersLength))
-    );
-  }
-  return result.join('');
-}
+    var result = [];
+    var characters = letters;
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result.push(
+            characters.charAt(Math.floor(Math.random() * charactersLength))
+        );
+    }
+    return result.join("");
+};
 
 let saveHanziList = () => {
+    let list_name = hanzi_list_arr[0].name;
+    let list_reference = hanzi_list_arr[0].reference;
+    let list = hanzi_list_arr[0].hanzi;
 
-    let list_name = hanzi_list_arr[0].name
-    let list_reference = hanzi_list_arr[0].reference
-    let list = hanzi_list_arr[0].hanzi
-
-    router.post('/save_hanzi_list', {list_name, list_reference, list})
-}
+    router.post("/save_hanzi_list", { list_name, list_reference, list });
+};
 
 // watch(search, debounce((value) => fetchData(), 500));
 // watch(s_set, debounce((value) => fetchData(), 500));
-watch(s_hanzi, debounce((value) => fetchData(), 500));
-watch(s_pinyin, debounce((value) => fetchData(), 500));
-watch(s_mean, debounce((value) => fetchData(), 500));
-watch(() => pages.props, (data) => (hanzi_list = data.hanzi_list));
+watch(
+    s_hanzi,
+    debounce((value) => fetchData(), 500)
+);
+watch(
+    s_pinyin,
+    debounce((value) => fetchData(), 500)
+);
+watch(
+    s_mean,
+    debounce((value) => fetchData(), 500)
+);
+watch(
+    () => pages.props,
+    (data) => (hanzi_list = data.hanzi_list)
+);
 
 onMounted(() => {
-    fetchData()
+    fetchData();
 });
 
 onBeforeUnmount(() => {
@@ -216,7 +226,25 @@ onBeforeUnmount(() => {
                 <table class="min-w-full">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>
+                                <div
+                                    class="relative cursor-pointer hover:text-red hover:scale-125"
+                                    @click="saveHanziList()"
+                                >
+                                    <i class="pi pi-inbox text-4xl">
+                                    </i>
+                                    <div
+                                        class="absolute z-30 -top-2 -right-3 lg:right-0 w-6 h-6 text-sm text-white rounded-full bg-red flex justify-center items-center"
+                                        v-if="hanzi_list_arr.length > 0"
+                                    >
+                                        <span
+                                            v-text="
+                                                hanzi_list_arr[0].hanzi.length
+                                            "
+                                        ></span>
+                                    </div>
+                                </div>
+                            </th>
                             <th>
                                 <select
                                     class="text-center h-10 w-12/12 rounded-lg"
@@ -263,21 +291,14 @@ onBeforeUnmount(() => {
                                     autocomplete="off"
                                 />
                             </th>
-                            <th>
-                            <div class="relative cursor-pointer hover:text-red hover:scale-125" @click="saveHanziList()">
-                                <i class="pi pi-inbox text-4xl"></i>
-                                <div class="absolute z-30 -top-2 -right-3 lg:right-0 w-6 h-6 text-sm text-white rounded-full bg-red flex justify-center items-center" v-if="hanzi_list_arr.length > 0">
-                                    <span v-text="hanzi_list_arr[0].hanzi.length"></span>
-                                </div>
-                            </div>
-                            </th>
+                            <th></th>
                         </tr>
                         <tr class="h-2"></tr>
                     </thead>
                     <thead>
                         <tr>
                             <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
+                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
                             >
                                 id
                             </th>
@@ -292,12 +313,17 @@ onBeforeUnmount(() => {
                                 hanzi
                             </th>
                             <th
+                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
+                            >
+                                list
+                            </th>
+                            <th
                                 class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
                             >
                                 pinyin
                             </th>
                             <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
+                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
                             >
                                 play
                             </th>
@@ -305,11 +331,6 @@ onBeforeUnmount(() => {
                                 class="bg-red text-white border border-gray-300 py-1 px-2 text-center"
                             >
                                 meaning
-                            </th>
-                            <th
-                                class="bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                list
                             </th>
                         </tr>
                     </thead>
@@ -319,7 +340,7 @@ onBeforeUnmount(() => {
                             :key="hanzi.id"
                         >
                             <td
-                                class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
+                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
                                 v-text="hanzi_list.from + index"
                             ></td>
                             <td
@@ -331,11 +352,35 @@ onBeforeUnmount(() => {
                                 v-text="hanzi.character"
                             ></td>
                             <td
+                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
+                            >
+                                <i
+                                    :title="
+                                        hanzi_list_arr[0] &&
+                                        hanzi_list_arr[0].hanzi.includes(
+                                            hanzi.character
+                                        )
+                                            ? 'remove from list'
+                                            : 'add to list'
+                                    "
+                                    class="pi text-xl cursor-pointer hover:text-red hover:font-bold hover:scale-125"
+                                    :class="
+                                        hanzi_list_arr[0] &&
+                                        hanzi_list_arr[0].hanzi.includes(
+                                            hanzi.character
+                                        )
+                                            ? 'pi-minus-circle text-red hover:text-black'
+                                            : 'pi-plus-circle text-black hover:text-red'
+                                    "
+                                    @click="addToHanziList(hanzi.character)"
+                                ></i>
+                            </td>
+                            <td
                                 class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
                                 v-text="hanzi.pinyin"
                             ></td>
                             <td
-                                class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
+                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
                             >
                                 <i
                                     class="pi pi-volume-up text-lg cursor-pointer hover:text-red hover:font-bold hover:scale-125"
@@ -346,16 +391,6 @@ onBeforeUnmount(() => {
                                 class="border border-gray-300 py-1 px-2 whitespace-nowrap"
                                 v-text="hanzi.definition"
                             ></td>
-                            <td
-                                class="border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                            >
-                              <i
-                                    :title="hanzi_list_arr[0] && hanzi_list_arr[0].hanzi.includes(hanzi.character) ? 'remove from list' : 'add to list'"
-                                    class="pi text-xl cursor-pointer hover:text-red hover:font-bold hover:scale-125"
-                                    :class="hanzi_list_arr[0] && hanzi_list_arr[0].hanzi.includes(hanzi.character) ? 'pi-minus-circle text-red hover:text-black' : 'pi-plus-circle text-black hover:text-red'"
-                                    @click="addToHanziList(hanzi.character)"
-                                ></i>
-                            </td>
                         </tr>
                     </tbody>
                 </table>

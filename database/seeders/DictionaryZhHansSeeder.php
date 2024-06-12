@@ -28,6 +28,7 @@ class DictionaryZhHansSeeder extends Seeder
                     DictionaryZhHans::create([
                         'character' => $data['character'] ?? null,
                         'set' => isset($data['set']) ? $data['set'] : null,
+                        'meaning_thai' => $data['meaning_thai'] ?? null,
                         'definition' => $data['definition'] ?? null,
                         'pinyin' => isset($data['pinyin']) ? $data['pinyin'] : null,
                         'radical' => $data['radical'] ?? null,

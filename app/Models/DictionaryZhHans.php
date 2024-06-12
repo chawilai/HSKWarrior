@@ -14,6 +14,7 @@ class DictionaryZhHans extends Model
     protected $fillable = [
         'character',
         'set',
+        'meaning_thai',
         'definition',
         'pinyin',
         'pinyin_english',

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 
 // Define props with default values and validators
 const props = defineProps({

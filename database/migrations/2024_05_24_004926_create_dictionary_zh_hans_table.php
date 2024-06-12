@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('character', 10);
             $table->json('set')->nullable();
+            $table->string('meaning_thai')->nullable();
             $table->string('definition')->nullable();
             $table->json('pinyin')->nullable();
             $table->string('pinyin_english')->nullable();

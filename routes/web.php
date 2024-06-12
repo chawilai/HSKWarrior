@@ -24,6 +24,11 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/data', function () {
+  return DictionaryZhHans::select(['id', 'character'])
+  ->where('set', 'like', '%hsk7%')->get();
+});
+
 Route::get('/organic', function () {
     return Inertia::render('Organic');
 });
@@ -44,11 +49,11 @@ Route::get('/warrior_writehanzi', function (Request $request) {
 
     $filters = [];
 
-    if($request->input("search")) $filters["search"] = $request->input("search");
-    if($request->input("s_set")) $filters["s_set"] = $request->input("s_set");
-    if($request->input("s_hanzi")) $filters["s_hanzi"] = $request->input("s_hanzi");
-    if($request->input("s_pinyin")) $filters["s_pinyin"] = $request->input("s_pinyin");
-    if($request->input("s_mean")) $filters["s_mean"] = $request->input("s_mean");
+    if ($request->input("search")) $filters["search"] = $request->input("search");
+    if ($request->input("s_set")) $filters["s_set"] = $request->input("s_set");
+    if ($request->input("s_hanzi")) $filters["s_hanzi"] = $request->input("s_hanzi");
+    if ($request->input("s_pinyin")) $filters["s_pinyin"] = $request->input("s_pinyin");
+    if ($request->input("s_mean")) $filters["s_mean"] = $request->input("s_mean");
 
     return Inertia::render('WarriorWriteHanzi', [
         "page" => $request->page,
@@ -56,31 +61,31 @@ Route::get('/warrior_writehanzi', function (Request $request) {
         "hanzi_list" => DictionaryZhHans::when($request->input('s_set'), function ($query, $s_set) {
             $query->where('set', 'like', '%' . $s_set . '%');
         })
-        ->when($request->input('s_hanzi'), function ($query, $s_hanzi) {
-            $query->where('character', 'like', '%' . $s_hanzi . '%');
-        })
-        ->when($request->input('s_pinyin'), function ($query, $s_pinyin) {
-            $query->where(function ($q) use ($s_pinyin) {
-                $q->where('pinyin', 'like', '%' . $s_pinyin . '%')
-                  ->orWhere('pinyin_english', 'like', '%' . $s_pinyin . '%');
-            });
-        })
-        ->when($request->input('s_mean'), function ($query, $s_mean) {
-            $query->where('definition', 'like', '%' . $s_mean . '%');
-        })
-        ->paginate(10)
-        ->withQueryString()
-        ->through(fn($hanzi) => [
-            'id' => $hanzi->id,
-            'character' => $hanzi->character,
-            'set' => $hanzi->set,
-            'definition' => $hanzi->definition,
-            'pinyin' => $hanzi->pinyin,
-            'pinyin_english' => Pinyin::sentence($hanzi->character, 'none')[0],
-            'radical' => $hanzi->radical,
-            'decomposition' => $hanzi->decomposition,
-            'acjk' => $hanzi->acjk,
-        ])
+            ->when($request->input('s_hanzi'), function ($query, $s_hanzi) {
+                $query->where('character', 'like', '%' . $s_hanzi . '%');
+            })
+            ->when($request->input('s_pinyin'), function ($query, $s_pinyin) {
+                $query->where(function ($q) use ($s_pinyin) {
+                    $q->where('pinyin', 'like', '%' . $s_pinyin . '%')
+                        ->orWhere('pinyin_english', 'like', '%' . $s_pinyin . '%');
+                });
+            })
+            ->when($request->input('s_mean'), function ($query, $s_mean) {
+                $query->where('definition', 'like', '%' . $s_mean . '%');
+            })
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn ($hanzi) => [
+                'id' => $hanzi->id,
+                'character' => $hanzi->character,
+                'set' => $hanzi->set,
+                'definition' => $hanzi->definition,
+                'pinyin' => $hanzi->pinyin,
+                'pinyin_english' => Pinyin::sentence($hanzi->character, 'none')[0],
+                'radical' => $hanzi->radical,
+                'decomposition' => $hanzi->decomposition,
+                'acjk' => $hanzi->acjk,
+            ])
     ]);
 });
 
@@ -101,7 +106,7 @@ Route::post('/save_hanzi_list', function (Request $request) {
         'box_number' => 6
     ]);
     // Create a new HanziList entry
-    foreach($request->list as $item) {
+    foreach ($request->list as $item) {
         HanziListWord::create([
             'hanzi_list_id' => $hanziList->id,
             'hanzi_id' => DictionaryZhHans::where('character', $item)->first()->id,
@@ -121,27 +126,28 @@ Route::get('/hanzi_list', function (Request $request) {
     $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
 
     $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.definition')
-    ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
-    ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
-    ->orderBy('hanzi_list_words.id', 'ASC')
-    ->get();
+        ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
+        ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
+        ->orderBy('hanzi_list_words.id', 'ASC')
+        ->get();
 
     $hanzi_list_word_arr['words'] = $words;
 
     $hanzi_list_data = [];
-    if($hanzi_list_word_arr) {
+    if ($hanzi_list_word_arr) {
         $hanzi_list_data['id'] = $hanzi_list_word_arr['id'];
         $hanzi_list_data['reference'] = $hanzi_list_word_arr['list_reference'];
         $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
         $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
         $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
-            fn($word) => [
-                    'character' => $word->hanzi->character,
-                    'set' => $word->hanzi->set,
-                    'definition' => $word->hanzi->definition,
-                    'pinyin' => $word->hanzi->pinyin,
-                    'radical' => $word->hanzi->radical,
-            ])->toArray();
+            fn ($word) => [
+                'character' => $word->hanzi->character,
+                'set' => $word->hanzi->set,
+                'definition' => $word->hanzi->definition,
+                'pinyin' => $word->hanzi->pinyin,
+                'radical' => $word->hanzi->radical,
+            ]
+        )->toArray();
     }
 
     return Inertia::render('WarriorhanziList', [
@@ -152,32 +158,68 @@ Route::get('/hanzi_list', function (Request $request) {
 
 Route::get('/warrior_flip_card', function (Request $request) {
 
-    if (!$request->reference) return back();
+    if ($request->has('reference')) {
+        // Fetch the first matching HanziList based on the provided reference
+        $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
 
-    $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
+        // Fetch words associated with the hanzi_list_id and join with DictionaryZhHans
+        $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.meaning_thai', 'dictionary_zh_hans.definition')
+            ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
+            ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
+            ->orderBy('hanzi_list_words.id', 'ASC')
+            ->get();
+    } else {
+        // Fetch directly from DictionaryZhHans where 'set' is 'hsk1' and randomly pick 10 records
 
-    $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.definition')
-    ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
-    ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
-    ->orderBy('hanzi_list_words.id', 'ASC')
-    ->get();
+        $set = $request->has('set') ? $request->set : 'hsk1';
+        $word_count = $request->has('word_count') ? $request->word_count : 10;
+
+        $words = DictionaryZhHans::where('set', 'like', "%{$set}%")
+            ->inRandomOrder()
+            ->take($word_count)
+            ->get();
+
+        $hanzi_list_data = [];
+
+        $hanzi_list_data['id'] = 'id';
+        $hanzi_list_data['reference'] = 'reference';
+        $hanzi_list_data['list_name'] = 'list_name';
+        $hanzi_list_data['box_count'] = 'box_count';
+        $hanzi_list_data['words'] = $words->map(
+            fn ($word) => [
+                'character' => $word->character,
+                'set' => $word->set,
+                'meaning_thai' => $word->meaning_thai,
+                'definition' => $word->definition,
+                'pinyin' => $word->pinyin,
+                'radical' => $word->radical,
+            ]
+        )->toArray();
+
+        return Inertia::render('WarriorFlipCard', [
+            'success' => session('success'),
+            'hanzi_list_data' => $hanzi_list_data
+        ]);
+    }
 
     $hanzi_list_word_arr['words'] = $words;
 
     $hanzi_list_data = [];
-    if($hanzi_list_word_arr) {
+    if ($hanzi_list_word_arr) {
         $hanzi_list_data['id'] = $hanzi_list_word_arr['id'];
         $hanzi_list_data['reference'] = $hanzi_list_word_arr['list_reference'];
         $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
         $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
         $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
-            fn($word) => [
-                    'character' => $word->hanzi->character,
-                    'set' => $word->hanzi->set,
-                    'definition' => $word->hanzi->definition,
-                    'pinyin' => $word->hanzi->pinyin,
-                    'radical' => $word->hanzi->radical,
-            ])->toArray();
+            fn ($word) => [
+                'character' => $word->hanzi->character,
+                'set' => $word->hanzi->set,
+                'meaning_thai' => $word->hanzi->meaning_thai,
+                'definition' => $word->hanzi->definition,
+                'pinyin' => $word->hanzi->pinyin,
+                'radical' => $word->hanzi->radical,
+            ]
+        )->toArray();
     }
 
     return Inertia::render('WarriorFlipCard', [
@@ -193,10 +235,10 @@ Route::get('/hanzi_list_writing', function (Request $request) {
     $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
 
     $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.definition')
-    ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
-    ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
-    ->orderBy('hanzi_list_words.id', 'ASC')
-    ->get();
+        ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
+        ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
+        ->orderBy('hanzi_list_words.id', 'ASC')
+        ->get();
 
     $hanzi_list_word_arr['words'] = $words;
 
@@ -238,9 +280,9 @@ Route::get('/home', function () {
 Route::get('/hanzi_sound', function () {
 
     $hanziRecords = Hanzi::whereBetween('id', [1, 1000])
-    ->where('pinyin_eng', 'like', '%ian')
-    ->orderBy('pinyin_eng', 'ASC')
-    ->get();
+        ->where('pinyin_eng', 'like', '%ian')
+        ->orderBy('pinyin_eng', 'ASC')
+        ->get();
 
     return Inertia::render('HanziSound', [
         'hsk1' => $hanziRecords
@@ -275,19 +317,16 @@ Route::post('/search', function (Request $request) {
 Route::get('/hanzi_quiz', function () {
 
     return Inertia::render('HanziQuiz');
-
 });
 
 Route::get('/test', function () {
 
     return Inertia::render('Test');
-
 });
 
 Route::get('/test2', function () {
 
     return Inertia::render('Test2');
-
 });
 
 Route::get('/test3', function () {
