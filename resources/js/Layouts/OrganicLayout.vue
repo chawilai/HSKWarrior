@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue";
-import { Link, usePage } from "@inertiajs/vue3";
+import { ref, onMounted } from "vue";
+import { Link, usePage, router } from "@inertiajs/vue3";
 import ScreenIndicator from "@/Components/ScreenIndicator.vue";
 
 import HamburgerIcon from "@/../icons/hamburger.svg";
@@ -49,6 +49,13 @@ const menus = [
     // {"title":"ทายคำศัพท์", "component": "WarriorHome","url": "/warrior_guessingwords", "disabled": false, "active": false},
 ];
 const sidebarOpen = ref(false);
+
+
+onMounted(() => {
+      router.on('navigate', () => {
+        sidebarOpen.value = false
+      })
+})
 </script>
 
 <template>
@@ -83,6 +90,7 @@ const sidebarOpen = ref(false);
                         class="text-lg lg:text-base font-medium group"
                     >
                         <Link
+                            @click="sidebarOpen = false"
                             as="button"
                             preserve-scroll
                             :href="menu.url"
@@ -103,6 +111,7 @@ const sidebarOpen = ref(false);
                     </li>
                 </ul>
                 <Link
+                    @click="sidebarOpen = false"
                     role="button"
                     href="#login"
                     class="flex justify-center items-center px-7 py-2 hover:-rotate-3 transition-all ease-out duration-300 text-base font-semibold leading-7 text-white bg-red border border-red rounded-lg focus:outline-red focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 hover:bg-transparent hover:text-red sm:w-auto hover:scale-[1.01] focus:bg-transparent focus:text-red hover:shadow-hsk whitespace-nowrap"
