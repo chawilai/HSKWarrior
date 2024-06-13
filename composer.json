@@ -10,8 +10,10 @@
         "laravel/breeze": "^2.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.9",
         "overtrue/pinyin": "^5.3",
+        "socialiteproviders/line": "^4.1",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

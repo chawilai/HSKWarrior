@@ -195,7 +195,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Head title="Flip Card" />
+    <Head title="การ์ดคำ" />
 
     <div
         class="pt-3 pb-10 px-6 mx-auto max-w-screen-xl sm:px-8 md:px-12 lg:px-16 xl:px-24"
@@ -216,7 +216,7 @@ onBeforeUnmount(() => {
                     <Link
                         preserve-scroll
                         as="button"
-                        :href="`/warrior_flip_card?set=hsk1&word_count=10`"
+                        :href="`/warrior_flip_card?set=hsk2&word_count=10`"
                         class="flex justify-center items-center gap-x-1 mb-4 px-3 py-2 border-2 border-gray-300 rounded-md text-lg hover:font-bold hover:bg-red hover:text-white"
                     >
                         <span>สุ่ม HSK 2</span>
@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
                     <Link
                         preserve-scroll
                         as="button"
-                        :href="`/warrior_flip_card?set=hsk1&word_count=10`"
+                        :href="`/warrior_flip_card?set=hsk3&word_count=10`"
                         class="flex justify-center items-center gap-x-1 mb-4 px-3 py-2 border-2 border-gray-300 rounded-md text-lg hover:font-bold hover:bg-red hover:text-white"
                     >
                         <span>สุ่ม HSK 3</span>
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
             </div>
             <div class="flex justify-center items-center flex-wrap gap-3">
                 <FlipCard
-                    :width="170"
+                    :width="160"
                     :height="150"
                     v-for="(word, index) in hanzi_list.words"
                     :key="word"

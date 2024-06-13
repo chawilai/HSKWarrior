@@ -40,7 +40,7 @@ const menus = [
         active: false,
     },
     {
-        title: "Flip Card",
+        title: "การ์ดคำ",
         component: "WarriorFlipCard",
         url: "/warrior_flip_card",
         disabled: false,
@@ -91,7 +91,7 @@ onMounted(() => {
                     >
                         <Link
                             @click="sidebarOpen = false"
-                            as="button"
+                            as="a"
                             preserve-scroll
                             :href="menu.url"
                             class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 text-opacity-100 transition-all duration-300 rounded outline-none cursor-pointer group lg:w-auto lg:h-auto lg:inline-block lg:hover:-rotate-3 active:ring-0 active:outline-none"

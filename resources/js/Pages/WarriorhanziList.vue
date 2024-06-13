@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
             <Link :href="`/warrior_flip_card?reference=${hanzi_list.reference}`" as="button"
             class="mb-2 px-3 py-2 rounded-md text-red bg-white border-2 border-red hover:text-white hover:bg-red hover:border-white transition-all duration-300">
             <i class="pi pi-play"></i>
-            Flip Card
+            การ์ดคำ
             </Link>
         </div>
         <div>

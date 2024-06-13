@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
 use App\Models\DictionaryZhHans;
@@ -169,15 +170,14 @@ Route::get('/warrior_flip_card', function (Request $request) {
             ->orderBy('hanzi_list_words.id', 'ASC')
             ->get();
     } else {
-        // Fetch directly from DictionaryZhHans where 'set' is 'hsk1' and randomly pick 10 records
 
-        $set = $request->has('set') ? $request->set : 'hsk1';
-        $word_count = $request->has('word_count') ? $request->word_count : 10;
+        $set = $request->input('set', 'hsk1');
+        $word_count = $request->input('word_count', 10);
 
-        $words = DictionaryZhHans::where('set', 'like', "%{$set}%")
-            ->inRandomOrder()
-            ->take($word_count)
-            ->get();
+        $words = DictionaryZhHans::where('set', 'LIKE', "%{$set}%")
+        ->inRandomOrder()
+        ->take($word_count)
+        ->get();
 
         $hanzi_list_data = [];
 
@@ -5393,6 +5393,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/auth/line', [AuthenticatedSessionController::class, 'redirectToLine']);
+Route::get('/auth/line/callback', [AuthenticatedSessionController::class, 'handleLineCallback']);
 
 Route::fallback(function () {
     return Inertia::render('404');

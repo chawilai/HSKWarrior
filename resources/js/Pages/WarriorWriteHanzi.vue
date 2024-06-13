@@ -272,6 +272,7 @@ onBeforeUnmount(() => {
                                     autocomplete="off"
                                 />
                             </th>
+                            <th></th>
                             <th>
                                 <input
                                     class="text-center h-10 w-10/12 rounded-lg"
@@ -291,7 +292,6 @@ onBeforeUnmount(() => {
                                     autocomplete="off"
                                 />
                             </th>
-                            <th></th>
                         </tr>
                         <tr class="h-2"></tr>
                     </thead>
