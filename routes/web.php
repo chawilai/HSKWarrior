@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Dictionary;
 use App\Models\DictionaryZhHans;
@@ -5394,8 +5394,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/auth/line', [AuthenticatedSessionController::class, 'redirectToLine']);
-Route::get('/auth/line/callback', [AuthenticatedSessionController::class, 'handleLineCallback']);
+Route::get('login/{provider}', [SocialController::class, 'redirectToProvider']);
+Route::get('login/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
 
 Route::fallback(function () {
     return Inertia::render('404');
