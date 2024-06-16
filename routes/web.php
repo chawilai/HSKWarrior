@@ -23,7 +23,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::get('/data', function () {
   return DictionaryZhHans::select(['id', 'character'])
@@ -5394,7 +5394,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('login/{provider}', [SocialController::class, 'redirectToProvider']);
+Route::get('login/{provider}', [SocialController::class, 'redirectToProvider'])->name('social.login');
 Route::get('login/{provider}/callback', [SocialController::class, 'handleProviderCallback']);
 
 Route::fallback(function () {

@@ -27,6 +27,10 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+// Social media login URLs
+const googleLoginUrl = route('social.login', 'google');
+const lineLoginUrl = route('social.login', 'line');
 </script>
 
 <template>
@@ -90,5 +94,50 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+
+        <hr class="my-4">
+
+        <div class="flex justify-center">
+            <a :href="googleLoginUrl" class="btn btn-danger mx-2">
+                Login with Google
+            </a>
+            <a :href="lineLoginUrl" class="btn btn-success mx-2">
+                Login with Line
+            </a>
+        </div>
     </GuestLayout>
 </template>
+
+<style scoped>
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+</style>

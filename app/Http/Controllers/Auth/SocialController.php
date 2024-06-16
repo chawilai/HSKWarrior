@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SocialController extends Controller
 {
@@ -16,24 +18,36 @@ class SocialController extends Controller
 
     public function handleProviderCallback($provider)
     {
-        $user = Socialite::driver($provider)->stateless()->user();
-        $authUser = $this->findOrCreateUser($user, $provider);
+        $socialUser = Socialite::driver($provider)->stateless()->user();
+        $authUser = $this->findOrCreateUser($socialUser, $provider);
         Auth::login($authUser, true);
         return redirect()->route('home');
     }
 
-    public function findOrCreateUser($providerUser, $provider)
+    public function findOrCreateUser($socialUser, $provider)
     {
-        $authUser = User::where('provider_id', $providerUser->getId())->first();
+        // Check if the user already exists by email
+        $authUser = User::where('email', $socialUser->getEmail())->first();
+
         if ($authUser) {
+            // If the user already exists, you may want to update the provider and provider_id
+            // or handle the scenario as needed.
+            if (!$authUser->provider || !$authUser->provider_id) {
+                $authUser->update([
+                    'provider' => $provider,
+                    'provider_id' => $socialUser->getId(),
+                ]);
+            }
             return $authUser;
         }
 
+        // If the user does not exist, create a new user
         return User::create([
-            'name' => $providerUser->getName(),
-            'email' => $providerUser->getEmail(),
+            'name' => $socialUser->getName(),
+            'email' => $socialUser->getEmail() ?? Str::random(10) . '@example.com',
             'provider' => $provider,
-            'provider_id' => $providerUser->getId(),
+            'provider_id' => $socialUser->getId(),
+            'password' => Hash::make(Str::random(10)), // You might want to set a random password
         ]);
     }
 }
