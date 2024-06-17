@@ -7,6 +7,9 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+import btn_login_base from "@/../images/btn_login_base.png";
+import google_login from "@/../images/google_login.png";
+
 defineProps({
     canResetPassword: {
         type: Boolean,
@@ -86,23 +89,23 @@ const lineLoginUrl = route('social.login', 'line');
                     :href="route('password.request')"
                     class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 >
-                    Forgot your password?
+                    ลืม Password ?
                 </Link>
 
                 <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
+                    ลงชื่อเข้าใช้
                 </PrimaryButton>
             </div>
         </form>
 
         <hr class="my-4">
 
-        <div class="flex justify-center">
-            <a :href="googleLoginUrl" class="btn btn-danger mx-2">
-                Login with Google
+        <div class="flex justify-center gap-4">
+            <a :href="googleLoginUrl">
+                <img :src="google_login" class="h-10 w-auto" alt="">
             </a>
-            <a :href="lineLoginUrl" class="btn btn-success mx-2">
-                Login with Line
+            <a :href="lineLoginUrl">
+                <img :src="btn_login_base" class="h-10 w-auto" alt="">
             </a>
         </div>
     </GuestLayout>
