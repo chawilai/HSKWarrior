@@ -3,12 +3,16 @@ import { ref, onMounted } from "vue";
 import { Link, usePage, router } from "@inertiajs/vue3";
 import ScreenIndicator from "@/Components/ScreenIndicator.vue";
 
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+
 import HamburgerIcon from "@/../icons/hamburger.svg";
 import warrior_logo from "@/../images/warrior_logo.png";
 
 const page = usePage();
 
 let activeMenu = ref("Home");
+const showingNavigationDropdown = ref(false);
 
 const menus = [
     {
@@ -50,12 +54,11 @@ const menus = [
 ];
 const sidebarOpen = ref(false);
 
-
 onMounted(() => {
-      router.on('navigate', () => {
-        sidebarOpen.value = false
-      })
-})
+    router.on("navigate", () => {
+        sidebarOpen.value = false;
+    });
+});
 </script>
 
 <template>
@@ -119,16 +122,55 @@ onMounted(() => {
                 >
                     เริ่มผจญภัย
                 </Link>
-                <Link
+                <!-- <Link
                     v-if="page.props.auth.user"
                     role="a"
                     href="/profile"
                     class="flex flex-col justify-center items-center"
                 >
-                    <img class="w-14 h-auto rounded-full" :src="page.props.auth.user.avatar" alt="">
-                    <span class="font-bold" v-text="page.props.auth.user.name"></span>
-                </Link>
+                    <img
+                        class="w-14 h-auto rounded-full"
+                        :src="page.props.auth.user.avatar"
+                        alt=""
+                    />
+                    <span
+                        class="font-bold"
+                        v-text="page.props.auth.user.name"
+                    ></span>
+                </Link> -->
+                <Dropdown align="right" width="48"
+                v-if="page.props.auth.user"
+                contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
+                >
+                    <template #trigger>
+                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                            <img
+                                class="w-14 h-auto rounded-full"
+                                :src="page.props.auth.user.avatar"
+                                alt=""
+                            />
+                            <span
+                                class="font-bold"
+                                v-text="page.props.auth.user.name"
+                            ></span>
+                        </div>
+                    </template>
+
+                    <template #content>
+                        <DropdownLink :href="route('profile.edit')">
+                            <i class="pi pi-user"></i><span class="ml-2">โปรไฟล์</span>
+                        </DropdownLink>
+                        <DropdownLink
+                            :href="route('logout')"
+                            method="post"
+                            as="button"
+                        >
+                            <i class="pi pi-sign-out"></i><span class="ml-2">Log Out</span>
+                        </DropdownLink>
+                    </template>
+                </Dropdown>
             </div>
+
             <button
                 @click="sidebarOpen = !sidebarOpen"
                 class="block lg:hidden relative z-30"
