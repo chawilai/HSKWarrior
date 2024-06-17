@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import warrior_logo from "@/../images/warrior_logo.png";
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -21,9 +22,10 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('home')">
-                                    <ApplicationLogo
+                                    <!-- <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
-                                    />
+                                    /> -->
+                                    <img class="w-14 h-auto" :src="warrior_logo" alt="" />
                                 </Link>
                             </div>
 
