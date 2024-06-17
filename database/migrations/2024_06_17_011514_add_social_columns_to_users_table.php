@@ -12,15 +12,17 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('provider')->nullable();
-            $table->string('provider_id')->nullable();
+            $table->string('provider')->nullable()->after('remember_token');
+            $table->string('provider_id')->nullable()->after('provider');
+            $table->string('avatar')->nullable()->after('provider_id');
+            $table->string('profile_picture')->nullable()->after('avatar');
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['provider', 'provider_id']);
+            $table->dropColumn(['provider', 'provider_id', 'avatar', 'profile_picture']);
         });
     }
 

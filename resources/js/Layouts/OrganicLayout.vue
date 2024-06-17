@@ -111,12 +111,22 @@ onMounted(() => {
                     </li>
                 </ul>
                 <Link
+                    v-if="!page.props.auth.user"
                     @click="sidebarOpen = false"
                     role="button"
-                    href="#login"
+                    href="/login"
                     class="flex justify-center items-center px-7 py-2 hover:-rotate-3 transition-all ease-out duration-300 text-base font-semibold leading-7 text-white bg-red border border-red rounded-lg focus:outline-red focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 hover:bg-transparent hover:text-red sm:w-auto hover:scale-[1.01] focus:bg-transparent focus:text-red hover:shadow-hsk whitespace-nowrap"
                 >
                     เริ่มผจญภัย
+                </Link>
+                <Link
+                    v-if="page.props.auth.user"
+                    role="a"
+                    href="/profile"
+                    class="flex flex-col justify-center items-center"
+                >
+                    <img class="w-14 h-auto rounded-full" :src="page.props.auth.user.avatar" alt="">
+                    <span class="font-bold" v-text="page.props.auth.user.name"></span>
                 </Link>
             </div>
             <button

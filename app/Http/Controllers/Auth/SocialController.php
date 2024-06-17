@@ -36,6 +36,8 @@ class SocialController extends Controller
                 $authUser->update([
                     'provider' => $provider,
                     'provider_id' => $socialUser->getId(),
+                    'avatar' => $socialUser->getAvatar(),
+                    'profile_picture' => $socialUser->getAvatar(),
                 ]);
             }
             return $authUser;
@@ -47,6 +49,8 @@ class SocialController extends Controller
             'email' => $socialUser->getEmail() ?? Str::random(10) . '@example.com',
             'provider' => $provider,
             'provider_id' => $socialUser->getId(),
+            'avatar' => $socialUser->getAvatar(),
+            'profile_picture' => $socialUser->getAvatar(),
             'password' => Hash::make(Str::random(10)), // You might want to set a random password
         ]);
     }

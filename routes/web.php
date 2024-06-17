@@ -269,14 +269,6 @@ Route::get('/warrior_guessingwords', function () {
     return Inertia::render('WarriorHome');
 });
 
-Route::get('/warrior', function () {
-    return Inertia::render('Warrior');
-});
-
-Route::get('/home', function () {
-    return Inertia::render('Home');
-});
-
 Route::get('/hanzi_sound', function () {
 
     $hanziRecords = Hanzi::whereBetween('id', [1, 1000])
@@ -5384,9 +5376,9 @@ Route::get('/test3', function () {
     return $result;
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
