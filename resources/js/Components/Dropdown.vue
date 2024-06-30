@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, watch, onBeforeUnmount, onUnmounted, ref } from 'vue';
 
 const props = defineProps({
     align: {
@@ -15,15 +15,6 @@ const props = defineProps({
         default: 'py-1 bg-white dark:bg-gray-700',
     },
 });
-
-const closeOnEscape = (e) => {
-    if (open.value && e.key === 'Escape') {
-        open.value = false;
-    }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-onUnmounted(() => document.removeEventListener('keydown', closeOnEscape));
 
 const widthClass = computed(() => {
     return {
@@ -42,13 +33,45 @@ const alignmentClasses = computed(() => {
 });
 
 const open = ref(false);
+const dropdownRef = ref(null);
+
+const closeOnEscape = (e) => {
+    if (open.value && e.key === 'Escape') {
+        open.value = false;
+    }
+};
+
+const onClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        open.value = false;
+    }
+};
+
+const toggleDropdown = () => {
+    if (open.value) {
+        document.addEventListener('click', onClickOutside);
+    } else {
+        document.removeEventListener('click', onClickOutside);
+    }
+};
+
+watch(open, toggleDropdown);
+
+onMounted(() => {
+    document.addEventListener('keydown', closeOnEscape);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('keydown', closeOnEscape);
+    document.removeEventListener('click', onClickOutside);
+});
 </script>
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" />
-        </div>
+    <div @mouseenter="open = true">
+        <slot name="trigger" />
+    </div>
 
         <!-- Full Screen Dropdown Overlay -->
         <div v-show="open" class="fixed inset-0 z-40" @click="open = false"></div>
@@ -63,6 +86,7 @@ const open = ref(false);
         >
             <div
                 v-show="open"
+                ref="dropdownRef"
                 class="absolute z-50 mt-2 rounded-md shadow-lg"
                 :class="[widthClass, alignmentClasses]"
                 style="display: none"

@@ -51,17 +51,4 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 
-    public function redirectToLine()
-    {
-        return Socialite::driver('line')->redirect();
-    }
-
-    public function handleLineCallback()
-    {
-        $user = Socialite::driver('line')->user();
-
-        // Handle user data (login or registration)
-        // Redirect to your SPA using Inertia
-    }
-
 }

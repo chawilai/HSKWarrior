@@ -32,7 +32,7 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <div class="flex flex-wrap gap-2 justify-center">
                     <div
-                        class="p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
+                        class="sm:flex-1 w-full max-w-96 p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
                     >
                         <UpdateProfileInformationForm
                             :must-verify-email="mustVerifyEmail"
@@ -42,14 +42,15 @@ defineProps({
                     </div>
 
                     <div
-                        class="p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
+                        v-if="false"
+                        class="sm:flex-1 w-full max-w-96 p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
                     >
-                        <UpdatePasswordForm class="max-w-xl" />
+                        <UpdatePasswordForm class="max-w-xl"/>
                     </div>
 
                     <div
                         v-if="false"
-                        class="p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
+                        class="sm:flex-1 w-full p-4 sm:p-8 bg-white dark:bg-gray-800 sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
                     >
                         <DeleteUserForm class="max-w-xl" />
                     </div>

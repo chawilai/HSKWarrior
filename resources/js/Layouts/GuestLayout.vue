@@ -6,7 +6,7 @@ import warrior_logo from "@/../images/warrior_logo.png";
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-20 sm:pt-0 bg-gradient-to-br from-transparent to-red-100">
+    <div class="min-h-screen flex flex-col items-center pt-20 bg-gradient-to-br from-transparent to-red-100">
         <div>
             <Link href="/">
                 <!-- <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" /> -->

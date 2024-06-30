@@ -13,12 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        User::factory(1)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         $this->call(HanziInertialSeeder::class);
         $this->call(HanziHSK1Seeder::class);
         $this->call(HanziHSK2Seeder::class);
@@ -44,5 +40,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GraphicsKoSeeder::class);
         $this->call(GraphicsZhHansSeeder::class);
         $this->call(GraphicsZhHantSeeder::class);
+        $this->call(ThaiAddressSeeder::class);
     }
 }

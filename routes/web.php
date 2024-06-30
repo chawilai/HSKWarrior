@@ -316,6 +316,13 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 });
 
+Route::get('/youglish', function () {
+
+
+
+    return Inertia::render('YouGlish');
+});
+
 Route::get('/test2', function () {
 
     return Inertia::render('Test2');

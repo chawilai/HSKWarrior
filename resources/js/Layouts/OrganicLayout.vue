@@ -140,7 +140,7 @@ onMounted(() => {
                 </Link> -->
                 <Dropdown align="right" width="48"
                 v-if="page.props.auth.user"
-                contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/40 hover:bg-white/80 backdrop-blur-md"
+                contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/90 hover:bg-white backdrop-blur-xl"
                 >
                     <template #trigger>
                         <div class="flex flex-col justify-center items-center cursor-pointer">

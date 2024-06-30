@@ -44,7 +44,7 @@ const lineLoginUrl = route('social.login', 'line');
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" v-if="false">
             <div>
                 <InputLabel for="email" value="Email" />
 
@@ -98,9 +98,12 @@ const lineLoginUrl = route('social.login', 'line');
             </div>
         </form>
 
+        <hr class="my-4" v-if="false">
+
+        <h2 class="text-center mb-4 text-xl font-bold">เข้าสู่ระบบ</h2>
         <hr class="my-4">
 
-        <div class="flex justify-center gap-4">
+        <div class="flex justify-center gap-4 py-4">
             <a :href="googleLoginUrl">
                 <img :src="google_login" class="h-10 w-auto" alt="">
             </a>

@@ -50,8 +50,8 @@
 //     - add stroke number on Character
 //     - add radical
 //     - add grid structure
-    - add empty slot full 1 row or 2 rows -> maybe can set or
-        - empty slot can draw using consent pad library
+    // - add empty slot full 1 row or 2 rows -> maybe can set or
+    //     - empty slot can draw using consent pad library
 //     - can save ?? have to login
 //     - add print button
 //     - add go back button
@@ -61,5 +61,16 @@
         //     - pagination for hanzi_list_writing
         //     - add page number current/max page
 
-2024-06-02
+2024-06-17 @roastniyom padad
+    // - add socialmedia login -> google, line
+        // - update users table
+            // - add provider, provider_id, profile_picture, link and merge email
+        // - add env for secret
+        // - add SocialMediaColtroller
+        // - test and publish
+    // - modify login layout -> GuestLayout
+    // - modify dropdown menu for profile, login
+    // - modify profile page
+    // - modify users for collecting exp, level, range, location
+
 
