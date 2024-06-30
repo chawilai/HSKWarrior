@@ -1756,7 +1756,7 @@
 {"character":"饴","set":["hsk8"],"definition":"sweet-meats; sweet-cakes; syrup","pinyin":["yí"],"radical":"饣 (食)","decomposition":"⿰饣台","acjk":"饴⿰饣.3台5"}
 {"character":"冽","set":["hsk8"],"definition":"cold and raw; pure, clear","pinyin":["liè"],"radical":"冫","decomposition":"⿰冫列","acjk":"冽⿰冫.2列6"}
 {"character":"变","set":["hsk3"],"meaning_thai":"เปลี่ยนแปลง","definition":"change, transform, alter; rebel","pinyin":["biàn(1669)"],"radical":"又","decomposition":"⿱亦又","acjk":"变⿱亦6又.2"}
-{"character":"京","set":["hsk1"],"meaning_thai": "กรุงเทพ","definition":"capital city","pinyin":["jīng"],"radical":"亠","decomposition":"⿳亠口小","acjk":"京⿳亠.2口3小3"}
+{"character":"京","set":["hsk1"],"meaning_thai": "เมืองหลวง","definition":"capital city","pinyin":["jīng"],"radical":"亠","decomposition":"⿳亠口小","acjk":"京⿳亠.2口3小3"}
 {"character":"享","set":["hsk5"],"meaning_thai":"เพลิดเพลิน","definition":"enjoy","pinyin":["xiǎng(76)"],"radical":"亠","decomposition":"⿳亠口子","acjk":"享⿳亠.2口3子3"}
 {"character":"冼","set":["hsk8"],"definition":"a surname","pinyin":["xiǎn"],"radical":"冫","decomposition":"⿰冫先","acjk":"冼⿰冫.2先6"}
 {"character":"庞","set":["hsk6"],"meaning_thai":"สง่างาม","definition":"disorderly, messy; huge, big","pinyin":["páng(19)"],"radical":"广","decomposition":"⿸广龙","acjk":"庞⿸广.3龙5"}
