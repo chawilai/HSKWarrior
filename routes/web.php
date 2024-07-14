@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ProfileController;
+use App\Models\ChineseWord;
 use App\Models\Dictionary;
 use App\Models\DictionaryZhHans;
 use App\Models\Hanzi;
@@ -87,6 +88,40 @@ Route::get('/warrior_writehanzi', function (Request $request) {
                 'decomposition' => $hanzi->decomposition,
                 'acjk' => $hanzi->acjk,
             ])
+    ]);
+});
+
+Route::get('/chinese_words', function (Request $request) {
+
+    $filters = [];
+
+    if ($request->input("search")) $filters["search"] = $request->input("search");
+    if ($request->input("s_set")) $filters["s_set"] = $request->input("s_set");
+    if ($request->input("s_hanzi")) $filters["s_hanzi"] = $request->input("s_hanzi");
+    if ($request->input("s_pinyin")) $filters["s_pinyin"] = $request->input("s_pinyin");
+    if ($request->input("s_mean")) $filters["s_mean"] = $request->input("s_mean");
+
+    $wordsWithTags = ChineseWord::where('tag', 'HSK 1')->with('tags')->get();
+
+    $words = $wordsWithTags->map(function($word) {
+        return [
+            'id' => $word->id,
+            'word' => $word->word,
+            'pinyin' => $word->pinyin,
+            'part_of_speech' => $word->part_of_speech,
+            'meaning_eng' => $word->meaning_eng,
+            'meaning_thai' => $word->meaning_thai,
+            'example' => $word->example,
+            'example_pinyin' => $word->example_pinyin,
+            'example_eng' => $word->example_eng,
+            'example_thai' => $word->example_thai,
+            'tags' => $word->tags->pluck('name')->toArray()
+        ];
+    });
+
+    return Inertia::render('WarriorHSKWords', [
+        "page" => $request->page,
+        "words_list" => $words
     ]);
 });
 

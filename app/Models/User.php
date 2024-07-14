@@ -17,7 +17,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'provider', 'provider_id', 'avatar', 'profile_picture',
+        'name',
+        'email',
+        'password',
+        'provider',
+        'provider_id',
+        'avatar',
+        'profile_picture',
     ];
 
     /**
@@ -41,5 +47,32 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function addExperience(int $amount, string $reason = null)
+    {
+        $this->experience += $amount;
+        $this->save();
+
+        $this->experienceHistory()->create([
+            'change' => $amount,
+            'reason' => $reason,
+        ]);
+    }
+
+    public function cutExperience(int $amount, string $reason = null)
+    {
+        $this->experience = max(0, $this->experience - $amount);
+        $this->save();
+
+        $this->experienceHistory()->create([
+            'change' => -$amount,
+            'reason' => $reason,
+        ]);
+    }
+
+    public function experienceHistory()
+    {
+        return $this->hasMany(ExperienceHistory::class);
     }
 }

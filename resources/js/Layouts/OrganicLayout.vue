@@ -29,11 +29,18 @@ const menus = [
         disabled: true,
         active: false,
     },
+    // {
+    //     title: "แบบฝึกหัด HSK",
+    //     component: "WarriorHSKWorkbook",
+    //     url: "/warrior_workbook",
+    //     disabled: true,
+    //     active: false,
+    // },
     {
-        title: "แบบฝึกหัด HSK",
-        component: "WarriorHSKWorkbook",
-        url: "/warrior_workbook",
-        disabled: true,
+        title: "ฝึกคำศัพท์",
+        component: "WarriorHSKWords",
+        url: "/chinese_words",
+        disabled: false,
         active: false,
     },
     {

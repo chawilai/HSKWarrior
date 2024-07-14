@@ -64,13 +64,35 @@
 2024-06-17 @roastniyom padad
     // - add socialmedia login -> google, line
         // - update users table
-            // - add provider, provider_id, profile_picture, link and merge email
+            // - add provider, provider1_id, profile_picture, link and merge email
         // - add env for secret
         // - add SocialMediaColtroller
-        // - test and publish
+        // - test and publis\[p];
     // - modify login layout -> GuestLayout
     // - modify dropdown menu for profile, login
     // - modify profile page
     // - modify users for collecting exp, level, range, location
+
+
+2024-06-30 @home
+    - add words of all hsk to database
+    - add page to list all word and meaning
+    - add youlish to listen the native speaker video -> free -> delete cookie if facing limit
+    - add hanziwriter letter for the word
+    - add sound for word
+    - add hanzi writing print out form ?? for word ?? how ??
+    - add flip card for word
+    - add the combination of the word ??
+        - nihao -> ni and hao
+
+
+
+2024-07-05 @the_xym_cafe
+    - badmintonparty
+        - add laravel+inertia+vue
+        - try to integrate vuetify
+
+
+
 
 

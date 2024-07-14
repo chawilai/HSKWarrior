@@ -12,9 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('experience_points')->default(0)->after('profile_picture');
-            $table->integer('level')->default(1)->after('experience_points');
-            $table->foreignId('rank_id')->nullable()->after('experience_points')->constrained('ranks')->onDelete('set null');
+            $table->bigInteger('experience')->default(0)->after('profile_picture');
+            $table->integer('level')->default(1)->after('experience');
+            $table->foreignId('rank_id')->nullable()->after('experience')->constrained('ranks')->onDelete('set null');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['rank_id']);
-            $table->dropColumn(['experience_points', 'level', 'rank_id']);
+            $table->dropColumn(['experience', 'level', 'rank_id']);
         });
     }
 };
