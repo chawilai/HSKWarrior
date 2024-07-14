@@ -75,8 +75,8 @@
 
 
 2024-06-30 @home
-    - add words of all hsk to database
-    - add page to list all word and meaning
+    // - add words of all hsk to database 2024-07-14
+    // - add page to list all word and meaning 2024-07-14
     - add youlish to listen the native speaker video -> free -> delete cookie if facing limit
     - add hanziwriter letter for the word
     - add sound for word
@@ -85,12 +85,33 @@
     - add the combination of the word ??
         - nihao -> ni and hao
 
+2024-07-14 @home-badroom
+    - add quiz for flipcard hanzi
+        - fetch hanzi to show flip card
+        - random one of them to show on the top (show meaning)
+        - add currectness to the array {
+            hanzi: "ta",
+            currect: false
+        }
+        - show the random word from set of the that currect is false
+        - when flip the card currect update the currect value of the list
+            - update the currect status
+            - stay open the card
+            - maybe change border to green
+        - when flip the card wrong turn the card back in 5 second
+            - maybe change border to red when flip up then change back to gray when flip back
+        - when all list is open
+            - notify finish show the complete card show new game select hsk1, hsk2, hsk3, animal, color ... and start game
+            - update exp
+            -
 
 
 2024-07-05 @the_xym_cafe
     - badmintonparty
         - add laravel+inertia+vue
         - try to integrate vuetify
+        - add art design ? repo
+
 
 
 

@@ -26,8 +26,8 @@ CREATE TABLE `chinese_words` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `chinese_words` (`id`, `word`, `pinyin`, `tag`, `part_of_speech`, `meaning_eng`, `meaning_thai`, `example`, `example_pinyin`, `example_eng`, `example_thai`, `created_at`, `updated_at`) VALUES
-(1,	'爱',	'ài',	'HSK 1',	'v.',	'love',	'ความรัก',	'妈妈，我爱你。',	'Māma, wǒ ài nǐ.',	'Mom, I love you.',	'แม่ ฉันรักคุณ',	'2024-07-14 02:16:37',	NULL),
-(2,	'爱',	'ài',	'HSK 1',	'v.',	'like doing sth.',	'ชอบทำบางอย่าง',	'我爱吃米饭。',	'Wǒ ài chī mǐfàn.',	'I love eating rice.',	'ฉันชอบกินข้าว',	'2024-07-14 02:16:37',	NULL),
+(1,	'爱',	'ài',	'HSK 1',	'v.',	'love',	'รัก',	'妈妈，我爱你。',	'Māma, wǒ ài nǐ.',	'Mom, I love you.',	'แม่ ฉันรักคุณ',	'2024-07-14 02:16:37',	NULL),
+(2,	'爱',	'ài',	'HSK 1',	'v.',	'like',	'ชอบ',	'我爱吃米饭。',	'Wǒ ài chī mǐfàn.',	'I love eating rice.',	'ฉันชอบกินข้าว',	'2024-07-14 02:16:37',	NULL),
 (3,	'八',	'bā',	'HSK 1',	'num.',	'eight',	'แปด',	'他儿子今年八岁了。',	'Tā érzi jīnnián bā suì le.',	'His son is eight years old this year.',	'ลูกชายของเขาอายุแปดปีในปีนี้',	'2024-07-14 02:16:37',	NULL),
 (4,	'爸爸',	'bàba',	'HSK 1',	'n.',	'father; dad; daddy',	'พ่อ',	'我爸爸是医生。',	'Wǒ bàba shì yīshēng.',	'My father is a doctor.',	'พ่อของฉันเป็นหมอ',	'2024-07-14 02:16:37',	NULL),
 (5,	'杯子',	'bēizi',	'HSK 1',	'n.',	'cup; glass',	'แก้ว',	'杯子里有茶。',	'Bēizi lǐ yǒu chá.',	'There is tea in the cup.',	'ในถ้วยมีชา',	'2024-07-14 02:16:37',	NULL),
