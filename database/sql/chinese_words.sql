@@ -150,7 +150,7 @@ INSERT INTO `chinese_words` (`id`, `word`, `pinyin`, `tag`, `part_of_speech`, `m
 (122,	'认识',	'rènshi',	'HSK 1',	'v.',	'get to know; get acquainted with',	'รู้จัก',	'认识你很高兴。',	'Rènshí nǐ hěn gāoxìng.',	'Nice to meet you.',	'ยินดีที่ได้รู้จัก',	'2024-07-14 02:16:37',	NULL),
 (123,	'三',	'sān',	'HSK 1',	'num.',	'three',	'สาม',	'我有三本书。',	'Wǒ yǒu sān běn shū.',	'I have three books.',	'ฉันมีหนังสือสามเล่ม',	'2024-07-14 02:16:37',	NULL),
 (124,	'商店',	'shāngdiàn',	'HSK 1',	'n.',	'shop; store',	'ร้านค้า',	'她去商店买西瓜了。',	'Tā qù shāngdiàn mǎi xīguā le.',	'She went to the store to buy watermelon.',	'เธอไปร้านซื้อแตงโม',	'2024-07-14 02:16:37',	NULL),
-(125,	'上',	'shàng',	'HSK 1',	'n.',	'upper; up; on; upward',	'ขึ้น',	'水果在桌子上。',	'Shuǐguǒ zài zhuōzi shàng.',	'The fruits are on the table.',	'ผลไม้อยู่บนโต๊ะ',	'2024-07-14 02:16:37',	NULL),
+(125,	'上',	'shàng',	'HSK 1',	'n.',	'upper; up; on; upward',	'บน',	'水果在桌子上。',	'Shuǐguǒ zài zhuōzi shàng.',	'The fruits are on the table.',	'ผลไม้อยู่บนโต๊ะ',	'2024-07-14 02:16:37',	NULL),
 (126,	'上',	'shàng',	'HSK 1',	'v.',	'be engaged (in work, study, etc.) at a fixed time',	'เข้างาน',	'我们八点上学。',	'Wǒmen bā diǎn shàngxué.',	'We go to school at eight.',	'พวกเราไปโรงเรียนตอนแปดโมง',	'2024-07-14 02:16:37',	NULL),
 (127,	'上',	'shàng',	'HSK 1',	'v.',	'go up; mount; board; get on',	'ขึ้นไป',	'我们坐电梯上一楼。',	'Wǒmen zuò diàntī shàng yī lóu.',	'We take the elevator to the first floor.',	'พวกเราขึ้นลิฟต์ไปชั้นหนึ่ง',	'2024-07-14 02:16:37',	NULL),
 (128,	'上午',	'shàngwǔ',	'HSK 1',	'n.',	'morning',	'ตอนเช้า',	'现在是上午10点。',	'Xiànzài shì shàngwǔ shí diǎn.',	'It is 10 a.m. now.',	'ตอนนี้เป็นเวลา 10 โมงเช้า.',	'2024-07-14 02:16:37',	NULL),

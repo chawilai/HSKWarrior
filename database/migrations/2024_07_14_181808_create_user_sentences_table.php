@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('sentence_id')->constrained('sentences')->onDelete('cascade'); // Assuming you have a sentences table
-            $table->enum('status', ['unknown', 'familiar', 'proficient', 'mastered']);
+            $table->enum('status', ['unknown', 'familiar', 'proficient', 'mastered'])->default('unknown');
             $table->json('recent_attempts')->nullable(); // To store the last 5 attempts as an array of booleans
             $table->timestamps();
         });
