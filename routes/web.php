@@ -12,6 +12,7 @@ use App\Models\Sentence;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
 use Inertia\Inertia;
@@ -361,6 +362,61 @@ Route::get('/youglish', function () {
 Route::get('/test2', function () {
 
     return Inertia::render('Test2');
+});
+
+Route::get('/test4', function () {
+
+    /*
+我喜欢喝茶。
+(Wǒ xǐhuan hē chá.)
+I like to drink tea.
+
+他是我的朋友。
+(Tā shì wǒ de péngyǒu.)
+He is my friend.
+
+我在学汉语。
+(Wǒ zài xué Hànyǔ.)
+I am studying Chinese.
+
+妈妈在看书。
+(Māma zài kàn shū.)
+Mom is reading a book.
+
+今天是星期五。
+(Jīntiān shì xīngqīwǔ.)
+Today is Friday.
+
+我去商店买。
+(Wǒ qù shāngdiàn mǎi.)
+I go to the store to buy.
+
+你会说汉语。
+(Nǐ huì shuō Hànyǔ.)
+You can speak Chinese.
+
+我们一起去。
+(Wǒmen yīqǐ qù.)
+We go together.
+
+爸爸在吃饭。
+(Bàba zài chī fàn.)
+Dad is eating.
+
+她在看电视。
+(Tā zài kàn diànshì.)
+She is watching TV.
+*/
+
+    $response = Http::post('http://localhost:3000/segment', [
+        'text' => '先生，请问你们开始点菜了吗？'
+    ]);
+
+    // Decode the JSON response
+    $segmentedText = $response->json();
+
+    // Output the segmented text
+    return response()->json($segmentedText);
 });
 
 Route::get('/test3', function () {
