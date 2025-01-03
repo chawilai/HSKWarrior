@@ -364,6 +364,13 @@ Route::get('/test2', function () {
     return Inertia::render('Test2');
 });
 
+Route::get('/khuntong1', fn () => Inertia::render('KhunTong/Card1'));
+Route::get('/khuntong2', fn () => Inertia::render('KhunTong/Card2'));
+Route::get('/khuntong3', fn () => Inertia::render('KhunTong/Card3'));
+Route::get('/khuntong4', fn () => Inertia::render('KhunTong/Card4'));
+Route::get('/khuntong5', fn () => Inertia::render('KhunTong/Card5'));
+Route::get('/khuntong6', fn () => Inertia::render('KhunTong/Card6'));
+
 Route::get('/test4', function () {
 
     /*
