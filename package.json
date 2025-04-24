@@ -20,8 +20,12 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.7.23",
+        "@heroicons/vue": "^2.2.0",
+        "@vueuse/motion": "^2.2.6",
         "hanzi-writer": "^3.6.1",
         "hanzi-writer-data": "^2.0.1",
+        "motion": "^12.0.6",
         "paper-css": "^0.4.1",
         "path": "^0.12.7",
         "pinia": "^2.1.7",

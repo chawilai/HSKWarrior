@@ -364,6 +364,11 @@ Route::get('/test2', function () {
     return Inertia::render('Test2');
 });
 
+Route::get('/bbb', function () {
+
+    return Inertia::render('Testxxx');
+});
+
 Route::get('/khuntong1', fn () => Inertia::render('KhunTong/Card1'));
 Route::get('/khuntong2', fn () => Inertia::render('KhunTong/Card2'));
 Route::get('/khuntong3', fn () => Inertia::render('KhunTong/Card3'));

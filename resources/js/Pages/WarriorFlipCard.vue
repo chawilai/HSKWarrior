@@ -15,6 +15,7 @@ let shouldStop = ref(false);
 let playingWord = ref("");
 let currentPlaybackId = ref(0);
 let toggle_text = ref("เปิด");
+let selectedAnswer = ref(null);
 
 const props = defineProps({
     hanzi_list_data: Object,
@@ -143,6 +144,7 @@ const handleFlip = (index) => {
 const unflipAll = () => {
     hanzi_list.value.words.forEach((word, index) => {
         word.isFlipped = false;
+        word.selectedAnswer = null;
     });
 
     setTimeout(() => {
@@ -155,25 +157,48 @@ const cardToggle = () => {
     if (toggle_text.value === "เปิด") {
         hanzi_list.value.words.forEach((word, index) => {
             word.isFlipped = true;
+            // word.selectedAnswer = null
         });
         toggle_text.value = "ปิด";
     } else {
         hanzi_list.value.words.forEach((word, index) => {
             word.isFlipped = false;
+            // word.selectedAnswer = null
         });
         toggle_text.value = "เปิด";
     }
 };
 
 const shuffle = (array) => {
+    array.forEach((word) => (word.selectedAnswer = null));
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]]; // ES6 destructuring assignment
     }
 };
 
+const markCorrect = (word) => {
+    word.selectedAnswer = "correct";
+    word.lastAnswer = "correct";
+};
+
+const markWrong = (word) => {
+    word.selectedAnswer = "wrong";
+    word.lastAnswer = "wrong";
+};
+
+const correctCount = computed(
+    () =>
+        hanzi_list.value.words.filter(
+            (word) => word.selectedAnswer === "correct"
+        ).length
+);
+
+const totalCount = computed(() => hanzi_list.value.words.length);
+
 onMounted(() => {
     hanzi_list.value.words.forEach((item, index) => {
+        item.selectedAnswer = null;
         animateHanzi[index] = writeHanzi(
             `hanzi_${item.character}`,
             item.character,
@@ -230,6 +255,14 @@ onBeforeUnmount(() => {
                         <span>สุ่ม HSK 3</span>
                     </Link>
                 </div>
+
+                <!-- Score -->
+                <div
+                    class="hidden sm:flex font-bold text-lg text-gray-700 pt-2"
+                >
+                    คะแนน: {{ correctCount }} / {{ totalCount }}
+                </div>
+
                 <div class="flex justify-center items-center flex-wrap gap-3">
                     <button
                         class="flex justify-center items-center gap-x-1 mb-4 px-3 py-2 border-2 border-gray-300 rounded-md text-lg hover:font-bold hover:bg-red hover:text-white"
@@ -251,6 +284,14 @@ onBeforeUnmount(() => {
                     </button>
                 </div>
             </div>
+
+            <!-- Score for mobile -->
+            <div
+                class="sm:hidden my-4 font-bold text-lg text-center text-gray-700"
+            >
+                คะแนน: {{ correctCount }} / {{ totalCount }}
+            </div>
+
             <div class="flex justify-center items-center flex-wrap gap-3">
                 <FlipCard
                     :width="160"
@@ -261,13 +302,60 @@ onBeforeUnmount(() => {
                     :isFlipped="word.isFlipped"
                     @flip="handleFlip(index)"
                 >
-                    <template v-slot:front>
+                    <template #front>
+                        <div class="absolute top-3 left-3 text-red-500 text-sm">
+                            {{ index + 1 }}
+                        </div>
+
+                        <div
+                            class="absolute bottom-2 right-2 text-lg"
+                            v-if="word.lastAnswer"
+                            :class="{
+                                'text-green-500': word.lastAnswer === 'correct',
+                                'text-red-500': word.lastAnswer === 'wrong',
+                            }"
+                        >
+                            <i
+                                :class="
+                                    word.lastAnswer === 'correct'
+                                        ? 'pi pi-check-circle'
+                                        : 'pi pi-times-circle'
+                                "
+                            ></i>
+                        </div>
+
                         <div
                             :id="`hanzi_${word.character}`"
                             class="w-32 h-32 mx-auto my-auto flex justify-center items-center cursor-pointer"
                         ></div>
                     </template>
                     <template v-slot:back>
+                        <div class="absolute top-3 left-3 text-red-500 text-sm">
+                            {{ index + 1 }}
+                        </div>
+                        <div class="flex gap-2 absolute top-3 right-3">
+                            <button
+                                @click.stop="markCorrect(word)"
+                                class="text-gray-500 text-sm hover:text-green-600 hover:scale-125 hover:font-bold"
+                                :class="{
+                                    'text-green-600 font-bold scale-125':
+                                        word.selectedAnswer === 'correct',
+                                }"
+                            >
+                                <i class="pi pi-check-circle"></i>
+                            </button>
+
+                            <button
+                                @click.stop="markWrong(word)"
+                                class="text-gray-500 text-sm hover:text-red-600 hover:scale-125 hover:font-bold"
+                                :class="{
+                                    'text-red-600 font-bold scale-125':
+                                        word.selectedAnswer === 'wrong',
+                                }"
+                            >
+                                <i class="pi pi-times-circle"></i>
+                            </button>
+                        </div>
                         <div
                             class="flex flex-col gap-y-2 justify-center items-center h-full w-full"
                         >
