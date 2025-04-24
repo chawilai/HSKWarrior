@@ -5,21 +5,11 @@ import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { debounce } from "lodash";
 import Pagination from "@/Pages/Shared/Pagination.vue";
 
-import HanziWriter from "hanzi-writer";
-
-import tts2 from "@/tts.js";
+import { usePlaySound } from "@/composables/usePlaySound.js";
 
 defineOptions({ layout: OrganicLayout });
 
-// const props = defineProps({
-//     filters: Object,
-//     hanzi_list: Object,
-// });
-
-// let hanziWriterList = ref([]);
-let shouldStop = ref(false);
-let playingWord = ref("");
-let currentPlaybackId = ref(0);
+const { playSound, stopPlayback, playingWord } = usePlaySound();
 
 const pages = usePage();
 
@@ -57,55 +47,6 @@ const fetchData = () => {
     );
 };
 
-let playSound = (input) => {
-    const tts = new tts2();
-
-    currentPlaybackId.value++;
-    const playbackId = currentPlaybackId.value;
-    shouldStop.value = false;
-
-    tts.rate(0.1); // 1.2 (0.1-10)
-    tts.volume(0.8); // 0.5 (0-1)
-    tts.pitch(1.2); // 1 (0.1-2) gooe 0.8 - 2
-
-    // Function to process a single sound
-    function processSound(sound) {
-        return new Promise((resolve) => {
-            tts.speak2(sound);
-
-            playingWord.value = sound;
-
-            resolve();
-        });
-    }
-
-    // Function to handle delay
-    function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    // Async function to handle the array processing with delay
-    async function processArray(sounds) {
-        for (const sound of sounds) {
-            if (shouldStop.value || playbackId !== currentPlaybackId.value) {
-                break;
-            }
-
-            await processSound(sound);
-            await sleep(1000);
-        }
-    }
-
-    // Check if the input is an array
-    if (Array.isArray(input)) {
-        // Process each sound in the array with a delay
-        processArray(input);
-    } else {
-        // Process the single sound
-        processSound(input);
-    }
-};
-
 let addToHanziList = (input, list_name = null) => {
     let found = false;
 
@@ -141,10 +82,6 @@ let addToHanziList = (input, list_name = null) => {
     }
 
     console.log(hanzi_list_arr);
-};
-
-let stopPlayback = () => {
-    shouldStop.value = true;
 };
 
 let makeid = (
