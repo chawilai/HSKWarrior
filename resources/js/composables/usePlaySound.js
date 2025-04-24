@@ -13,9 +13,9 @@ export function usePlaySound() {
     const playbackId = currentPlaybackId.value;
     shouldStop.value = false;
 
-    tts.rate(0.1);
-    tts.volume(0.8);
-    tts.pitch(1.2);
+    tts.rate(0.5);
+    tts.volume(1);
+    tts.pitch(1.3);
 
     function processSound(sound) {
       return new Promise((resolve) => {
