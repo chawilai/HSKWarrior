@@ -256,13 +256,6 @@ onBeforeUnmount(() => {
                     </Link>
                 </div>
 
-                <!-- Score -->
-                <div
-                    class="hidden sm:flex font-bold text-lg text-gray-700 pt-2"
-                >
-                    คะแนน: {{ correctCount }} / {{ totalCount }}
-                </div>
-
                 <div class="flex justify-center items-center flex-wrap gap-3">
                     <button
                         class="flex justify-center items-center gap-x-1 mb-4 px-3 py-2 border-2 border-gray-300 rounded-md text-lg hover:font-bold hover:bg-red hover:text-white"
@@ -287,7 +280,7 @@ onBeforeUnmount(() => {
 
             <!-- Score for mobile -->
             <div
-                class="sm:hidden my-4 font-bold text-lg text-center text-gray-700"
+                class="my-4 font-bold text-lg text-center text-gray-700"
             >
                 คะแนน: {{ correctCount }} / {{ totalCount }}
             </div>
