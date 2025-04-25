@@ -207,7 +207,12 @@ Route::get('/warrior_flip_card', function (Request $request) {
         $words = HanziListWord::with(['latestWordGuess', 'hanzi'])
             ->where('hanzi_list_id', $hanziList->id)
             ->orderBy('id', 'ASC')
-            ->get();
+            ->get()
+            ->sortBy(function ($item) {
+                if ($item->latestWordGuess === null) return 1; // Not guessed = last
+                return $item->latestWordGuess->is_correct ? 2 : 0; // Wrong first, then correct
+            })
+            ->values();
 
         $hanzi_list_data = [
             'id' => $hanziList->id,
@@ -233,7 +238,12 @@ Route::get('/warrior_flip_card', function (Request $request) {
             ->where('set', 'LIKE', "%{$set}%")
             ->inRandomOrder()
             ->take($word_count)
-            ->get();
+            ->get()
+            ->sortBy(function ($word) {
+                if ($word->latestGuessForCurrentUser === null) return 1; // No guess = last
+                return $word->latestGuessForCurrentUser->is_correct ? 2 : 0; // Wrong (0) first
+            })
+            ->values(); // reindex
 
         $hanzi_list_data = [
             'id' => null,
