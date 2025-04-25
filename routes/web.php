@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WordGuessController;
 use App\Models\ChineseWord;
 use App\Models\Dictionary;
 use App\Models\DictionaryZhHans;
@@ -28,8 +29,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/data', function () {
-  return DictionaryZhHans::select(['id', 'character'])
-  ->where('set', 'like', '%hsk7%')->get();
+    return DictionaryZhHans::select(['id', 'character'])
+        ->where('set', 'like', '%hsk7%')->get();
 });
 
 Route::get('/organic', function () {
@@ -47,6 +48,8 @@ Route::get('/warrior_textbook', function () {
 Route::get('/warrior_workbook', function () {
     return Inertia::render('WarriorHSKWorkbook');
 });
+
+Route::post('/word-guess', [WordGuessController::class, 'store']);
 
 Route::get('/warrior_writehanzi', function (Request $request) {
 
@@ -78,7 +81,7 @@ Route::get('/warrior_writehanzi', function (Request $request) {
             })
             ->paginate(10)
             ->withQueryString()
-            ->through(fn ($hanzi) => [
+            ->through(fn($hanzi) => [
                 'id' => $hanzi->id,
                 'character' => $hanzi->character,
                 'set' => $hanzi->set,
@@ -104,7 +107,7 @@ Route::get('/chinese_words', function (Request $request) {
 
     $wordsWithTags = ChineseWord::where('tag', 'HSK 1')->with('tags')->get();
 
-    $words = $wordsWithTags->map(function($word) {
+    $words = $wordsWithTags->map(function ($word) {
         return [
             'id' => $word->id,
             'word' => $word->word,
@@ -177,7 +180,7 @@ Route::get('/hanzi_list', function (Request $request) {
         $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
         $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
         $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
-            fn ($word) => [
+            fn($word) => [
                 'character' => $word->hanzi->character,
                 'set' => $word->hanzi->set,
                 'definition' => $word->hanzi->definition,
@@ -194,68 +197,60 @@ Route::get('/hanzi_list', function (Request $request) {
 });
 
 Route::get('/warrior_flip_card', function (Request $request) {
+    $hanzi_list_data = [];
 
     if ($request->has('reference')) {
-        // Fetch the first matching HanziList based on the provided reference
-        $hanzi_list_word_arr = HanziList::where('list_reference', $request->reference)->first()->toArray();
+        // Safely get the HanziList or abort with 404
+        $hanziList = HanziList::where('list_reference', $request->reference)->firstOrFail();
 
-        // Fetch words associated with the hanzi_list_id and join with DictionaryZhHans
-        $words = HanziListWord::select('hanzi_list_words.*', 'dictionary_zh_hans.character', 'dictionary_zh_hans.pinyin', 'dictionary_zh_hans.meaning_thai', 'dictionary_zh_hans.definition')
-            ->join('dictionary_zh_hans', 'hanzi_list_words.hanzi_id', '=', 'dictionary_zh_hans.id')
-            ->where('hanzi_list_words.hanzi_list_id', $hanzi_list_word_arr['id'])
-            ->orderBy('hanzi_list_words.id', 'ASC')
+        // Fetch related words with latest guess
+        $words = HanziListWord::with(['latestWordGuess', 'hanzi'])
+            ->where('hanzi_list_id', $hanziList->id)
+            ->orderBy('id', 'ASC')
             ->get();
-    } else {
 
+        $hanzi_list_data = [
+            'id' => $hanziList->id,
+            'reference' => $hanziList->list_reference,
+            'list_name' => $hanziList->list_name,
+            'box_count' => $hanziList->box_number,
+            'words' => $words->map(fn($word) => [
+                'id'            => $word->hanzi->id,
+                'character'     => $word->hanzi->character,
+                'set'           => $word->hanzi->set,
+                'meaning_thai'  => $word->hanzi->meaning_thai,
+                'definition'    => $word->hanzi->definition,
+                'pinyin'        => $word->hanzi->pinyin,
+                'radical'       => $word->hanzi->radical,
+                'latest_guess'  => optional($word->latestWordGuess)->is_correct,
+            ]),
+        ];
+    } else {
         $set = $request->input('set', 'hsk1');
         $word_count = $request->input('word_count', 10);
 
-        $words = DictionaryZhHans::where('set', 'LIKE', "%{$set}%")
-        ->inRandomOrder()
-        ->take($word_count)
-        ->get();
+        $words = DictionaryZhHans::with('latestGuessForCurrentUser')
+            ->where('set', 'LIKE', "%{$set}%")
+            ->inRandomOrder()
+            ->take($word_count)
+            ->get();
 
-        $hanzi_list_data = [];
-
-        $hanzi_list_data['id'] = 'id';
-        $hanzi_list_data['reference'] = 'reference';
-        $hanzi_list_data['list_name'] = 'list_name';
-        $hanzi_list_data['box_count'] = 'box_count';
-        $hanzi_list_data['words'] = $words->map(
-            fn ($word) => [
-                'character' => $word->character,
-                'set' => $word->set,
-                'meaning_thai' => $word->meaning_thai,
-                'definition' => $word->definition,
-                'pinyin' => $word->pinyin,
-                'radical' => $word->radical,
-            ]
-        )->toArray();
-
-        return Inertia::render('WarriorFlipCard', [
-            'success' => session('success'),
-            'hanzi_list_data' => $hanzi_list_data
-        ]);
-    }
-
-    $hanzi_list_word_arr['words'] = $words;
-
-    $hanzi_list_data = [];
-    if ($hanzi_list_word_arr) {
-        $hanzi_list_data['id'] = $hanzi_list_word_arr['id'];
-        $hanzi_list_data['reference'] = $hanzi_list_word_arr['list_reference'];
-        $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
-        $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
-        $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
-            fn ($word) => [
-                'character' => $word->hanzi->character,
-                'set' => $word->hanzi->set,
-                'meaning_thai' => $word->hanzi->meaning_thai,
-                'definition' => $word->hanzi->definition,
-                'pinyin' => $word->hanzi->pinyin,
-                'radical' => $word->hanzi->radical,
-            ]
-        )->toArray();
+        $hanzi_list_data = [
+            'id' => null,
+            'reference' => null,
+            'list_name' => "Random: {$set}",
+            'box_count' => null,
+            'words' => $words->map(fn($word) => [
+                'id'            => $word->id,
+                'character'     => $word->character,
+                'set'           => $word->set,
+                'meaning_thai'  => $word->meaning_thai,
+                'definition'    => $word->definition,
+                'pinyin'        => $word->pinyin,
+                'radical'       => $word->radical,
+                'latest_guess'  => optional($word->latestGuessForCurrentUser)->is_correct,
+            ]),
+        ];
     }
 
     return Inertia::render('WarriorFlipCard', [
@@ -285,7 +280,7 @@ Route::get('/hanzi_list_writing', function (Request $request) {
         $hanzi_list_data['list_name'] = $hanzi_list_word_arr['list_name'];
         $hanzi_list_data['box_count'] = $hanzi_list_word_arr['box_number'];
         $hanzi_list_data['words'] = $hanzi_list_word_arr['words']->map(
-            fn ($word) => [
+            fn($word) => [
                 'character' => $word->hanzi->character,
                 'set' => $word->hanzi->set,
                 'definition' => $word->hanzi->definition,
@@ -349,7 +344,22 @@ Route::get('/hanzi_quiz', function () {
 
 Route::get('/test', function () {
 
-    return Inertia::render('Test');
+    $guessedWords = \App\Models\WordGuess::with('word')
+        ->where('user_id', auth()->id())
+        ->get();
+
+    $filtered = $guessedWords->map(function ($guess) {
+        return [
+            'character'     => $guess->word->character,
+            'pinyin'        => $guess->word->pinyin,
+            'meaning_thai'  => $guess->word->meaning_thai,
+            'is_correct'    => $guess->is_correct,
+        ];
+    });
+
+    return $filtered;
+
+    // return Inertia::render('Test');
 });
 
 Route::get('/youglish', function () {
@@ -369,12 +379,12 @@ Route::get('/bbb', function () {
     return Inertia::render('Testxxx');
 });
 
-Route::get('/khuntong1', fn () => Inertia::render('KhunTong/Card1'));
-Route::get('/khuntong2', fn () => Inertia::render('KhunTong/Card2'));
-Route::get('/khuntong3', fn () => Inertia::render('KhunTong/Card3'));
-Route::get('/khuntong4', fn () => Inertia::render('KhunTong/Card4'));
-Route::get('/khuntong5', fn () => Inertia::render('KhunTong/Card5'));
-Route::get('/khuntong6', fn () => Inertia::render('KhunTong/Card6'));
+Route::get('/khuntong1', fn() => Inertia::render('KhunTong/Card1'));
+Route::get('/khuntong2', fn() => Inertia::render('KhunTong/Card2'));
+Route::get('/khuntong3', fn() => Inertia::render('KhunTong/Card3'));
+Route::get('/khuntong4', fn() => Inertia::render('KhunTong/Card4'));
+Route::get('/khuntong5', fn() => Inertia::render('KhunTong/Card5'));
+Route::get('/khuntong6', fn() => Inertia::render('KhunTong/Card6'));
 
 Route::get('/test4', function () {
 

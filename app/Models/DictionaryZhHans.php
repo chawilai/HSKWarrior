@@ -76,6 +76,19 @@ class DictionaryZhHans extends Model
         return $this->hasMany(HanziListWord::class);
     }
 
+    public function wordGuessesForCurrentUser()
+    {
+        return $this->hasMany(WordGuess::class, 'dictionary_zh_hans_id', 'id')
+            ->where('user_id', auth()->id());
+    }
+
+    public function latestGuessForCurrentUser()
+    {
+        return $this->hasOne(WordGuess::class, 'dictionary_zh_hans_id', 'id')
+            ->where('user_id', auth()->id())
+            ->latest('guessed_at');
+    }
+
     // public function hanziLists()
     // {
     //     return $this->belongsToMany(HanziList::class, 'hanzi_list_words', 'hanzi_id', 'hanzi_list_id');

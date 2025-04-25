@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\WordGuess;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -43,5 +44,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ThaiAddressSeeder::class);
 
         $this->call(ChineseWordsTableSeeder::class);
+
+        WordGuess::factory(1000)->create();
     }
 }

@@ -37,4 +37,17 @@ class HanziListWord extends Model
     {
         return $this->belongsTo(DictionaryZhHans::class, 'hanzi_id');
     }
+
+    public function wordGuessesForCurrentUser()
+    {
+        return $this->hasMany(WordGuess::class, 'dictionary_zh_hans_id', 'hanzi_id')
+            ->where('user_id', auth()->id());
+    }
+
+    public function latestWordGuess()
+    {
+        return $this->hasOne(WordGuess::class, 'dictionary_zh_hans_id', 'hanzi_id')
+            ->where('user_id', auth()->id())
+            ->latest('guessed_at');
+    }
 }

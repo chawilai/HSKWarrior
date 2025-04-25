@@ -18,10 +18,12 @@ let toggle_text = ref("เปิด");
 let selectedAnswer = ref(null);
 
 const props = defineProps({
-    hanzi_list_data: Object,
+    hanzi_list_data: Object
 });
 
 let hanzi_list = ref(props.hanzi_list_data);
+
+console.log(hanzi_list.value.words)
 
 let animateHanzi = [];
 
@@ -177,14 +179,35 @@ const shuffle = (array) => {
     }
 };
 
+const submitGuess = async (word, isCorrect) => {
+
+    router.post('/word-guess', {
+        dictionary_zh_hans_id: word.id,
+        is_correct: isCorrect,
+    }, {
+        preserveScroll: true,
+        onSuccess: (page) => {
+
+            const found = hanzi_list.value.words.find(w => w.id === word.id);
+            if (found) {
+                found.latest_guess = isCorrect ? 1 : 0;
+            }
+
+            console.log('Guess recorded!');
+        }
+    });
+};
+
 const markCorrect = (word) => {
     word.selectedAnswer = "correct";
     word.lastAnswer = "correct";
+    submitGuess(word, true);
 };
 
 const markWrong = (word) => {
     word.selectedAnswer = "wrong";
     word.lastAnswer = "wrong";
+    submitGuess(word, false);
 };
 
 const correctCount = computed(
@@ -197,6 +220,7 @@ const correctCount = computed(
 const totalCount = computed(() => hanzi_list.value.words.length);
 
 onMounted(() => {
+
     hanzi_list.value.words.forEach((item, index) => {
         item.selectedAnswer = null;
         animateHanzi[index] = writeHanzi(
@@ -293,6 +317,7 @@ onBeforeUnmount(() => {
                     :key="word"
                     :word="word.character"
                     :isFlipped="word.isFlipped"
+                    :guessResult="word.latest_guess"
                     @flip="handleFlip(index)"
                 >
                     <template #front>
@@ -301,19 +326,18 @@ onBeforeUnmount(() => {
                         </div>
 
                         <div
-                            class="absolute bottom-2 right-2 text-lg"
-                            v-if="word.lastAnswer"
-                            :class="{
-                                'text-green-500': word.lastAnswer === 'correct',
-                                'text-red-500': word.lastAnswer === 'wrong',
-                            }"
+                        class="absolute bottom-2 right-2 text-lg"
+                        v-if="word.lastAnswer || word.latest_guess !== null"
+                        :class="{
+                            'text-green-500': word.lastAnswer === 'correct' || (!word.lastAnswer && word.latest_guess === 1),
+                            'text-red-500': word.lastAnswer === 'wrong' || (!word.lastAnswer && word.latest_guess === 0),
+                        }"
                         >
                             <i
-                                :class="
-                                    word.lastAnswer === 'correct'
-                                        ? 'pi pi-check-circle'
-                                        : 'pi pi-times-circle'
-                                "
+                                :class="{
+                                    'pi pi-check-circle': word.lastAnswer === 'correct' || (!word.lastAnswer && word.latest_guess === 1),
+                                    'pi pi-times-circle': word.lastAnswer === 'wrong' || (!word.lastAnswer && word.latest_guess === 0),
+                                }"
                             ></i>
                         </div>
 
