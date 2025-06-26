@@ -7,6 +7,8 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+const port = process.env.VITE_SSR_PORT || 13714; // <-- เพิ่มบรรทัดนี้เข้ามา
+
 createServer((page) =>
     createInertiaApp({
         page,
@@ -21,5 +23,6 @@ createServer((page) =>
                     location: new URL(page.props.ziggy.location),
                 });
         },
-    })
+    }),
+    port // <-- เพิ่ม port เป็นพารามิเตอร์ตัวที่ 2
 );
