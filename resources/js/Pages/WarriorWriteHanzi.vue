@@ -1,9 +1,11 @@
+```
 <script setup>
 import OrganicLayout from "@/Layouts/OrganicLayout.vue";
 import { Head, router, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { debounce } from "lodash";
 import Pagination from "@/Pages/Shared/Pagination.vue";
+import tts2 from "@/azure_tts.js";
 
 import { usePlaySound } from "@/composables/usePlaySound.js";
 
