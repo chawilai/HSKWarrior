@@ -99,7 +99,7 @@ onMounted(() => {
                     /> -->
             </span>
             <h1
-                class="pt-4 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight whitespace-nowrap"
+                class="pt-4 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-none whitespace-nowrap"
             >
                 <span class="whitespace-nowrap text-red"> HSK </span>
                 <span class="whitespace-nowrap">Warrior</span><br />
