@@ -50,6 +50,7 @@ Route::get('/warrior_workbook', function () {
 });
 
 Route::post('/word-guess', [WordGuessController::class, 'store']);
+Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
 
 Route::get('/warrior_writehanzi', function (Request $request) {
 
