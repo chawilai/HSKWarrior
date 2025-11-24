@@ -89,7 +89,7 @@ onMounted(() => {
                 </div>
             </a>
             <div
-                class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 lg:static lg:bg-transparent lg:flex lg:space-y-0 lg:space-x-8 lg:flex-row lg:space-x-14"
+                class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 lg:static lg:bg-transparent lg:flex lg:space-y-0 lg:space-x-8 lg:flex-row"
                 :class="sidebarOpen ? 'fixed flex' : 'hidden'"
             >
                 <ul
