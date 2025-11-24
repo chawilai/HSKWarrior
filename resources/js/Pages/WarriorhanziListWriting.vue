@@ -2,7 +2,7 @@
 import { Head, Link } from "@inertiajs/vue3";
 import { ref, computed, onMounted, onBeforeUnmount, onUnmounted } from "vue";
 import HanziWriter from "hanzi-writer";
-import tts2 from "@/tts.js";
+import tts2 from "@/azure_tts.js";
 import warrior_logo from "@/../images/warrior_logo.png";
 import QRCode from "qrcode";
 import HanziStrokeList from "@/Components/HanziStrokeList.vue";

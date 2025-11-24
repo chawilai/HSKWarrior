@@ -6,7 +6,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 import HanziWriter from "hanzi-writer";
-import tts2 from "@/tts.js";
+import tts2 from "@/azure_tts.js";
 
 defineOptions({ layout: Layout });
 

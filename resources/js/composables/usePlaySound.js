@@ -1,6 +1,6 @@
 // composables/usePlaySound.js
 import { ref } from "vue";
-import tts2 from "@/tts.js";
+import tts2 from "@/azure_tts.js";
 
 export function usePlaySound() {
   const shouldStop = ref(false);

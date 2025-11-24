@@ -3,7 +3,7 @@ import { ref, computed, onBeforeUnmount } from "vue";
 import Main from "@/Layouts/Main.vue";
 import { Head } from "@inertiajs/vue3";
 
-import tts2 from "@/tts.js";
+import tts2 from "@/azure_tts.js";
 
 let props = defineProps({
     hsk1: {
