@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import svgLoader from 'vite-svg-loader'
@@ -20,6 +21,7 @@ export default defineConfig({
             },
         }),
         svgLoader(),
+        tailwindcss(),
     ],
     // resolve: {
     //     alias: {
