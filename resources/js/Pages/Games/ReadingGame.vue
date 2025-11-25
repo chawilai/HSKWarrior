@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import OrganicLayout from "@/Layouts/OrganicLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import AzureTTS from "@/azure_tts";
+import { dummyData } from "@/data/readingGameDummyData";
 
 defineOptions({ layout: OrganicLayout });
 
@@ -14,7 +15,13 @@ const contentTypes = [
     { label: "คำศัพท์ (Words)", value: "word" },
 ];
 
-const hskLevels = [1, 2, 3, 4];
+const hskLevels = [
+    { label: "ทั้งหมด (All)", value: 0 },
+    { label: "HSK 1", value: 1 },
+    { label: "HSK 2", value: 2 },
+    { label: "HSK 3", value: 3 },
+    { label: "HSK 4", value: 4 },
+];
 
 const categories = [
     { label: "ทั้งหมด (All)", value: "" },
@@ -54,6 +61,27 @@ let chunks = [];
 const fetchContent = async () => {
     isLoadingContent.value = true;
     try {
+        // --- Dummy Data Logic ---
+        const type = selectedType.value === "sentence" ? "sentences" : "words";
+        let data = dummyData[type];
+
+        if (selectedLevel.value !== 0) {
+            data = data.filter((item) => item.level === selectedLevel.value);
+        }
+
+        if (selectedType.value === "word" && selectedCategory.value) {
+            data = data.filter(
+                (item) => item.category === selectedCategory.value
+            );
+        }
+
+        // Simulate network delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        examples.value = data;
+
+        /* 
+        // --- Original API Logic (Disabled) ---
         const params = new URLSearchParams({
             type: selectedType.value,
             level: selectedLevel.value,
@@ -65,9 +93,10 @@ const fetchContent = async () => {
 
         const data = await res.json();
         examples.value = data;
+        */
 
-        if (data.length > 0) {
-            selectExample(data[0]);
+        if (examples.value.length > 0) {
+            selectExample(examples.value[0]);
         } else {
             selectedExample.value = null;
             refText.value = "";
@@ -339,10 +368,10 @@ const getScoreColor = (score) => {
                             >
                                 <option
                                     v-for="level in hskLevels"
-                                    :key="level"
-                                    :value="level"
+                                    :key="level.value"
+                                    :value="level.value"
                                 >
-                                    HSK {{ level }}
+                                    {{ level.label }}
                                 </option>
                             </select>
 
