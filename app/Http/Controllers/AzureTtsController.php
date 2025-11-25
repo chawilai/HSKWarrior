@@ -24,6 +24,20 @@ class AzureTtsController extends Controller
         $pitch = $validated['pitch'] ?? 1.0;
         $voice = $validated['voice'] ?? 'zh-CN-XiaoxiaoNeural';
 
+        // 1. Generate Cache Key
+        $normalizedText = $this->normalizeText($text);
+        $cacheKey = $this->generateCacheKey($normalizedText, $voice, $rate, $volume, $pitch);
+        $cachePath = "tts_cache/{$cacheKey}.mp3";
+
+        // 2. Check Cache
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($cachePath)) {
+            $fileContent = \Illuminate\Support\Facades\Storage::disk('public')->get($cachePath);
+            return response($fileContent, 200)
+                ->header('Content-Type', 'audio/mpeg')
+                ->header('Cache-Control', 'public, max-age=31536000') // Cache for 1 year
+                ->header('X-TTS-Cache', 'HIT');
+        }
+
         $speechKey = env('AZURE_SPEECH_KEY');
         $speechRegion = env('AZURE_SPEECH_REGION');
 
@@ -49,9 +63,32 @@ class AzureTtsController extends Controller
               ->post($endpoint);
 
             if ($response->successful()) {
-                return response($response->body(), 200)
+                $audioContent = $response->body();
+
+                // 3. Save to Cache
+                \Illuminate\Support\Facades\Storage::disk('public')->put($cachePath, $audioContent);
+
+                // 4. Log to Database (Mapping)
+                try {
+                    \App\Models\TtsCacheLog::firstOrCreate(
+                        ['filename_hash' => $cacheKey],
+                        [
+                            'text_content' => $text,
+                            'voice' => $voice,
+                            'rate' => $rate,
+                            'volume' => $volume,
+                            'pitch' => $pitch,
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    // Don't fail the request if logging fails
+                    Log::error('Failed to log TTS cache: ' . $e->getMessage());
+                }
+
+                return response($audioContent, 200)
                     ->header('Content-Type', 'audio/mpeg')
-                    ->header('Cache-Control', 'public, max-age=3600');
+                    ->header('Cache-Control', 'public, max-age=31536000')
+                    ->header('X-TTS-Cache', 'MISS');
             }
 
             Log::error('Azure TTS API Error', [
@@ -75,6 +112,22 @@ class AzureTtsController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function normalizeText($text)
+    {
+        // Remove all non-letter and non-number characters (keep Chinese, English, Numbers)
+        // \p{L} matches any unicode letter (including Chinese)
+        // \p{N} matches any unicode number
+        // /u modifier enables UTF-8 support
+        return preg_replace('/[^\p{L}\p{N}]/u', '', $text);
+    }
+
+    private function generateCacheKey($text, $voice, $rate, $volume, $pitch)
+    {
+        // Create a unique hash based on content and parameters
+        $data = "{$text}|{$voice}|{$rate}|{$volume}|{$pitch}";
+        return md5($data);
     }
 
     private function buildSsml($text, $voice, $rate, $volume, $pitch)
