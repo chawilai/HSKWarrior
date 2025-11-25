@@ -51,13 +51,13 @@ const menus = [
         active: false,
     },
     {
-        title: "การ์ดคำ",
-        component: "WarriorFlipCard",
-        url: "/warrior_flip_card",
-        disabled: false,
-        active: false,
+        title: "Games",
+        type: "dropdown",
+        children: [
+            { title: "Reading Game (ฝึกอ่าน)", url: "/games/reading" },
+            { title: "การ์ดคำ (Flip Card)", url: "/warrior_flip_card" },
+        ],
     },
-    // {"title":"ทายคำศัพท์", "component": "WarriorHome","url": "/warrior_guessingwords", "disabled": false, "active": false},
 ];
 const sidebarOpen = ref(false);
 
@@ -97,9 +97,37 @@ onMounted(() => {
                 >
                     <li
                         v-for="menu in menus"
-                        class="text-lg lg:text-base font-medium group"
+                        class="text-lg lg:text-base font-medium group relative"
                     >
+                        <div
+                            v-if="menu.type === 'dropdown'"
+                            class="dropdown dropdown-hover"
+                        >
+                            <div
+                                tabindex="0"
+                                role="button"
+                                class="relative flex items-center justify-center w-full h-16 px-1 text-base text-gray-900 text-opacity-100 transition-all duration-300 rounded outline-none cursor-pointer group lg:w-auto lg:h-auto lg:inline-block lg:hover:-rotate-3 active:ring-0 active:outline-none"
+                            >
+                                <span class="relative z-20 whitespace-nowrap">{{
+                                    menu.title
+                                }}</span>
+                                <span
+                                    class="absolute bottom-0 left-0 z-10 w-0 h-2 transition-all duration-300 ease-out skew-x-12 group-hover:w-full bg-red-400"
+                                ></span>
+                            </div>
+                            <ul
+                                tabindex="0"
+                                class="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-box w-52"
+                            >
+                                <li v-for="child in menu.children">
+                                    <Link :href="child.url">{{
+                                        child.title
+                                    }}</Link>
+                                </li>
+                            </ul>
+                        </div>
                         <Link
+                            v-else
                             @click="sidebarOpen = false"
                             as="a"
                             preserve-scroll
@@ -145,12 +173,16 @@ onMounted(() => {
                         v-text="page.props.auth.user.name"
                     ></span>
                 </Link> -->
-                <Dropdown align="right" width="48"
-                v-if="page.props.auth.user"
-                contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/90 hover:bg-white backdrop-blur-xl"
+                <Dropdown
+                    align="right"
+                    width="48"
+                    v-if="page.props.auth.user"
+                    contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/90 hover:bg-white backdrop-blur-xl"
                 >
                     <template #trigger>
-                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                        <div
+                            class="flex flex-col justify-center items-center cursor-pointer"
+                        >
                             <img
                                 class="w-14 h-auto rounded-full"
                                 :src="page.props.auth.user.avatar"
@@ -165,14 +197,16 @@ onMounted(() => {
 
                     <template #content>
                         <DropdownLink :href="route('profile.edit')">
-                            <i class="pi pi-user"></i><span class="ml-2">โปรไฟล์</span>
+                            <i class="pi pi-user"></i
+                            ><span class="ml-2">โปรไฟล์</span>
                         </DropdownLink>
                         <DropdownLink
                             :href="route('logout')"
                             method="post"
                             as="button"
                         >
-                            <i class="pi pi-sign-out"></i><span class="ml-2">Log Out</span>
+                            <i class="pi pi-sign-out"></i
+                            ><span class="ml-2">Log Out</span>
                         </DropdownLink>
                     </template>
                 </Dropdown>

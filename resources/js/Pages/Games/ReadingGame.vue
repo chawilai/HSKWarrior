@@ -34,6 +34,11 @@ const isRecording = ref(false);
 const isProcessing = ref(false);
 const statusMessage = ref("");
 const result = ref(null);
+const animatedResult = ref({
+    accuracy: 0,
+    fluency: 0,
+    completeness: 0,
+});
 const selfAudioSrc = ref(null);
 
 let mediaRecorder = null;
@@ -45,13 +50,38 @@ const selectExample = (example) => {
     selectedExample.value = example;
     refText.value = example.text;
     result.value = null;
+    // Reset animated values
+    animatedResult.value = { accuracy: 0, fluency: 0, completeness: 0 };
     statusMessage.value = "";
     selfAudioSrc.value = null;
+};
+
+const animateValue = (key, start, end, duration) => {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        // Ease out quart
+        const easeProgress = 1 - Math.pow(1 - progress, 4);
+
+        animatedResult.value[key] = Math.floor(
+            progress * (end - start) + start
+        );
+
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        } else {
+            animatedResult.value[key] = end;
+        }
+    };
+    window.requestAnimationFrame(step);
 };
 
 const playReference = async () => {
     await tts.speak2(refText.value, "zh-CN", { rate: 0.8 });
 };
+
+// ... (keep existing audio recording logic) ...
 
 // --- Audio Recording (WAV) ---
 // Helper to write string to DataView
@@ -122,6 +152,7 @@ const startRecording = async () => {
         isRecording.value = true;
         statusMessage.value = "Recording...";
         result.value = null;
+        animatedResult.value = { accuracy: 0, fluency: 0, completeness: 0 };
 
         // Store references to stop later
         mediaRecorder = { stream, audioContext, source, processor };
@@ -178,6 +209,18 @@ const stopRecording = async () => {
 
         const data = await res.json();
         result.value = data;
+
+        // Trigger animations
+        const best = data.NBest[0];
+        animateValue("accuracy", 0, Math.round(best.AccuracyScore), 1500);
+        animateValue("fluency", 0, Math.round(best.FluencyScore), 1500);
+        animateValue(
+            "completeness",
+            0,
+            Math.round(best.CompletenessScore),
+            1500
+        );
+
         statusMessage.value = "Done!";
     } catch (e) {
         statusMessage.value = "Error: " + e.message;
@@ -248,7 +291,7 @@ const getScoreColor = (score) => {
             <div class="lg:w-1/2 w-full flex flex-col justify-center gap-4">
                 <!-- Practice Area -->
                 <div
-                    class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-4 border border-white/50 relative overflow-hidden group"
+                    class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-4 border border-white/50 relative group"
                 >
                     <!-- Decorative background elements -->
                     <div
@@ -366,10 +409,7 @@ const getScoreColor = (score) => {
                         <span>📊 ผลการประเมิน</span>
                         <span
                             class="badge badge-lg badge-primary text-white font-bold"
-                            >{{
-                                Math.round(result.NBest[0].AccuracyScore)
-                            }}
-                            คะแนน</span
+                            >{{ animatedResult.accuracy }} คะแนน</span
                         >
                     </h3>
 
@@ -384,19 +424,13 @@ const getScoreColor = (score) => {
                                     >ความถูกต้อง (Accuracy)</span
                                 >
                                 <span class="text-2xl font-bold text-gray-900"
-                                    >{{
-                                        Math.round(
-                                            result.NBest[0].AccuracyScore
-                                        )
-                                    }}%</span
+                                    >{{ animatedResult.accuracy }}%</span
                                 >
                             </div>
                             <progress
                                 class="progress w-full h-3"
-                                :class="
-                                    getScoreColor(result.NBest[0].AccuracyScore)
-                                "
-                                :value="result.NBest[0].AccuracyScore"
+                                :class="getScoreColor(animatedResult.accuracy)"
+                                :value="animatedResult.accuracy"
                                 max="100"
                             ></progress>
                         </div>
@@ -415,21 +449,15 @@ const getScoreColor = (score) => {
                                     >
                                     <span
                                         class="text-xl font-bold text-gray-900"
-                                        >{{
-                                            Math.round(
-                                                result.NBest[0].FluencyScore
-                                            )
-                                        }}%</span
+                                        >{{ animatedResult.fluency }}%</span
                                     >
                                 </div>
                                 <progress
                                     class="progress w-full h-2"
                                     :class="
-                                        getScoreColor(
-                                            result.NBest[0].FluencyScore
-                                        )
+                                        getScoreColor(animatedResult.fluency)
                                     "
-                                    :value="result.NBest[0].FluencyScore"
+                                    :value="animatedResult.fluency"
                                     max="100"
                                 ></progress>
                             </div>
@@ -447,10 +475,7 @@ const getScoreColor = (score) => {
                                     <span
                                         class="text-xl font-bold text-gray-900"
                                         >{{
-                                            Math.round(
-                                                result.NBest[0]
-                                                    .CompletenessScore
-                                            )
+                                            animatedResult.completeness
                                         }}%</span
                                     >
                                 </div>
@@ -458,10 +483,10 @@ const getScoreColor = (score) => {
                                     class="progress w-full h-2"
                                     :class="
                                         getScoreColor(
-                                            result.NBest[0].CompletenessScore
+                                            animatedResult.completeness
                                         )
                                     "
-                                    :value="result.NBest[0].CompletenessScore"
+                                    :value="animatedResult.completeness"
                                     max="100"
                                 ></progress>
                             </div>
