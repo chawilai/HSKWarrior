@@ -173,43 +173,48 @@ onMounted(() => {
                         v-text="page.props.auth.user.name"
                     ></span>
                 </Link> -->
-                <Dropdown
-                    align="right"
-                    width="48"
+                <div
                     v-if="page.props.auth.user"
-                    contentClasses="sm:rounded-lg shadow-md hover:shadow-xl bg-white/90 hover:bg-white backdrop-blur-xl"
+                    class="dropdown dropdown-hover dropdown-end"
                 >
-                    <template #trigger>
-                        <div
-                            class="flex flex-col justify-center items-center cursor-pointer"
-                        >
-                            <img
-                                class="w-14 h-auto rounded-full"
-                                :src="page.props.auth.user.avatar"
-                                alt=""
-                            />
-                            <span
-                                class="font-bold"
-                                v-text="page.props.auth.user.name"
-                            ></span>
-                        </div>
-                    </template>
-
-                    <template #content>
-                        <DropdownLink :href="route('profile.edit')">
-                            <i class="pi pi-user"></i
-                            ><span class="ml-2">โปรไฟล์</span>
-                        </DropdownLink>
-                        <DropdownLink
-                            :href="route('logout')"
-                            method="post"
-                            as="button"
-                        >
-                            <i class="pi pi-sign-out"></i
-                            ><span class="ml-2">Log Out</span>
-                        </DropdownLink>
-                    </template>
-                </Dropdown>
+                    <div
+                        tabindex="0"
+                        role="button"
+                        class="flex flex-col justify-center items-center cursor-pointer"
+                    >
+                        <img
+                            class="w-14 h-auto rounded-full"
+                            :src="page.props.auth.user.avatar"
+                            alt=""
+                        />
+                        <span
+                            class="font-bold"
+                            v-text="page.props.auth.user.name"
+                        ></span>
+                    </div>
+                    <ul
+                        tabindex="0"
+                        class="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                        <li>
+                            <Link :href="route('profile.edit')">
+                                <i class="pi pi-user"></i
+                                ><span class="ml-2">โปรไฟล์</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                as="button"
+                                class="w-full text-left"
+                            >
+                                <i class="pi pi-sign-out"></i
+                                ><span class="ml-2">Log Out</span>
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <button
