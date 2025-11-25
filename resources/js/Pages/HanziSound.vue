@@ -30,9 +30,7 @@ let playSound = (input) => {
     const playbackId = currentPlaybackId.value;
     shouldStop.value = false;
 
-    tts.rate(0.8); // 1.2 (0.1-10)
-    tts.volume(0.5); // 0.5 (0-1)
-    tts.pitch(1); // 1 (0.1-2) gooe 0.8 - 2
+    // Using default settings from azure_tts.js
 
     // Function to process a single sound
     function processSound(sound) {

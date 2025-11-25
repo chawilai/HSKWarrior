@@ -1,14 +1,44 @@
 class AzureTTS {
     constructor() {
-        this.u_rate = 1.0;
-        this.u_volume = 100;
-        this.u_pitch = 1.0;
+        // Default settings - ปรับได้ที่นี่เลย
+        this.defaults = {
+            rate: 0.7,      // ความเร็ว (0.1-10, แนะนำ 0.5-1.5)
+            volume: 80,     // เสียงดัง (0-100)
+            pitch: 1.0,     // ระดับเสียง (0.1-2.0)
+            voice: 'zh-CN-XiaoxiaoNeural'
+            // ตัวเลือกเสียงภาษาจีน (Mandarin):
+            // หญิง:
+            // 'zh-CN-XiaoxiaoNeural' (Default - เสียงใส ฟังสบาย)
+            // 'zh-CN-XiaoyiNeural' (เสียงดิจิตอล สดใส)
+            // 'zh-CN-LiaoningNeural' (สำเนียงเหลียวหนิง)
+            // 'zh-CN-SichuanNeural' (สำเนียงเสฉวน)
+            //
+            // ชาย:
+            // 'zh-CN-YunxiNeural' (เสียงหนุ่ม สุภาพ)
+            // 'zh-CN-YunjianNeural' (เสียงผู้ใหญ่ ทางการ)
+            // 'zh-CN-YunyangNeural' (เสียงผู้ประกาศข่าว)
+        };
+        
         this.currentAudio = null;
     }
 
-    async speak2(textToSpeak, langCode = 'zh-CN') {
+    /**
+     * พูดข้อความ
+     * @param {string} textToSpeak - ข้อความที่จะพูด
+     * @param {string} langCode - รหัสภาษา (ไม่ได้ใช้แล้ว แต่เก็บไว้ compatibility)
+     * @param {object} options - ตัวเลือกเพิ่มเติม { rate, volume, pitch, voice }
+     */
+    async speak2(textToSpeak, langCode = 'zh-CN', options = {}) {
         // Cancel any previous playback
         this.cancel2();
+
+        // Merge options with defaults
+        const settings = {
+            rate: options.rate ?? this.defaults.rate,
+            volume: options.volume ?? this.defaults.volume,
+            pitch: options.pitch ?? this.defaults.pitch,
+            voice: options.voice ?? this.defaults.voice,
+        };
 
         try {
             const response = await fetch('/api/azure-tts', {
@@ -19,10 +49,10 @@ class AzureTTS {
                 },
                 body: JSON.stringify({
                     text: textToSpeak,
-                    rate: this.u_rate,
-                    volume: this.u_volume,
-                    pitch: this.u_pitch,
-                    voice: 'zh-CN-XiaoxiaoNeural',
+                    rate: settings.rate,
+                    volume: settings.volume,
+                    pitch: settings.pitch,
+                    voice: settings.voice,
                 }),
             });
 
@@ -55,21 +85,20 @@ class AzureTTS {
         }
     }
 
+    // เก็บไว้เพื่อ backward compatibility (แต่ไม่แนะนำให้ใช้แล้ว)
     volume(volume_val) {
-        // Convert 0-1 to 0-100 for Azure API
-        this.u_volume = Math.round(Number(volume_val) * 100);
+        console.warn('tts.volume() is deprecated. Use speak2(text, lang, { volume: value }) instead.');
+        this.defaults.volume = Math.round(Number(volume_val) * 100);
     }
 
     rate(rate_val) {
-        // Clamp to Azure supported range
-        let r = Number(rate_val);
-        if (r < 0.5) r = 0.5;
-        if (r > 2.0) r = 2.0;
-        this.u_rate = r;
+        console.warn('tts.rate() is deprecated. Use speak2(text, lang, { rate: value }) instead.');
+        this.defaults.rate = Number(rate_val);
     }
 
     pitch(pitch_val) {
-        this.u_pitch = Number(pitch_val);
+        console.warn('tts.pitch() is deprecated. Use speak2(text, lang, { pitch: value }) instead.');
+        this.defaults.pitch = Number(pitch_val);
     }
 }
 

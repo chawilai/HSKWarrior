@@ -13,9 +13,7 @@ export function usePlaySound() {
     const playbackId = currentPlaybackId.value;
     shouldStop.value = false;
 
-    tts.rate(0.5);
-    tts.volume(1);
-    tts.pitch(1.3);
+    // Using default settings from azure_tts.js
 
     function processSound(sound) {
       return new Promise((resolve) => {
