@@ -19,6 +19,9 @@ use Illuminate\Support\Js;
 use Inertia\Inertia;
 use Overtrue\Pinyin\Pinyin;
 
+// force login user = 1
+Auth::loginUsingId(1); 
+
 Route::get('/', function () {
     return Inertia::render('Warrior', [
         'canLogin' => Route::has('login'),
@@ -51,6 +54,11 @@ Route::get('/warrior_workbook', function () {
 
 Route::post('/word-guess', [WordGuessController::class, 'store']);
 Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
+Route::post('/api/speech/assess', [App\Http\Controllers\AzureSpeechController::class, 'assess']);
+
+Route::get('/games/reading', function () {
+    return Inertia::render('Games/ReadingGame');
+})->middleware(['auth', 'verified'])->name('games.reading');
 
 Route::get('/warrior_writehanzi', function (Request $request) {
 
