@@ -9,27 +9,32 @@ defineOptions({ layout: OrganicLayout });
 const tts = new AzureTTS();
 
 // --- State ---
-const examples = [
-    { text: "你好，我是学生。", pinyin: "Nǐhǎo, wǒ shì xuéshēng." },
-    { text: "你喜欢喝茶吗？", pinyin: "Nǐ xǐhuan hē chá ma?" },
-    { text: "我有两个弟弟。", pinyin: "Wǒ yǒu liǎng gè dìdi." },
-    { text: "今天的天气很好。", pinyin: "Jīntiān de tiānqì hěn hǎo." },
-    { text: "我想去中国旅游。", pinyin: "Wǒ xiǎng qù Zhōngguó lǚyóu." },
-    { text: "他在医院工作。", pinyin: "Tā zài yīyuàn gōngzuò." },
-    { text: "请给我一杯水。", pinyin: "Qǐng gěi wǒ yì bēi shuǐ." },
-    { text: "我会说一点儿中文。", pinyin: "Wǒ huì shuō yìdiǎnr Zhōngwén." },
-    {
-        text: "我每天早上七点起床。",
-        pinyin: "Wǒ měitiān zǎoshang qī diǎn qǐchuáng.",
-    },
-    {
-        text: "我喜欢听音乐和看电影。",
-        pinyin: "Wǒ xǐhuan tīng yīnyuè hé kàn diànyǐng.",
-    },
+const contentTypes = [
+    { label: "ประโยค (Sentences)", value: "sentence" },
+    { label: "คำศัพท์ (Words)", value: "word" },
 ];
 
-const selectedExample = ref(examples[0]);
-const refText = ref(examples[0].text);
+const hskLevels = [1, 2, 3, 4];
+
+const categories = [
+    { label: "ทั้งหมด (All)", value: "" },
+    { label: "คำกริยา (Verbs)", value: "v." },
+    { label: "คำนาม (Nouns)", value: "n." },
+    { label: "ตัวเลข (Numbers)", value: "num." },
+    { label: "คำสรรพนาม (Pronouns)", value: "pron." },
+    { label: "คำคุณศัพท์ (Adjectives)", value: "adj." },
+    { label: "คำวิเศษณ์ (Adverbs)", value: "adv." },
+];
+
+const selectedType = ref("sentence");
+const selectedLevel = ref(1);
+const selectedCategory = ref("");
+const isLoadingContent = ref(false);
+
+const examples = ref([]);
+
+const selectedExample = ref(null);
+const refText = ref("");
 const isRecording = ref(false);
 const isProcessing = ref(false);
 const statusMessage = ref("");
@@ -46,6 +51,35 @@ let chunks = [];
 
 // --- Methods ---
 
+const fetchContent = async () => {
+    isLoadingContent.value = true;
+    try {
+        const params = new URLSearchParams({
+            type: selectedType.value,
+            level: selectedLevel.value,
+            category: selectedCategory.value,
+        });
+
+        const res = await fetch(`/api/reading-game/content?${params}`);
+        if (!res.ok) throw new Error("Failed to fetch content");
+
+        const data = await res.json();
+        examples.value = data;
+
+        if (data.length > 0) {
+            selectExample(data[0]);
+        } else {
+            selectedExample.value = null;
+            refText.value = "";
+        }
+    } catch (e) {
+        console.error(e);
+        statusMessage.value = "Error loading content";
+    } finally {
+        isLoadingContent.value = false;
+    }
+};
+
 const selectExample = (example) => {
     selectedExample.value = example;
     refText.value = example.text;
@@ -55,6 +89,10 @@ const selectExample = (example) => {
     statusMessage.value = "";
     selfAudioSrc.value = null;
 };
+
+onMounted(() => {
+    fetchContent();
+});
 
 const animateValue = (key, start, end, duration) => {
     let startTimestamp = null;
@@ -262,14 +300,120 @@ const getScoreColor = (score) => {
                     </p>
                 </div>
 
-                <!-- Example Selection -->
+                <!-- Filters -->
                 <div
                     class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/50"
                 >
                     <h3 class="text-lg font-bold mb-4 text-gray-800">
-                        1. เลือกประโยคฝึกฝน
+                        1. ตั้งค่าการฝึก
                     </h3>
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-col gap-4">
+                        <!-- Type Selection -->
+                        <div class="flex gap-6">
+                            <label
+                                class="cursor-pointer flex items-center gap-2"
+                                v-for="type in contentTypes"
+                                :key="type.value"
+                            >
+                                <input
+                                    type="radio"
+                                    name="contentType"
+                                    class="radio radio-primary"
+                                    :value="type.value"
+                                    v-model="selectedType"
+                                    @change="fetchContent"
+                                />
+                                <span
+                                    class="label-text font-bold text-gray-700"
+                                    >{{ type.label }}</span
+                                >
+                            </label>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4">
+                            <!-- Level Selection -->
+                            <select
+                                class="select select-bordered w-full max-w-[150px]"
+                                v-model="selectedLevel"
+                                @change="fetchContent"
+                            >
+                                <option
+                                    v-for="level in hskLevels"
+                                    :key="level"
+                                    :value="level"
+                                >
+                                    HSK {{ level }}
+                                </option>
+                            </select>
+
+                            <!-- Category Selection (Only for Words) -->
+                            <select
+                                v-if="selectedType === 'word'"
+                                class="select select-bordered w-full max-w-[200px]"
+                                v-model="selectedCategory"
+                                @change="fetchContent"
+                            >
+                                <option
+                                    v-for="cat in categories"
+                                    :key="cat.value"
+                                    :value="cat.value"
+                                >
+                                    {{ cat.label }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example Selection -->
+                <div
+                    class="bg-white/60 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-white/50"
+                >
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">
+                            2. เลือก{{
+                                selectedType === "word" ? "คำศัพท์" : "ประโยค"
+                            }}
+                        </h3>
+                        <button
+                            @click="fetchContent"
+                            class="btn btn-ghost btn-sm btn-circle"
+                            :class="{ 'animate-spin': isLoadingContent }"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div
+                        v-if="isLoadingContent"
+                        class="flex justify-center py-8"
+                    >
+                        <span
+                            class="loading loading-spinner loading-lg text-primary"
+                        ></span>
+                    </div>
+
+                    <div
+                        v-else-if="examples.length === 0"
+                        class="text-center py-8 text-gray-500"
+                    >
+                        ไม่พบข้อมูล
+                    </div>
+
+                    <div v-else class="flex flex-wrap gap-2">
                         <button
                             v-for="(ex, idx) in examples"
                             :key="idx"
@@ -304,7 +448,10 @@ const getScoreColor = (score) => {
                         >
                             {{ refText }}
                         </h1>
-                        <p class="text-gray-500 text-xl font-light">
+                        <p
+                            v-if="selectedExample"
+                            class="text-gray-500 text-xl font-light"
+                        >
                             {{ selectedExample.pinyin }}
                         </p>
                     </div>
@@ -314,7 +461,8 @@ const getScoreColor = (score) => {
                     >
                         <button
                             @click="playReference"
-                            class="btn btn-circle btn-lg bg-blue-100 hover:bg-blue-200 border-0 text-blue-600 shadow-lg hover:scale-110 transition-all duration-300 w-10 h-10"
+                            :disabled="!selectedExample"
+                            class="btn btn-circle btn-lg bg-blue-100 hover:bg-blue-200 border-0 text-blue-600 shadow-lg hover:scale-110 transition-all duration-300 w-10 h-10 disabled:opacity-50 disabled:scale-100"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -335,8 +483,8 @@ const getScoreColor = (score) => {
                         <button
                             v-if="!isRecording"
                             @click="startRecording"
-                            class="btn btn-circle btn-lg bg-red text-white border-0 shadow-xl shadow-red/30 hover:scale-110 hover:bg-red-600 transition-all duration-300 w-10 h-10"
-                            :disabled="isProcessing"
+                            class="btn btn-circle btn-lg bg-red text-white border-0 shadow-xl shadow-red/30 hover:scale-110 hover:bg-red-600 transition-all duration-300 w-10 h-10 disabled:opacity-50 disabled:scale-100"
+                            :disabled="isProcessing || !selectedExample"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
