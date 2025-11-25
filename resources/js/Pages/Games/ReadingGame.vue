@@ -471,7 +471,7 @@ const getScoreColor = (score) => {
                         class="absolute top-0 right-0 w-32 h-32 bg-red-100 rounded-full blur-3xl -z-10 opacity-50"
                     ></div>
 
-                    <div class="text-center mb-8 relative z-10">
+                    <div class="text-center mb-6 relative z-10">
                         <h1
                             class="text-2xl lg:text-3xl font-bold mb-4 text-gray-900 tracking-tight"
                         >
@@ -549,7 +549,7 @@ const getScoreColor = (score) => {
 
                     <div
                         v-if="statusMessage"
-                        class="text-center mt-6 font-medium"
+                        class="text-center mt-3 font-medium"
                         :class="
                             isRecording
                                 ? 'text-red animate-pulse'
@@ -566,7 +566,7 @@ const getScoreColor = (score) => {
                     class="bg-white/60 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-white/50 flex items-center gap-4"
                 >
                     <span
-                        class="text-sm font-bold text-gray-500 uppercase tracking-wider"
+                        class="text-sm w-2/5 font-bold text-gray-500 uppercase tracking-wider"
                         >เสียงของคุณ:</span
                     >
                     <audio
@@ -578,29 +578,31 @@ const getScoreColor = (score) => {
 
                 <div
                     v-if="result"
-                    class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/50 h-full animate-fade-in-up"
+                    class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl p-4 border border-white/50 h-full animate-fade-in-up"
                 >
                     <h3
-                        class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2"
+                        class="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-gray-800 flex flex-wrap justify-between items-center gap-2"
                     >
-                        <span>📊 ผลการประเมิน</span>
+                        <span class="ml-2">📊 ผลการประเมิน</span>
                         <span
-                            class="badge badge-lg badge-primary text-white font-bold"
+                            class="badge badge-md md:badge-lg badge-primary text-white font-bold mr-3 scale-120"
                             >{{ animatedResult.accuracy }} คะแนน</span
                         >
                     </h3>
 
                     <!-- Scores Grid -->
-                    <div class="grid grid-cols-1 gap-6 mb-8">
+                    <div class="grid grid-cols-1 gap-4 md:gap-6 mb-3 md:mb-6">
                         <!-- Accuracy -->
                         <div
-                            class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
+                            class="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100"
                         >
                             <div class="flex justify-between items-end mb-2">
-                                <span class="text-gray-500 font-medium"
+                                <span
+                                    class="text-gray-500 font-medium text-sm md:text-base"
                                     >ความถูกต้อง (Accuracy)</span
                                 >
-                                <span class="text-2xl font-bold text-gray-900"
+                                <span
+                                    class="text-xl md:text-2xl font-bold text-gray-900"
                                     >{{ animatedResult.accuracy }}%</span
                                 >
                             </div>
@@ -612,20 +614,20 @@ const getScoreColor = (score) => {
                             ></progress>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-3 md:gap-6">
                             <!-- Fluency -->
                             <div
-                                class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
+                                class="bg-white rounded-2xl p-3 md:p-5 shadow-sm border border-gray-100"
                             >
                                 <div
                                     class="flex justify-between items-end mb-2"
                                 >
                                     <span
-                                        class="text-gray-500 font-medium text-sm"
+                                        class="text-gray-500 font-medium text-xs md:text-sm"
                                         >ความลื่นไหล</span
                                     >
                                     <span
-                                        class="text-xl font-bold text-gray-900"
+                                        class="text-lg md:text-xl font-bold text-gray-900"
                                         >{{ animatedResult.fluency }}%</span
                                     >
                                 </div>
@@ -640,17 +642,17 @@ const getScoreColor = (score) => {
                             </div>
                             <!-- Completeness -->
                             <div
-                                class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
+                                class="bg-white rounded-2xl p-3 md:p-5 shadow-sm border border-gray-100"
                             >
                                 <div
                                     class="flex justify-between items-end mb-2"
                                 >
                                     <span
-                                        class="text-gray-500 font-medium text-sm"
+                                        class="text-gray-500 font-medium text-xs md:text-sm"
                                         >ความครบถ้วน</span
                                     >
                                     <span
-                                        class="text-xl font-bold text-gray-900"
+                                        class="text-lg md:text-xl font-bold text-gray-900"
                                         >{{
                                             animatedResult.completeness
                                         }}%</span
@@ -672,20 +674,20 @@ const getScoreColor = (score) => {
 
                     <!-- Word Analysis -->
                     <div
-                        class="bg-gray-50 rounded-2xl p-6 border border-gray-100"
+                        class="bg-gray-50 rounded-2xl p-4 md:p-6 border border-gray-100"
                     >
                         <h4
-                            class="font-bold text-gray-700 mb-4 uppercase text-sm tracking-wider"
+                            class="font-bold text-gray-700 mb-3 md:mb-4 uppercase text-xs md:text-sm tracking-wider"
                         >
                             วิเคราะห์รายคำ
                         </h4>
                         <div
-                            class="flex flex-wrap gap-3 text-3xl leading-loose"
+                            class="flex flex-wrap gap-2 md:gap-3 text-xl md:text-3xl leading-loose"
                         >
                             <span
                                 v-for="(word, idx) in result.NBest[0].Words"
                                 :key="idx"
-                                class="px-3 py-1 rounded-lg bg-white shadow-sm border border-gray-100 cursor-help transition-transform hover:scale-110 tooltip tooltip-top"
+                                class="px-2 py-1 md:px-3 md:py-1 rounded-lg bg-white shadow-sm border border-gray-100 cursor-help transition-transform hover:scale-110 tooltip tooltip-top"
                                 :class="getColorClass(word.AccuracyScore)"
                                 :data-tip="
                                     'คะแนน: ' + Math.round(word.AccuracyScore)
