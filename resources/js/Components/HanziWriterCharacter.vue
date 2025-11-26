@@ -15,6 +15,14 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    strokeColor: {
+        type: String,
+        default: "#333333",
+    },
+    radicalColor: {
+        type: String,
+        default: "#B71F1F",
+    },
 });
 
 const writerInstance = ref(null);
@@ -34,8 +42,8 @@ const initWriter = () => {
         width: props.size,
         height: props.size,
         padding: 2,
-        strokeColor: "#333333",
-        radicalColor: "#166534", // green-800 for radical
+        strokeColor: props.strokeColor,
+        radicalColor: props.radicalColor,
         showOutline: true,
         strokeAnimationSpeed: 1.5,
         delayBetweenStrokes: 50,
