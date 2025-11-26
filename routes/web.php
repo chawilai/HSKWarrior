@@ -52,6 +52,10 @@ Route::get('/warrior_workbook', function () {
     return Inertia::render('WarriorHSKWorkbook');
 });
 
+Route::get('/warrior_question', function () {
+    return Inertia::render('Question');
+});
+
 Route::post('/word-guess', [WordGuessController::class, 'store']);
 Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
 Route::post('/api/speech/assess', [App\Http\Controllers\AzureSpeechController::class, 'assess']);
