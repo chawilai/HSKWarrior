@@ -46,6 +46,31 @@ const getCharSize = (text) => {
     return 30;
 };
 
+const hanziRefs = ref({});
+
+const setHanziRef = (el, wordId, charIndex) => {
+    if (el) {
+        if (!hanziRefs.value[wordId]) {
+            hanziRefs.value[wordId] = [];
+        }
+        hanziRefs.value[wordId][charIndex] = el;
+    }
+};
+
+const playWord = (word) => {
+    playSound(word.word);
+
+    // Trigger animation for all characters in the word
+    const chars = hanziRefs.value[word.id];
+    if (chars) {
+        chars.forEach((charComp) => {
+            if (charComp && charComp.animate) {
+                charComp.animate();
+            }
+        });
+    }
+};
+
 // Animation delay for staggered entrance
 const getDelay = (index) => {
     return { animationDelay: `${index * 50}ms` };
@@ -146,7 +171,8 @@ const getDelay = (index) => {
                                 >
                                     <!-- Characters Row -->
                                     <div
-                                        class="flex justify-center items-center gap-1"
+                                        class="flex justify-center items-center gap-1 cursor-pointer"
+                                        @click="playWord(word)"
                                     >
                                         <HanziWriterCharacter
                                             v-for="(
@@ -156,6 +182,14 @@ const getDelay = (index) => {
                                             :id="`${word.id}-${charIndex}`"
                                             :character="char"
                                             :size="getCharSize(word.word)"
+                                            :ref="
+                                                (el) =>
+                                                    setHanziRef(
+                                                        el,
+                                                        word.id,
+                                                        charIndex
+                                                    )
+                                            "
                                         />
                                     </div>
 
@@ -169,7 +203,7 @@ const getDelay = (index) => {
                                             {{ word.pinyin }}
                                         </div>
                                         <button
-                                            @click="playSound(word.word)"
+                                            @click="playWord(word)"
                                             class="btn btn-circle btn-ghost btn-xs text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 h-7 w-7"
                                         >
                                             <i
