@@ -171,7 +171,7 @@ const getDelay = (index) => {
                                 >
                                     <!-- Characters Row -->
                                     <div
-                                        class="flex justify-center items-center gap-1 cursor-pointer h-[75px]"
+                                        class="flex justify-center items-center gap-1 cursor-pointer h-[75px] relative"
                                         @click="playWord(word)"
                                     >
                                         <HanziWriterCharacter
@@ -191,20 +191,9 @@ const getDelay = (index) => {
                                                     )
                                             "
                                         />
-                                    </div>
-
-                                    <!-- Pinyin & Speaker Row -->
-                                    <div
-                                        class="flex justify-between items-center w-full border-t border-indigo-100 pt-2 mt-1"
-                                    >
-                                        <div
-                                            class="text-sm font-bold text-indigo-500 font-serif italic"
-                                        >
-                                            {{ word.pinyin }}
-                                        </div>
                                         <button
-                                            @click="playWord(word)"
-                                            class="btn btn-circle btn-ghost btn-xs text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 h-7 w-7"
+                                            @click.stop="playWord(word)"
+                                            class="btn btn-circle btn-ghost btn-xs text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 h-7 w-7 absolute bottom-0 right-0"
                                         >
                                             <i
                                                 class="pi pi-volume-up text-sm"
@@ -215,6 +204,17 @@ const getDelay = (index) => {
                                                 }"
                                             ></i>
                                         </button>
+                                    </div>
+
+                                    <!-- Pinyin Row -->
+                                    <div
+                                        class="flex justify-center items-center w-full border-t border-indigo-100 pt-2 mt-1"
+                                    >
+                                        <div
+                                            class="text-sm font-bold text-indigo-500 font-serif italic"
+                                        >
+                                            {{ word.pinyin }}
+                                        </div>
                                     </div>
                                 </div>
 
