@@ -12,6 +12,9 @@ const props = defineProps({
 
 const { playSound, playingWord } = usePlaySound();
 
+const showPinyin = ref(true);
+const showMeaning = ref(true);
+
 const hskLevels = [
     { id: "HSK 1", name: "HSK 1", color: "bg-blue-100 text-blue-700" },
     { id: "HSK 2", name: "HSK 2", color: "bg-teal-100 text-teal-700" },
@@ -74,6 +77,15 @@ const playWord = (word) => {
 // Animation delay for staggered entrance
 const getDelay = (index) => {
     return { animationDelay: `${index * 50}ms` };
+};
+
+const highlightWord = (sentence, word) => {
+    if (!sentence || !word) return sentence;
+    const regex = new RegExp(word, "g");
+    return sentence.replace(
+        regex,
+        `<span class="text-red-600 font-bold">${word}</span>`
+    );
 };
 </script>
 
@@ -143,12 +155,43 @@ const getDelay = (index) => {
                                 {{ current_level }}
                             </p>
                         </div>
-                        <div class="hidden md:block">
+                        <div class="flex items-center gap-4">
+                            <!-- Config Zone -->
                             <div
-                                class="badge badge-lg p-4 font-bold"
-                                :class="getLevelColor(current_level)"
+                                class="flex items-center gap-3 bg-white p-2 rounded-lg border border-gray-100 shadow-sm"
                             >
-                                {{ words_list.length }} คำ
+                                <label class="cursor-pointer label gap-2 p-0">
+                                    <span
+                                        class="label-text text-xs font-bold text-gray-600"
+                                        >Pinyin</span
+                                    >
+                                    <input
+                                        type="checkbox"
+                                        class="toggle toggle-xs toggle-primary"
+                                        v-model="showPinyin"
+                                    />
+                                </label>
+                                <div class="w-px h-4 bg-gray-200"></div>
+                                <label class="cursor-pointer label gap-2 p-0">
+                                    <span
+                                        class="label-text text-xs font-bold text-gray-600"
+                                        >คำแปล</span
+                                    >
+                                    <input
+                                        type="checkbox"
+                                        class="toggle toggle-xs toggle-secondary"
+                                        v-model="showMeaning"
+                                    />
+                                </label>
+                            </div>
+
+                            <div class="hidden md:block">
+                                <div
+                                    class="badge badge-lg p-3 font-bold"
+                                    :class="getLevelColor(current_level)"
+                                >
+                                    {{ words_list.length }} คำ
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,6 +251,7 @@ const getDelay = (index) => {
 
                                     <!-- Pinyin Row -->
                                     <div
+                                        v-if="showPinyin"
                                         class="flex justify-center items-center w-full border-t border-indigo-100 pt-2 mt-1"
                                     >
                                         <div
@@ -220,7 +264,10 @@ const getDelay = (index) => {
 
                                 <div class="p-3 pt-2">
                                     <!-- Meaning -->
-                                    <div class="mb-2 leading-tight">
+                                    <div
+                                        class="mb-2 leading-tight"
+                                        v-if="showMeaning"
+                                    >
                                         <div
                                             class="flex flex-wrap items-center gap-1"
                                         >
@@ -250,11 +297,16 @@ const getDelay = (index) => {
                                         </button>
                                         <p
                                             class="text-gray-800 font-medium mb-0.5 line-clamp-2"
-                                        >
-                                            {{ word.example }}
-                                        </p>
+                                            v-html="
+                                                highlightWord(
+                                                    word.example,
+                                                    word.word
+                                                )
+                                            "
+                                        ></p>
                                         <p
                                             class="text-gray-500 text-[10px] truncate"
+                                            v-if="showPinyin"
                                         >
                                             {{ word.example_pinyin }}
                                         </p>
