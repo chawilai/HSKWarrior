@@ -171,7 +171,7 @@ const getDelay = (index) => {
                                 >
                                     <!-- Characters Row -->
                                     <div
-                                        class="flex justify-center items-center gap-1 cursor-pointer"
+                                        class="flex justify-center items-center gap-1 cursor-pointer h-[75px]"
                                         @click="playWord(word)"
                                     >
                                         <HanziWriterCharacter
