@@ -2,7 +2,7 @@
 import { Link } from "@inertiajs/vue3";
 // import Badge from '@/Components/Badge.vue';
 
-import warrior_logo from '/resources/images/warrior_logo.png';
+import warrior_logo from "/resources/images/warrior_logo.png";
 </script>
 
 <template>
