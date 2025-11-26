@@ -55,7 +55,8 @@ const menus = [
         type: "dropdown",
         children: [
             { title: "Reading Game (ฝึกอ่าน)", url: "/games/reading" },
-            { title: "การ์ดคำ (Flip Card)", url: "/warrior_question" },
+            { title: "การ์ดคำ (Flip Card)", url: "/warrior_flip_card" },
+            { title: "จับคู่การ์ด (Match Card)", url: "/warrior_question" },
         ],
     },
 ];
