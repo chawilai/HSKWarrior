@@ -3,6 +3,7 @@ import OrganicLayout from "@/Layouts/OrganicLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { usePlaySound } from "@/composables/usePlaySound.js";
+import HanziWriterCharacter from "@/Components/HanziWriterCharacter.vue";
 
 const props = defineProps({
     words_list: Array,
@@ -35,6 +36,14 @@ const selectLevel = (level) => {
 const getLevelColor = (level) => {
     const found = hskLevels.find((l) => l.id === level);
     return found ? found.color : "bg-gray-100 text-gray-700";
+};
+
+const getCharSize = (text) => {
+    const len = text.length;
+    if (len <= 1) return 70;
+    if (len === 2) return 55;
+    if (len === 3) return 40;
+    return 30;
 };
 
 // Animation delay for staggered entrance
@@ -130,77 +139,92 @@ const getDelay = (index) => {
                             class="card bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-fade-in-up"
                             :style="getDelay(index % 20)"
                         >
-                            <div class="card-body p-2">
-                                <!-- Word Header -->
+                            <div class="card-body p-0 overflow-hidden">
+                                <!-- Word Header with Gradient -->
                                 <div
-                                    class="flex justify-between items-start mb-1"
+                                    class="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 flex flex-col gap-2"
                                 >
-                                    <div>
-                                        <h2
-                                            class="text-xl font-bold text-gray-800 mb-0 cursor-pointer hover:text-primary transition-colors"
-                                            @click="playSound(word.word)"
-                                        >
-                                            {{ word.word }}
-                                        </h2>
+                                    <!-- Characters Row -->
+                                    <div
+                                        class="flex justify-center items-center gap-1"
+                                    >
+                                        <HanziWriterCharacter
+                                            v-for="(
+                                                char, charIndex
+                                            ) in word.word.split('')"
+                                            :key="`${word.id}-${charIndex}`"
+                                            :id="`${word.id}-${charIndex}`"
+                                            :character="char"
+                                            :size="getCharSize(word.word)"
+                                        />
+                                    </div>
+
+                                    <!-- Pinyin & Speaker Row -->
+                                    <div
+                                        class="flex justify-between items-center w-full border-t border-indigo-100 pt-2 mt-1"
+                                    >
                                         <div
-                                            class="text-xs text-gray-500 font-serif italic"
+                                            class="text-sm font-bold text-indigo-500 font-serif italic"
                                         >
                                             {{ word.pinyin }}
                                         </div>
+                                        <button
+                                            @click="playSound(word.word)"
+                                            class="btn btn-circle btn-ghost btn-xs text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100 h-7 w-7"
+                                        >
+                                            <i
+                                                class="pi pi-volume-up text-sm"
+                                                :class="{
+                                                    'animate-pulse text-indigo-600':
+                                                        playingWord ===
+                                                        word.word,
+                                                }"
+                                            ></i>
+                                        </button>
                                     </div>
-                                    <button
-                                        @click="playSound(word.word)"
-                                        class="btn btn-circle btn-ghost btn-xs text-gray-400 hover:text-primary hover:bg-primary/10 h-6 w-6 min-h-0"
-                                    >
-                                        <i
-                                            class="pi pi-volume-up text-xs"
-                                            :class="{
-                                                'animate-pulse text-primary':
-                                                    playingWord === word.word,
-                                            }"
-                                        ></i>
-                                    </button>
                                 </div>
 
-                                <!-- Meaning -->
-                                <div class="mb-1 leading-tight">
+                                <div class="p-3 pt-2">
+                                    <!-- Meaning -->
+                                    <div class="mb-2 leading-tight">
+                                        <div
+                                            class="flex flex-wrap items-center gap-1"
+                                        >
+                                            <span
+                                                class="badge badge-sm badge-primary badge-outline opacity-80"
+                                                >{{ word.part_of_speech }}</span
+                                            >
+                                            <span
+                                                class="font-bold text-gray-700 text-sm"
+                                            >
+                                                {{ word.meaning_thai }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Example Section (Ultra Compact) -->
                                     <div
-                                        class="flex flex-wrap items-center gap-1"
+                                        class="bg-amber-50 rounded-lg p-2 text-[11px] group relative mt-auto border border-amber-100"
                                     >
-                                        <span
-                                            class="badge badge-xs badge-outline opacity-70 scale-90 origin-left"
-                                            >{{ word.part_of_speech }}</span
+                                        <button
+                                            @click="playSound(word.example)"
+                                            class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity btn btn-xs btn-circle btn-ghost h-5 w-5 min-h-0 text-amber-600 hover:bg-amber-200"
                                         >
-                                        <span
-                                            class="font-medium text-gray-700 text-xs truncate"
+                                            <i
+                                                class="pi pi-volume-up text-[10px]"
+                                            ></i>
+                                        </button>
+                                        <p
+                                            class="text-gray-800 font-medium mb-0.5 line-clamp-2"
                                         >
-                                            {{ word.meaning_thai }}
-                                        </span>
+                                            {{ word.example }}
+                                        </p>
+                                        <p
+                                            class="text-gray-500 text-[10px] truncate"
+                                        >
+                                            {{ word.example_pinyin }}
+                                        </p>
                                     </div>
-                                </div>
-
-                                <!-- Example Section (Ultra Compact) -->
-                                <div
-                                    class="bg-gray-50 rounded p-1.5 text-[10px] group relative mt-auto"
-                                >
-                                    <button
-                                        @click="playSound(word.example)"
-                                        class="absolute top-0.5 right-0.5 opacity-0 group-hover:opacity-100 transition-opacity btn btn-xs btn-circle btn-ghost h-4 w-4 min-h-0"
-                                    >
-                                        <i
-                                            class="pi pi-volume-up text-[8px]"
-                                        ></i>
-                                    </button>
-                                    <p
-                                        class="text-gray-800 font-medium mb-0.5 line-clamp-1"
-                                    >
-                                        {{ word.example }}
-                                    </p>
-                                    <p
-                                        class="text-gray-500 text-[9px] truncate"
-                                    >
-                                        {{ word.example_pinyin }}
-                                    </p>
                                 </div>
                             </div>
                         </div>
