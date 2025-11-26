@@ -44,6 +44,7 @@ const selectedExample = ref(null);
 const refText = ref("");
 const isRecording = ref(false);
 const isProcessing = ref(false);
+const isPlayingReference = ref(false);
 const statusMessage = ref("");
 const result = ref(null);
 const animatedResult = ref({
@@ -145,7 +146,16 @@ const animateValue = (key, start, end, duration) => {
 };
 
 const playReference = async () => {
-    await tts.speak2(refText.value, "zh-CN", { rate: 0.8 });
+    if (isPlayingReference.value) return;
+
+    isPlayingReference.value = true;
+    try {
+        await tts.speak2(refText.value, "zh-CN", { rate: 0.8 });
+    } catch (e) {
+        console.error(e);
+    } finally {
+        isPlayingReference.value = false;
+    }
 };
 
 // ... (keep existing audio recording logic) ...
@@ -490,10 +500,15 @@ const getScoreColor = (score) => {
                     >
                         <button
                             @click="playReference"
-                            :disabled="!selectedExample"
+                            :disabled="!selectedExample || isPlayingReference"
                             class="btn btn-circle btn-lg bg-blue-100 hover:bg-blue-200 border-0 text-blue-600 shadow-lg hover:scale-110 transition-all duration-300 w-10 h-10 disabled:opacity-50 disabled:scale-100"
                         >
+                            <span
+                                v-if="isPlayingReference"
+                                class="loading loading-spinner loading-sm"
+                            ></span>
                             <svg
+                                v-else
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"
                                 fill="none"
