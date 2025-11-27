@@ -59,7 +59,6 @@ let typeWords = (el_id, text_arr = []) => {
 // Example usage
 
 onMounted(() => {
-
     typeWords("service_typing", [
         "แบบเรียน HSK 1-6",
         "แบบฝึกหัด HSK 1-6",
@@ -117,7 +116,9 @@ onMounted(() => {
                 <span class="whitespace-nowrap">จนเป็นนักรบที่แข็งแกร่ง</span>
             </p>
 
-            <div class="flex sm:ml-20 pt-4 font-sans font-semibold space-x-4 sm:space-x-6">
+            <div
+                class="flex sm:ml-20 pt-4 font-sans font-semibold space-x-4 sm:space-x-6"
+            >
                 <div
                     id="service_typing"
                     class="mt-5 text-2xl text-center text-red"
@@ -173,8 +174,13 @@ onMounted(() => {
                     >
                         <img src="@/../images/img/object/fan_1.png" alt="" />
                     </div>
-                    <div class="w-13 h-13 bg-white/80 group-hover/card:border-red/40 rounded-2xl border-2 border-white object-cover overflow-hidden">
-                        <img src="@/../images/img/object/lantern_2.png" alt=""/>
+                    <div
+                        class="w-13 h-13 bg-white/80 group-hover/card:border-red/40 rounded-2xl border-2 border-white object-cover overflow-hidden"
+                    >
+                        <img
+                            src="@/../images/img/object/lantern_2.png"
+                            alt=""
+                        />
                     </div>
                 </div>
                 <div class="pt-3 font-bold">สร้างโปรไฟล์เพื่อบันทึกเลเวล</div>
@@ -215,5 +221,48 @@ onMounted(() => {
                 <span>Fueler</span>
             </div>
         </div>
+
+        <!-- <button class="btn" onclick="my_modal_top.showModal()">
+            เปิดเมนูเต็มจอ
+        </button>
+
+        <dialog id="my_modal_top" class="modal">
+            <div
+                class="modal-box w-full h-full p-0 max-w-none rounded-none absolute top-0"
+            >
+                <div class="p-4 bg-base-200 min-h-full">
+                    <h3 class="text-lg font-bold">เมนูเต็มจอจากด้านบน</h3>
+                    <p class="py-4">เนื้อหาเมนูของคุณอยู่ตรงนี้</p>
+                    <form method="dialog" class="absolute right-4 top-4">
+                        <button class="btn btn-sm btn-circle btn-ghost">
+                            ✕
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>ปิด</button>
+            </form>
+        </dialog>
+
+        <div class="drawer">
+            <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+                <label for="my-drawer-1" class="btn drawer-button"
+                    >Open drawer</label
+                >
+            </div>
+            <div class="drawer-side">
+                <label
+                    for="my-drawer-1"
+                    aria-label="close sidebar"
+                    class="drawer-overlay"
+                ></label>
+                <ul class="menu bg-base-200 min-h-full w-80 p-4">
+                    <li><a>Sidebar Item 1</a></li>
+                    <li><a>Sidebar Item 2</a></li>
+                </ul>
+            </div>
+        </div> -->
     </div>
 </template>
