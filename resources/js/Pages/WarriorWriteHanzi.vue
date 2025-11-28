@@ -6,6 +6,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { debounce } from "lodash";
 import Pagination from "@/Pages/Shared/Pagination.vue";
 import tts2 from "@/azure_tts.js";
+import HanziWriterCharacter from "@/Components/HanziWriterCharacter.vue";
 
 import { usePlaySound } from "@/composables/usePlaySound.js";
 
@@ -13,7 +14,25 @@ defineOptions({ layout: OrganicLayout });
 
 const { playSound, stopPlayback, playingWord } = usePlaySound();
 
+const hanziRefs = ref({});
+
+const setHanziRef = (el, id) => {
+    if (el) {
+        hanziRefs.value[id] = el;
+    }
+};
+
+const playWordWithAnimation = (hanzi) => {
+    playSound(hanzi.character);
+    
+    const charComp = hanziRefs.value[hanzi.id];
+    if (charComp && charComp.animate) {
+        charComp.animate();
+    }
+};
+
 const pages = usePage();
+// ... (rest of script)
 
 let hanzi_list = pages.props.hanzi_list;
 let hanzi_list_arr = pages.props.hanzi_list_arr;
@@ -140,203 +159,169 @@ onBeforeUnmount(() => {
 <template>
     <Head>
         <title>Hànzì</title>
-        <!-- <link rel="icon" type="image/svg+xml" href="@/../images/warrior_logo.png" /> -->
     </Head>
 
-    <div
-        class="flex flex-wrap-reverse gap-y-24 justify-between py-14 px-6 mx-auto max-w-screen-xl sm:px-8 md:px-12 lg:px-16 xl:px-24"
-    >
-        <div class="flex flex-col gap-y-2 w-full -mt-10">
-            <!-- <div class="flex justify-end gap-x-2">
-            <div class="flex flex-col justify-center">
-                <span class="text-xl font-bold">ค้นหา</span>
-                <span class="text-based">(Hanzi, Pinyin, Meaning)</span>
-            </div>
-            <input
-                type="text"
-                name="search"
-                v-model="search"
-                @keydown.enter="fetchData()"
-                class="border border-gray-300 px-2 rounded-lg text-center w-52"
-                autocomplete="off"
-            />
-        </div> -->
-            <div class="w-full overflow-x-auto p-4">
-                <table class="min-w-full">
-                    <thead>
-                        <tr>
-                            <th>
-                                <div
-                                    class="relative cursor-pointer hover:text-red hover:scale-125"
-                                    @click="saveHanziList()"
-                                >
-                                    <i class="pi pi-inbox text-4xl">
-                                    </i>
-                                    <div
-                                        class="absolute z-30 -top-2 -right-3 lg:right-0 w-6 h-6 text-sm text-white rounded-full bg-red flex justify-center items-center"
-                                        v-if="hanzi_list_arr.length > 0"
-                                    >
-                                        <span
-                                            v-text="
-                                                hanzi_list_arr[0].hanzi.length
-                                            "
-                                        ></span>
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <select
-                                    class="text-center h-10 w-12/12 rounded-lg"
-                                    name="s_set"
-                                    v-model="s_set"
-                                    @change="fetchData()"
-                                >
-                                    <option></option>
-                                    <option>hsk1</option>
-                                    <option>hsk2</option>
-                                    <option>hsk3</option>
-                                    <option>hsk4</option>
-                                    <option>hsk5</option>
-                                    <option>hsk6</option>
-                                    <option>hsk7</option>
-                                    <option>hsk8</option>
-                                </select>
-                            </th>
-                            <th>
-                                <input
-                                    class="text-center h-10 w-10/12 rounded-lg"
-                                    type="text"
-                                    name="s_hanzi"
-                                    v-model="s_hanzi"
-                                    autocomplete="off"
-                                />
-                            </th>
-                            <th></th>
-                            <th>
-                                <input
-                                    class="text-center h-10 w-10/12 rounded-lg"
-                                    type="text"
-                                    name="s_pinyin"
-                                    v-model="s_pinyin"
-                                    autocomplete="off"
-                                />
-                            </th>
-                            <th></th>
-                            <th>
-                                <input
-                                    class="text-center h-10 w-10/12 rounded-lg"
-                                    type="text"
-                                    name="s_mean"
-                                    v-model="s_mean"
-                                    autocomplete="off"
-                                />
-                            </th>
-                        </tr>
-                        <tr class="h-2"></tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <th
-                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                id
-                            </th>
-                            <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                set
-                            </th>
-                            <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                hanzi
-                            </th>
-                            <th
-                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                list
-                            </th>
-                            <th
-                                class="w-24 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                pinyin
-                            </th>
-                            <th
-                                class="w-16 bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                play
-                            </th>
-                            <th
-                                class="bg-red text-white border border-gray-300 py-1 px-2 text-center"
-                            >
-                                meaning
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="(hanzi, index) in hanzi_list.data"
-                            :key="hanzi.id"
-                        >
-                            <td
-                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                                v-text="hanzi_list.from + index"
-                            ></td>
-                            <td
-                                class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                                v-text="hanzi.set"
-                            ></td>
-                            <td
-                                class="w-24 text-2xl font-medium border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                                v-text="hanzi.character"
-                            ></td>
-                            <td
-                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                            >
-                                <i
-                                    :title="
-                                        hanzi_list_arr[0] &&
-                                        hanzi_list_arr[0].hanzi.includes(
-                                            hanzi.character
-                                        )
-                                            ? 'remove from list'
-                                            : 'add to list'
-                                    "
-                                    class="pi text-xl cursor-pointer hover:text-red hover:font-bold hover:scale-125"
-                                    :class="
-                                        hanzi_list_arr[0] &&
-                                        hanzi_list_arr[0].hanzi.includes(
-                                            hanzi.character
-                                        )
-                                            ? 'pi-minus-circle text-red hover:text-black'
-                                            : 'pi-plus-circle text-black hover:text-red'
-                                    "
-                                    @click="addToHanziList(hanzi.character)"
-                                ></i>
-                            </td>
-                            <td
-                                class="w-24 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                                v-text="hanzi.pinyin"
-                            ></td>
-                            <td
-                                class="w-16 border border-gray-300 py-1 px-2 whitespace-nowrap text-center"
-                            >
-                                <i
-                                    class="pi pi-volume-up text-lg cursor-pointer hover:text-red hover:font-bold hover:scale-125"
-                                    @click="playSound(hanzi.character)"
-                                ></i>
-                            </td>
-                            <td
-                                class="border border-gray-300 py-1 px-2 whitespace-nowrap"
-                                v-text="hanzi.definition"
-                            ></td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+            <!-- Header & Filter Section -->
+            <div class="flex flex-col gap-6 mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">ฝึกเขียนอักษรจีน</h1>
+                        <p class="text-gray-500 mt-1">เลือกตัวอักษรที่ต้องการฝึกเขียนแล้วบันทึกลงรายการ</p>
+                    </div>
+                    
+                    <!-- Basket / My List Button -->
+                    <div 
+                        class="relative group cursor-pointer"
+                        @click="saveHanziList()"
+                    >
+                        <button class="btn btn-primary btn-lg gap-3 shadow-lg hover:scale-105 transition-transform">
+                            <i class="pi pi-inbox text-xl"></i>
+                            <span>รายการที่เลือก</span>
+                            <div class="badge badge-white text-primary font-bold border-none">
+                                {{ hanzi_list_arr[0] ? hanzi_list_arr[0].hanzi.length : 0 }}
+                            </div>
+                        </button>
+                        <div class="absolute top-full right-0 mt-2 w-64 p-2 bg-white rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 text-sm text-gray-600 border border-gray-100">
+                            คลิกเพื่อบันทึกและเริ่มฝึกเขียน
+                        </div>
+                    </div>
+                </div>
 
-                <!-- pagination -->
-                <Pagination class="w-fit mt-2" :links="hanzi_list.links" />
+                <!-- Filter Bar -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- HSK Level -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-gray-600">ระดับ (HSK)</span>
+                            </label>
+                            <select 
+                                class="select select-bordered w-full focus:border-primary focus:ring-2 focus:ring-primary/20" 
+                                v-model="s_set"
+                                @change="fetchData()"
+                            >
+                                <option value="">ทั้งหมด</option>
+                                <option value="hsk1">HSK 1</option>
+                                <option value="hsk2">HSK 2</option>
+                                <option value="hsk3">HSK 3</option>
+                                <option value="hsk4">HSK 4</option>
+                                <option value="hsk5">HSK 5</option>
+                                <option value="hsk6">HSK 6</option>
+                                <option value="hsk7">HSK 7</option>
+                                <option value="hsk8">HSK 8</option>
+                            </select>
+                        </div>
+
+                        <!-- Hanzi Filter -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-gray-600">ตัวอักษร (Hanzi)</span>
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    type="text" 
+                                    placeholder="ค้นหาตัวอักษร..." 
+                                    class="input input-bordered w-full pl-10 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                    v-model="s_hanzi"
+                                />
+                                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Pinyin Filter -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-gray-600">พินอิน (Pinyin)</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                placeholder="ค้นหาพินอิน..." 
+                                class="input input-bordered w-full focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                v-model="s_pinyin"
+                            />
+                        </div>
+
+                        <!-- Meaning Filter -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-gray-600">ความหมาย</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                placeholder="ค้นหาความหมาย..." 
+                                class="input input-bordered w-full focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                v-model="s_mean"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3 mb-8">
+                <div 
+                    v-for="(hanzi, index) in hanzi_list.data" 
+                    :key="hanzi.id"
+                    class="card bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                >
+                    <div class="card-body p-2 items-center text-center relative">
+                        <!-- Selection Toggle (Top Right) -->
+                        <button 
+                            class="absolute top-1 right-1 btn btn-circle btn-xs transition-colors duration-200"
+                            :class="hanzi_list_arr[0] && hanzi_list_arr[0].hanzi.includes(hanzi.character) 
+                                ? 'btn-primary text-white' 
+                                : 'btn-ghost text-gray-400 hover:bg-red-600 hover:text-white hover:border-red-600'"
+                            @click="addToHanziList(hanzi.character)"
+                            :title="hanzi_list_arr[0] && hanzi_list_arr[0].hanzi.includes(hanzi.character) ? 'ลบออกจากรายการ' : 'เพิ่มลงรายการ'"
+                        >
+                            <i class="pi text-[10px]" :class="hanzi_list_arr[0] && hanzi_list_arr[0].hanzi.includes(hanzi.character) ? 'pi-check' : 'pi-plus'"></i>
+                        </button>
+
+                        <!-- HSK Badge (Top Left) -->
+                        <div class="absolute top-1 left-1 badge badge-ghost badge-xs text-[10px] font-mono opacity-50 px-1">
+                            {{ hanzi.set }}
+                        </div>
+
+                        <!-- Character -->
+                        <div 
+                            class="mt-2 mb-1 cursor-pointer hover:scale-110 transition-transform"
+                            @click="playWordWithAnimation(hanzi)"
+                        >
+                            <HanziWriterCharacter 
+                                :ref="(el) => setHanziRef(el, hanzi.id)"
+                                :id="`hanzi-${hanzi.id}`"
+                                :character="hanzi.character"
+                                :size="45"
+                                :strokeColor="'#1f2937'"
+                                :radicalColor="'#B71F1F'"
+                            />
+                        </div>
+
+                        <!-- Pinyin -->
+                        <div class="text-sm font-bold text-primary font-serif italic mb-0.5">
+                            {{ hanzi.pinyin }}
+                        </div>
+
+                        <!-- Meaning -->
+                        <div class="text-[10px] text-gray-600 line-clamp-2 h-8 flex items-center justify-center leading-tight px-1">
+                            {{ hanzi.definition }}
+                        </div>
+
+                        <!-- Audio Button (Bottom) -->
+                        <button 
+                            class="btn btn-circle btn-ghost btn-xs text-gray-400 hover:text-primary mt-1"
+                            @click="playWordWithAnimation(hanzi)"
+                        >
+                            <i class="pi pi-volume-up text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center pb-12">
+                <Pagination :links="hanzi_list.links" />
             </div>
         </div>
-    </div>
 </template>

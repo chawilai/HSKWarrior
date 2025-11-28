@@ -313,7 +313,7 @@ onUnmounted(() => {
     <div class="flex justify-between items-center">
       <div class="w-full p-3 text-xs">
         <strong
-          >Copyright &copy; 2023-2024
+          >Copyright &copy; 2025
           <a target="_blank" href="https://hskwarrior.com">HSK Warrior</a>.</strong
         >
         All rights reserved.
