@@ -39,42 +39,48 @@ class AzureTTS {
             pitch: options.pitch ?? this.defaults.pitch,
             voice: options.voice ?? this.defaults.voice,
         };
+        
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch('/api/azure-tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    },
+                    body: JSON.stringify({
+                        text: textToSpeak,
+                        rate: settings.rate,
+                        volume: settings.volume,
+                        pitch: settings.pitch,
+                        voice: settings.voice,
+                    }),
+                });
 
-        try {
-            const response = await fetch('/api/azure-tts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                },
-                body: JSON.stringify({
-                    text: textToSpeak,
-                    rate: settings.rate,
-                    volume: settings.volume,
-                    pitch: settings.pitch,
-                    voice: settings.voice,
-                }),
-            });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                this.currentAudio = new Audio(audioUrl);
+                
+                this.currentAudio.addEventListener('ended', () => {
+                    URL.revokeObjectURL(audioUrl);
+                    if (options.onEnded) {
+                        options.onEnded();
+                    }
+                    resolve();
+                });
+
+                await this.currentAudio.play();
+                
+            } catch (error) {
+                console.error('Azure TTS Error:', error);
+                reject(error);
             }
-
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            
-            this.currentAudio = new Audio(audioUrl);
-            
-            // Clean up blob URL after playback
-            this.currentAudio.addEventListener('ended', () => {
-                URL.revokeObjectURL(audioUrl);
-            });
-
-            await this.currentAudio.play();
-            
-        } catch (error) {
-            console.error('Azure TTS Error:', error);
-        }
+        });
     }
 
     cancel2() {
