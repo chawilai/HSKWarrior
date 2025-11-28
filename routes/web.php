@@ -20,7 +20,7 @@ use Inertia\Inertia;
 use Overtrue\Pinyin\Pinyin;
 
 // force login user = 1
-// Auth::loginUsingId(1);
+Auth::loginUsingId(1); 
 
 Route::get('/', function () {
     return Inertia::render('Warrior', [
@@ -56,6 +56,9 @@ Route::get('/warrior_question', function () {
     return Inertia::render('Question');
 });
 
+Route::get('/warrior_drawer1', function () {
+    return Inertia::render('Drawer1');
+});
 Route::get('/st5', function () {
     return Inertia::render('ST5');
 });

@@ -56,7 +56,7 @@ const menus = [
         children: [
             { title: "Reading Game (ฝึกอ่าน)", url: "/games/reading" },
             { title: "การ์ดคำ (Flip Card)", url: "/warrior_flip_card" },
-            { title: "จับคู่การ์ด (Match Card)", url: "/warrior_question" },
+            { title: "จับคู่การ์ด (Memory Match Games)", url: "/warrior_question" },
         ],
     },
 ];
@@ -73,6 +73,7 @@ onMounted(() => {
     <div
         class="w-full min-h-screen font-sans text-gray-900 bg-gradient-to-br from-transparent to-red-100"
         :class="sidebarOpen ? 'overflow-hidden h-screen' : ''"
+
     >
         <!-- <ScreenIndicator /> -->
 
@@ -90,7 +91,7 @@ onMounted(() => {
                 </div>
             </a>
             <div
-                class="inset-0 transition-all bg-white/70 backdrop-blur-xl z-20 flex-col items-center justify-center space-y-8 lg:static lg:bg-transparent lg:flex lg:space-y-0 lg:space-x-8 lg:flex-row"
+                class="inset-0 transition-all bg-white/70 z-10 flex-col items-center justify-center space-y-8 lg:static lg:bg-transparent lg:flex lg:space-y-0 lg:space-x-8 lg:flex-row"
                 :class="sidebarOpen ? 'fixed flex' : 'hidden'"
             >
                 <ul
