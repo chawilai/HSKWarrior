@@ -6,11 +6,9 @@ import OrganicLayout from "@/Layouts/OrganicLayout.vue";
 
 <template>
     <Head title="Test Page" />
-    <OrganicLayout />
-    <div class="relative min-h-screen bg-gray-100">
+    <OrganicLayout>
         <Scene1 />
-    </div>
-    <OrganicLayout />
+    </OrganicLayout>
 </template>
 
 <style>
