@@ -405,6 +405,27 @@ function checkMatch() {
 }
 
 /* -----------------------------
+    STATE
+------------------------------ */
+// ... โค้ดที่มีอยู่ ...
+
+const showDisabledAlert = ref(false)
+
+
+/* -----------------------------
+    UTILITY
+------------------------------ */
+
+function showGameInProgressAlert() {
+  // 1. แสดงข้อความแจ้งเตือน
+  showDisabledAlert.value = true
+
+  // 2. ซ่อนข้อความแจ้งเตือนหลังจาก 2 วินาที
+  setTimeout(() => {
+    showDisabledAlert.value = false
+  }, 2000)
+}
+/* -----------------------------
     CLOSE POPUP
 ------------------------------ */
 function closePopup() {
@@ -491,6 +512,13 @@ function loadHSKCards(level: number) {
   
   
     <div class="p-6 rounded-2xl card-board" :class="{'board-shuffling': isShuffling}" style="width: 650px;">
+    <div 
+  v-if="!isGameStarted && !isShuffling" 
+  class="start-game-overlay"
+>
+  <p class="text-xl font-bold mb-4">⬇️ กดปุ่ม "เริ่มเกม" ด้านล่างเพื่อเริ่มเล่น</p>
+  <p class="text-lg text-gray-700">เลือกระดับ HSK ที่ต้องการก่อนเริ่มเกม</p>
+</div>
       <div class="grid grid-cols-4 gap-6">
           <div
             v-for="card in cards"
@@ -571,11 +599,19 @@ function loadHSKCards(level: number) {
     -->
     <!-- BUTTONS -->
     <div class="text-center mt-5 flex justify-center gap-4">
-      <button @click="startGameWithPreview":disabled="isGameStarted" class="btn-start">
-        สลับการ์ดและเริ่มเกม (ดูไพ่ 10 วิ)
-      </button>
+      <button 
+  @click="isGameStarted ? showGameInProgressAlert() : startGameWithPreview()" 
+  class="btn-start"
+  :class="{ 'disabled-btn': isGameStarted }"
+>
+  สลับการ์ดและเริ่มเกม (ดูไพ่ 10 วิ)
+</button>
 
-      <button @click="startGameWithShuffle":disabled="isGameStarted" class="btn-random">
+<button 
+  @click="isGameStarted ? showGameInProgressAlert() : startGameWithShuffle()" 
+  class="btn-random"
+  :class="{ 'disabled-btn': isGameStarted }"
+>
   สุ่มและเริ่มเกม
 </button>
 
@@ -615,6 +651,9 @@ function loadHSKCards(level: number) {
   🎉 Level {{ levelUpPopup.level }} Up! 🎉
 </div>
 
+</div>
+<div v-if="showDisabledAlert" class="disabled-alert-floating">
+  🛑 กรุณาเล่นเกมปัจจุบันให้จบก่อน! 🛑
 </div>
     </OrganicLayout>
 </template>
@@ -1475,4 +1514,71 @@ function loadHSKCards(level: number) {
     .floating-flower.image-10 { width: 150px; height: 150px; }
 }
 
+/* --- NEW: Start Game Overlay --- */
+.start-game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9); /* สีพื้นหลังขาวโปร่งแสง */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px; /* ให้ตรงกับ Card Board */
+    z-index: 20; /* ต้องสูงกว่าการ์ดแต่ต่ำกว่า pop-up อื่นๆ */
+    text-align: center;
+    padding: 20px;
+    border: 1px  #ff94a0; /* เพิ่มขอบน่ารักๆ */
+}
+
+/* ปรับสีข้อความใน Overlay */
+.start-game-overlay p {
+    color: #ff5252;
+}
+
+/* ปรับให้ Overlay ดูนุ่มนวลขึ้น */
+.card-board {
+    position: relative; /* สำคัญ: เพื่อให้ Overlay ตำแหน่ง relative กับ Board */
+}
+
+/* --- NEW: Disabled Button Style (ใช้แทน :disabled) --- */
+.disabled-btn {
+    opacity: 0.5; /* ทำให้ปุ่มดูจางลง */
+    cursor: not-allowed; /* เปลี่ยนเคอร์เซอร์เป็นไม่อนุญาต */
+    pointer-events: all !important; /* ต้องเปิด pointer-events เพื่อให้ click event ทำงาน */
+    transform: none !important; /* ลบ hover/active effect ออก */
+    box-shadow: none !important;
+}
+
+.disabled-btn:hover {
+    background: #ff94a0; /* ใช้สีพื้นหลังเดิมเพื่อไม่ให้ดูแปลก */
+}
+
+/* --- NEW: Disabled Alert Floating Popup --- */
+.disabled-alert-floating {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    background: #fff4f4;
+    border: 3px solid #ff5252;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ff5252;
+    border-radius: 16px;
+    
+    animation: alertFade 2s ease forwards;
+    z-index: 10000;
+}
+
+@keyframes alertFade {
+    0% { opacity: 0; transform: translate(-50%, 0); }
+    10% { opacity: 1; transform: translate(-50%, -50%); }
+    90% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -100px); }
+}
 </style>

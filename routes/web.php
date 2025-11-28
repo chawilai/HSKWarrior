@@ -20,7 +20,7 @@ use Inertia\Inertia;
 use Overtrue\Pinyin\Pinyin;
 
 // force login user = 1
-// Auth::loginUsingId(1); 
+Auth::loginUsingId(1); 
 
 Route::get('/', function () {
     return Inertia::render('Warrior', [
@@ -68,6 +68,12 @@ Route::get('/hanzi_card', function () {
     return Inertia::render('HanziCardTest');
 });
 
+Route::get('/warrior_drawer1', function () {
+    return Inertia::render('Drawer1');
+});
+Route::get('/st5', function () {
+    return Inertia::render('ST5');
+});
 
 Route::post('/word-guess', [WordGuessController::class, 'store']);
 Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
@@ -124,15 +130,9 @@ Route::get('/warrior_writehanzi', function (Request $request) {
 
 Route::get('/chinese_words', function (Request $request) {
 
-    $filters = [];
+    $level = $request->input('level', 'HSK 1'); // Default to HSK 1
 
-    if ($request->input("search")) $filters["search"] = $request->input("search");
-    if ($request->input("s_set")) $filters["s_set"] = $request->input("s_set");
-    if ($request->input("s_hanzi")) $filters["s_hanzi"] = $request->input("s_hanzi");
-    if ($request->input("s_pinyin")) $filters["s_pinyin"] = $request->input("s_pinyin");
-    if ($request->input("s_mean")) $filters["s_mean"] = $request->input("s_mean");
-
-    $wordsWithTags = ChineseWord::where('tag', 'HSK 1')->with('tags')->get();
+    $wordsWithTags = ChineseWord::where('tag', $level)->with('tags')->get();
 
     $words = $wordsWithTags->map(function ($word) {
         return [
@@ -151,8 +151,8 @@ Route::get('/chinese_words', function (Request $request) {
     });
 
     return Inertia::render('WarriorHSKWords', [
-        "page" => $request->page,
-        "words_list" => $words
+        "words_list" => $words,
+        "current_level" => $level
     ]);
 });
 
