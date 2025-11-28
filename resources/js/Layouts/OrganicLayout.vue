@@ -56,6 +56,8 @@ const menus = [
         children: [
             { title: "Reading Game (ฝึกอ่าน)", url: "/games/reading" },
             { title: "การ์ดคำ (Flip Card)", url: "/warrior_question" },
+            { title: "คำถามตัวเลือก (Question)", url: "/choice_question" },
+            { title: "เรียงคำ (Word Order)", url: "/word_order" },
         ],
     },
 ];

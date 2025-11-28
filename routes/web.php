@@ -31,6 +31,7 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+
 Route::get('/data', function () {
     return DictionaryZhHans::select(['id', 'character'])
         ->where('set', 'like', '%hsk7%')->get();
@@ -55,6 +56,18 @@ Route::get('/warrior_workbook', function () {
 Route::get('/warrior_question', function () {
     return Inertia::render('Question');
 });
+
+Route::get('/choice_question', function () {
+    return Inertia::render('ChoiceQuestion');
+});
+Route::get('/word_order', function () {
+    return Inertia::render('WordOrder');
+});
+
+Route::get('/hanzi_card', function () {
+    return Inertia::render('HanziCardTest');
+});
+
 
 Route::post('/word-guess', [WordGuessController::class, 'store']);
 Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
@@ -398,6 +411,10 @@ Route::get('/test2', function () {
     return Inertia::render('Test2');
 });
 
+Route::get('/page_test', function () {
+    return Inertia::render('PageTest');
+});
+
 Route::get('/bbb', function () {
 
     return Inertia::render('Testxxx');
@@ -409,6 +426,8 @@ Route::get('/khuntong3', fn() => Inertia::render('KhunTong/Card3'));
 Route::get('/khuntong4', fn() => Inertia::render('KhunTong/Card4'));
 Route::get('/khuntong5', fn() => Inertia::render('KhunTong/Card5'));
 Route::get('/khuntong6', fn() => Inertia::render('KhunTong/Card6'));
+
+
 
 Route::get('/test4', function () {
 

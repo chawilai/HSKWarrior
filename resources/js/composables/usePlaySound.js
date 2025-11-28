@@ -7,20 +7,16 @@ export function usePlaySound() {
   const playingWord = ref("");
   const currentPlaybackId = ref(0);
 
-  const playSound = (input) => {
+  const playSound = (input, onAllSoundsFinished) => {
     const tts = new tts2();
     currentPlaybackId.value++;
     const playbackId = currentPlaybackId.value;
     shouldStop.value = false;
 
-    // Using default settings from azure_tts.js
-
-    function processSound(sound) {
-      return new Promise((resolve) => {
-        tts.speak2(sound);
-        playingWord.value = sound;
-        resolve();
-      });
+    async function processSound(sound) {
+      playingWord.value = sound;
+      // The speak2 method now returns a promise that resolves when the sound ends
+      await tts.speak2(sound);
     }
 
     function sleep(ms) {
@@ -33,14 +29,23 @@ export function usePlaySound() {
           break;
         }
         await processSound(sound);
-        await sleep(1000);
+        await sleep(1000); // Optional delay between sounds
+      }
+      // After the loop, if not stopped, call the final callback
+      if (!shouldStop.value && onAllSoundsFinished) {
+        onAllSoundsFinished();
       }
     }
 
     if (Array.isArray(input)) {
       processArray(input);
     } else {
-      processSound(input);
+      processSound(input).then(() => {
+        // After a single sound, if not stopped, call the final callback
+        if (!shouldStop.value && onAllSoundsFinished) {
+          onAllSoundsFinished();
+        }
+      });
     }
   };
 
