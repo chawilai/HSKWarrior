@@ -268,7 +268,7 @@ const getButtonClass = (index: number) => {
       <div class="hidden lg:flex flex-1 flex-col justify-start items-end pr-8 pt-20">
         <img
           class="w-full max-h-screen object-contain drop-shadow-2xl animate-up-down"
-          src="http://[::1]:5173/resources/images/coin1.png"
+          src="@/../images/coin1.png"
           alt="Coin"
         />
       </div>
@@ -351,7 +351,7 @@ const getButtonClass = (index: number) => {
       <div class="hidden lg:flex flex-1 flex-col justify-start items-start pl-8 pt-20">
         <img
           class="w-full max-w-xs object-contain drop-shadow-2xl animate-up-down"
-          src="http://[::1]:5173/resources/images/warrior_student2.png"
+          src="@/../images/warrior_student2.png"
           alt="Warrior"
         />
       </div>
@@ -367,7 +367,7 @@ const getButtonClass = (index: number) => {
   font-family: "Noto Sans TC", sans-serif;
 }
 .background-question-image {
-  background-image: url("http://[::1]:5173/resources/images/bg_word6.png");
+  background-image: url("@/../images/bg_word6.png");
 
   background-repeat: repeat;
 

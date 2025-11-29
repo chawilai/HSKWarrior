@@ -20,7 +20,7 @@ use Inertia\Inertia;
 use Overtrue\Pinyin\Pinyin;
 
 // force login user = 1
-Auth::loginUsingId(1); 
+// Auth::loginUsingId(1); 
 
 Route::get('/', function () {
     return Inertia::render('Warrior', [

@@ -49,9 +49,9 @@ const sentences = [
   },
 ];
 
-const puAlertImage = "http://[::1]:5173/resources/images/pu_alert.png";
-const puAlertImage2 = "http://[::1]:5173/resources/images/pu_alert2.png";
-const stu_finish = "http://[::1]:5173/resources/images/warrior_stu_finish.png";
+const puAlertImage = "@/../images/pu_alert.png";
+const puAlertImage2 = "@/../images/pu_alert2.png";
+const stu_finish = "@/../images/warrior_stu_finish.png";
 const currentSentenceIndex = ref(0);
 const sentence = computed(() => sentences[currentSentenceIndex.value]);
 
@@ -258,7 +258,7 @@ function playAudio(text: string) {
       <div class="hidden lg:flex flex-1 flex-col justify-between items-end pr-8">
         <img
           class="w-64 max-h-screen object-contain drop-shadow-2xl animate-up-down"
-          src="http://[::1]:5173/resources/images/img/object/lantern_1.png"
+          src="@/../images/img/object/lantern_1.png"
           alt="Lantern Top Left"
         />
       </div>
@@ -429,7 +429,7 @@ function playAudio(text: string) {
       <div class="hidden lg:flex flex-1 flex-col justify-between items-start pl-8">
         <img
           class="w-full max-h-screen object-contain drop-shadow-2xl animate-up-down"
-          src="http://[::1]:5173/resources/images/warrior_pu.png"
+          src="@/../images/warrior_pu.png"
           alt="Warrior Master Top Right"
         />
       </div>
