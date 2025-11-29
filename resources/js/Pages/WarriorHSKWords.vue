@@ -4,6 +4,7 @@ import { Head, router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { usePlaySound } from "@/composables/usePlaySound.js";
 import HanziWriterCharacter from "@/Components/HanziWriterCharacter.vue";
+import axios from "axios";
 
 const props = defineProps({
     words_list: Array,
@@ -86,6 +87,62 @@ const highlightWord = (sentence, word) => {
         regex,
         `<span class="text-red-600 font-bold">${word}</span>`
     );
+};
+
+// AI Sentence Logic
+const showAiModal = ref(false);
+const aiSentences = ref([]);
+const loadingAi = ref(false);
+const currentWordForAi = ref(null);
+
+const openAiModal = async (word, forceRefresh = false) => {
+    if (!forceRefresh) {
+        currentWordForAi.value = word;
+        showAiModal.value = true;
+        aiSentences.value = [];
+    }
+    
+    loadingAi.value = true;
+
+    try {
+        const response = await axios.post('/api/ai-sentences/generate', {
+            word: word.word,
+            level: props.current_level,
+            force_refresh: forceRefresh
+        });
+        aiSentences.value = response.data.sentences;
+    } catch (error) {
+        console.error("Failed to fetch AI sentences", error);
+    } finally {
+        loadingAi.value = false;
+    }
+};
+
+const closeAiModal = () => {
+    showAiModal.value = false;
+    aiSentences.value = [];
+    currentWordForAi.value = null;
+};
+
+const playAiAudio = async (text) => {
+    try {
+        const response = await axios.post('/api/azure-tts', {
+            text: text,
+            voice: 'zh-CN-XiaoxiaoNeural',
+            rate: 0.7,
+            volume: 80,
+            pitch: 1.0
+        }, {
+            responseType: 'arraybuffer' // Important for audio
+        });
+
+        const blob = new Blob([response.data], { type: 'audio/mpeg' });
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.play();
+    } catch (error) {
+        console.error("TTS Error", error);
+    }
 };
 </script>
 
@@ -311,6 +368,15 @@ const highlightWord = (sentence, word) => {
                                             {{ word.example_pinyin }}
                                         </p>
                                     </div>
+                                    
+                                    <!-- AI Button -->
+                                    <button 
+                                        @click="openAiModal(word)"
+                                        class="btn btn-xs btn-outline btn-primary w-full mt-2 flex items-center gap-1"
+                                    >
+                                        <i class="pi pi-sparkles"></i>
+                                        ตัวอย่างประโยค AI
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -335,6 +401,57 @@ const highlightWord = (sentence, word) => {
             </div>
         </div>
     </OrganicLayout>
+
+    <!-- AI Sentences Modal -->
+    <dialog class="modal" :class="{ 'modal-open': showAiModal }">
+        <div class="modal-box relative">
+            <button @click="closeAiModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
+            
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="pi pi-sparkles text-yellow-500"></i>
+                    ตัวอย่างประโยค AI: <span class="text-primary">{{ currentWordForAi?.word }}</span>
+                </h3>
+                <button 
+                    @click="openAiModal(currentWordForAi, true)" 
+                    class="btn btn-sm btn-ghost text-primary"
+                    :disabled="loadingAi"
+                >
+                    <i class="pi pi-refresh" :class="{ 'animate-spin': loadingAi }"></i>
+                    สร้างใหม่
+                </button>
+            </div>
+            
+            <div class="py-2">
+                <div v-if="loadingAi" class="flex flex-col items-center justify-center py-8">
+                    <span class="loading loading-dots loading-lg text-primary"></span>
+                    <p class="text-gray-500 mt-2">AI กำลังแต่งประโยค...</p>
+                </div>
+                
+                <div v-else-if="aiSentences.length > 0" class="space-y-4">
+                    <div v-for="(item, idx) in aiSentences" :key="idx" class="bg-gray-50 p-3 rounded-lg border border-gray-100 relative group">
+                        <button 
+                            @click="playAiAudio(item.sentence)"
+                            class="btn btn-circle btn-sm btn-ghost absolute top-2 right-2 text-primary"
+                        >
+                            <i class="pi pi-volume-up"></i>
+                        </button>
+                        
+                        <p class="text-lg font-medium text-gray-800 pr-8">{{ item.sentence }}</p>
+                        <p class="text-sm text-gray-500 italic mb-1">{{ item.pinyin }}</p>
+                        <p class="text-sm text-gray-600">{{ item.translation }}</p>
+                    </div>
+                </div>
+                
+                <div v-else class="text-center py-8 text-gray-500">
+                    ไม่พบข้อมูล
+                </div>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button @click="closeAiModal">close</button>
+        </form>
+    </dialog>
 </template>
 
 <style scoped>

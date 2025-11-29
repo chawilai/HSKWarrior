@@ -79,6 +79,7 @@ Route::post('/word-guess', [WordGuessController::class, 'store']);
 Route::post('/api/azure-tts', [App\Http\Controllers\AzureTtsController::class, 'synthesize']);
 Route::post('/api/speech/assess', [App\Http\Controllers\AzureSpeechController::class, 'assess']);
 Route::get('/api/reading-game/content', [App\Http\Controllers\ReadingGameController::class, 'getContent']);
+Route::post('/api/ai-sentences/generate', [App\Http\Controllers\AiSentenceController::class, 'generate']);
 
 Route::get('/games/reading', function () {
     return Inertia::render('Games/ReadingGame');
